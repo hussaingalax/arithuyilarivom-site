@@ -83,9 +83,29 @@ ul{
 @media(max-width:768px){
 
   nav{
-    flex-direction:column;
-    gap:10px;
+    flex-direction:row;
+    overflow-x:auto;
+    white-space:nowrap;
+    justify-content:flex-start;
+    padding-bottom:5px;
   }
+
+  nav a{
+    display:inline-block;
+    padding:6px 10px;
+    font-size:14px;
+  }
+
+  h1{font-size:22px}
+  h2{font-size:18px}
+
+  .btn{
+    width:100%;
+    text-align:center;
+  }
+
+}
+
 
   h1{
     font-size:22px;
