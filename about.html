@@ -6,54 +6,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Shiek Guru - Arithuyil Arivom</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background:#f4f6fb;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#eef2f7,#f9fbff);
   color:#222;
 }
 
 header{
-  background:#111;
-  padding:15px;
+  background:linear-gradient(90deg,#111,#222);
+  padding:18px;
   text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,0.2);
 }
 
 nav{
   display:flex;
   justify-content:center;
+  gap:18px;
   flex-wrap:wrap;
-  gap:15px;
 }
 
 nav a{
   color:#fff;
   text-decoration:none;
-  font-weight:600;
+  font-weight:500;
   font-size:15px;
+  opacity:0.9;
+}
+
+nav a:hover{
+  opacity:1;
+  text-decoration:underline;
 }
 
 .container{
   max-width:1100px;
   margin:auto;
-  padding:20px;
+  padding:30px 20px;
 }
 
 h1,h2{
   text-align:center;
-  margin-top:10px;
+  font-weight:600;
 }
 
 .card{
   background:#fff;
-  padding:22px;
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
-  margin:20px 0;
+  padding:26px;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  margin:28px 0;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
 }
 
 .center{text-align:center}
@@ -61,77 +74,39 @@ h1,h2{
 img.guru{
   width:220px;
   max-width:90%;
-  border-radius:14px;
+  border-radius:18px;
   margin-top:15px;
-}
-
-@media(max-width:768px){
-  img.guru{
-    width:140px;
-  }
+  box-shadow:0 8px 18px rgba(0,0,0,0.2);
 }
 
 .btn{
   display:inline-block;
-  background:#111;
+  background:linear-gradient(90deg,#111,#333);
   color:#fff;
-  padding:12px 22px;
+  padding:14px 28px;
   text-decoration:none;
-  border-radius:8px;
-  margin-top:15px;
+  border-radius:10px;
+  margin-top:18px;
   font-size:16px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.25);
+  transition:0.3s;
 }
 
-ul{
-  line-height:1.8;
-  padding-left:20px;
+.btn:hover{
+  transform:scale(1.05);
 }
 
-/* 📱 Mobile Responsive */
+ul{line-height:1.9}
+
+/* Mobile */
 @media(max-width:768px){
-
   nav{
-    flex-direction:row;
     overflow-x:auto;
     white-space:nowrap;
     justify-content:flex-start;
-    padding-bottom:5px;
   }
-
-  nav a{
-    display:inline-block;
-    padding:6px 10px;
-    font-size:14px;
-  }
-
-  h1{font-size:22px}
-  h2{font-size:18px}
-
-  .btn{
-    width:100%;
-    text-align:center;
-  }
-
-}
-
-
-  h1{
-    font-size:22px;
-  }
-
-  h2{
-    font-size:18px;
-  }
-
-  .card{
-    padding:18px;
-  }
-
-  .btn{
-    width:100%;
-    text-align:center;
-  }
-
+  img.guru{width:140px}
+  .btn{width:100%;text-align:center}
 }
 </style>
 </head>
