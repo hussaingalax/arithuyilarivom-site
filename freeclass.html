@@ -1,71 +1,100 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Free Mind Power Class | Arithuyil Arivom</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Mind Power Experience Class</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{margin:0;font-family:Poppins,Arial;background:#f6f8fb;color:#222}
+body{
+font-family:Poppins;
+margin:0;
+background:#f4f6fb;
+}
+
+section{
+padding:60px 20px;
+max-width:1100px;
+margin:auto;
+}
 
 .hero{
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;text-align:center;padding:60px 20px
+background:linear-gradient(135deg,#0f2027,#2c5364);
+color:white;
+text-align:center;
+padding:80px 20px;
 }
-.hero h1{font-size:34px;margin:0}
-.hero p{font-size:18px;margin:15px 0}
 
 .btn{
-background:#ff3b3b;color:white;padding:14px 28px;
-border-radius:8px;text-decoration:none;display:inline-block;margin-top:15px;
-font-weight:bold
+background:#ff3b3b;
+color:white;
+padding:14px 28px;
+border-radius:8px;
+text-decoration:none;
+display:inline-block;
+margin-top:20px;
+font-weight:600;
 }
 
-.section{max-width:1100px;margin:auto;padding:50px 20px}
 .card{
-background:white;padding:30px;border-radius:15px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);margin-bottom:30px
+background:white;
+padding:30px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+margin:30px 0;
 }
 
-.form input{
-width:100%;padding:14px;margin:10px 0;border-radius:8px;border:1px solid #ddd
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
 }
 
-.submitbtn{
-background:#111;color:white;padding:15px;width:100%;
-border:none;border-radius:10px;font-size:17px
+.video{
+width:100%;
+height:250px;
 }
 
-.resultgrid{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:20px
-}
-
-.stickybar{
+.sticky{
 position:fixed;
 bottom:0;
 left:0;
-width:100%;
-background:#fff;
-padding:15px;
+right:0;
+background:#111;
+color:white;
+padding:12px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-box-shadow:0 -5px 15px rgba(0,0,0,0.15);
-z-index:999;
+z-index:9999;
 }
 
-.stickybar a{
+.sticky a{
 background:#ff3b3b;
+padding:12px 20px;
 color:white;
-padding:12px 22px;
-border-radius:6px;
 text-decoration:none;
-font-weight:bold
+border-radius:6px;
 }
 
-@media(max-width:600px){
-.hero h1{font-size:26px}
+input{
+padding:12px;
+width:100%;
+margin:8px 0;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+background:#111;
+color:white;
+padding:14px;
+border:none;
+width:100%;
+border-radius:8px;
+font-size:16px;
 }
 </style>
 </head>
@@ -74,63 +103,91 @@ font-weight:bold
 
 <div class="hero">
 <h1>Free Mind Power Experience Class</h1>
-<p>First Class Attend pannunga — Life Change feel pannunga</p>
+<p>Attend One Class – Feel Life Transformation</p>
 <a href="#register" class="btn">Join Free Class</a>
 </div>
 
-<div class="section">
+<section id="register">
+<div class="card">
+<h2>Register For Free Class</h2>
 
-<div class="card" id="register">
-<h2>Register for Free Class</h2>
+<form action="https://formsubmit.co/YOURMAIL@gmail.com" method="POST">
+<input name="name" placeholder="Name" required>
+<input name="mobile" placeholder="Mobile Number" required>
+<input name="district" placeholder="District" required>
 
-<form action="https://formsubmit.co/hussaingalax@gmail.com" method="POST">
-<input type="hidden" name="_next" value="https://wa.me/919840851295?text=I%20have%20registered%20for%20Free%20Class">
-<input type="text" name="name" placeholder="Name" required>
-<input type="text" name="mobile" placeholder="Mobile Number" required>
-<input type="text" name="district" placeholder="District" required>
-<button class="submitbtn">Register Now</button>
+<input type="hidden" name="_next" value="https://arithuyilarivom.com/thankyou.html">
+
+<button>Register Now</button>
 </form>
+</div>
+</section>
+
+<section>
+<h2>Why Attend This Class?</h2>
+<div class="grid">
+<div class="card">Stress Clear</div>
+<div class="card">Health Improvement</div>
+<div class="card">Money Flow Activation</div>
+<div class="card">Relationship Healing</div>
+</div>
+</section>
+
+<section>
+<h2>Student Video Testimonials</h2>
+<div class="grid">
+
+<iframe class="video" src="https://www.youtube.com/embed/VIDEOID"></iframe>
+<iframe class="video" src="https://www.youtube.com/embed/VIDEOID"></iframe>
+<iframe class="video" src="https://www.youtube.com/embed/VIDEOID"></iframe>
 
 </div>
+</section>
 
-<div class="card">
-<h2>Why Attend This Free Class?</h2>
-<ul>
-<li>Mind Stress clear aagum</li>
-<li>Body energy feel varum</li>
-<li>Fear & negative thoughts release</li>
-<li>Life clarity start aagum</li>
-</ul>
-<a href="#register" class="btn">Attend Free Class</a>
+<section>
+<h2>How This Works</h2>
+<div class="grid">
+<div class="card">Register</div>
+<div class="card">Attend Relaxation Session</div>
+<div class="card">Experience Mind Activation</div>
+<div class="card">Join Advanced Training</div>
 </div>
+</section>
 
-<div class="card">
-<h2>Student Results</h2>
-
-<div class="resultgrid">
-<div class="card">Health Healing Feedback</div>
-<div class="card">Wealth Success Feedback</div>
-<div class="card">Relationship Healing Feedback</div>
+<section>
+<h2>Before vs After Results</h2>
+<div class="grid">
+<div class="card">Fear, Stress, Confusion</div>
+<div class="card">Confidence, Clarity, Success</div>
 </div>
+</section>
 
-</div>
-
-<div class="card" style="text-align:center">
+<section>
 <h2>About Shiek Guru</h2>
-<img src="guru.jpg" width="200" style="border-radius:15px">
+<div class="card" style="text-align:center">
+<img src="guru.jpg" width="180">
 <p>Founder – Arithuyil Arivom</p>
 <a href="#register" class="btn">Join Free Class</a>
 </div>
+</section>
 
+<section>
+<h2>Guarantee</h2>
 <div class="card">
+Attend class → Experience results → Then join main program  
+Otherwise no obligation.
+</div>
+</section>
+
+<section>
 <h2>FAQ</h2>
-<p><b>Is class free?</b><br> Yes, First experience class free.</p>
-<p><b>Online attend panna mudiyuma?</b><br> Yes, Online and Offline available.</p>
+<div class="card">
+<p><b>Is this class free?</b><br>Yes, first experience class free.</p>
+<p><b>Online attend panna mudiyuma?</b><br>Yes, online & offline available.</p>
 </div>
+</section>
 
-</div>
-
-<div class="stickybar">
+<div class="sticky">
 <div>Free Class Seats Filling Fast</div>
 <a href="#register">Join Now</a>
 </div>
