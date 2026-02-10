@@ -638,13 +638,14 @@ Join Free Class Now
 
 </section>
 
+<!-- Supabase CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const supabaseUrl = "YOUR_SUPABASE_URL";
-const supabaseKey = "YOUR_SUPABASE_PUBLIC_KEY";
+const supabaseUrl = "https://zorilulohlswghkfjuio.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpvcmlsdWxvaGxzd2doa2ZqdWlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0OTIwNjQsImV4cCI6MjA4NDA2ODA2NH0.s3GnrI9Yh41qqZb-qzDIwBiYzd8H3v-BqLT6mbzVh90";
 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 async function registerUser(event){
     event.preventDefault();
@@ -653,35 +654,35 @@ async function registerUser(event){
     const mobile = document.getElementById("mobile").value;
     const location = document.getElementById("location").value;
 
-    const { data, error } = await supabase
+    const { error } = await supabaseClient
         .from('freeclass_leads')
-        .insert([{ name, mobile, location }]);
+        .insert([{ name: name, mobile: mobile, location: location }]);
 
     if(error){
         alert("Error submitting form");
+        console.log(error);
         return;
     }
 
-    // go to payment page
-    window.location.href = "payment.html?mobile="+mobile;
+    window.location.href = "payment.html?mobile=" + mobile;
 }
 </script>
+
 
 <section id="register">
 <div class="card">
 <h2>Register For Free Experience Class</h2>
 
 <form onsubmit="registerUser(event)">
-<input id="name" placeholder="Name" required>
-<input id="mobile" placeholder="Mobile Number" required>
-<input id="district" placeholder="District" required>
+<input id="name" name="name" placeholder="Name" required>
+<input id="mobile" name="mobile" placeholder="Mobile Number" required>
+<input id="location" name="location" placeholder="Location" required>
 
 <button type="submit">Register & Continue Payment</button>
 </form>
 
 </div>
 </section>
-
   
 <section class="class-details">
 
