@@ -638,14 +638,13 @@ Join Free Class Now
 
 </section>
 
-<!-- Supabase CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 const supabaseUrl = "https://zorilulohlswghkfjuio.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpvcmlsdWxvaGxzd2doa2ZqdWlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0OTIwNjQsImV4cCI6MjA4NDA2ODA2NH0.s3GnrI9Yh41qqZb-qzDIwBiYzd8H3v-BqLT6mbzVh90";
+const supabaseKey = "YOUR_PUBLIC_ANON_KEY";
 
-const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 async function registerUser(event){
     event.preventDefault();
@@ -654,19 +653,19 @@ async function registerUser(event){
     const mobile = document.getElementById("mobile").value;
     const location = document.getElementById("location").value;
 
-    const { error } = await supabaseClient
-        .from('freeclass_leads')
+    const { error } = await supabase
+        .from('freeclass_registrations')   // IMPORTANT — table name same irukkanum
         .insert([{ name: name, mobile: mobile, location: location }]);
 
     if(error){
-        alert("Error submitting form");
-        console.log(error);
+        alert(error.message);
         return;
     }
 
-    window.location.href = "payment.html?mobile=" + mobile;
+    window.location.href = "payment.html?mobile="+mobile;
 }
 </script>
+
 
 
 <section id="register">
