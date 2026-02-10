@@ -651,7 +651,7 @@ async function registerUser(event){
 
     const name = document.getElementById("name").value;
     const mobile = document.getElementById("mobile").value;
-    const district = document.getElementById("location").value;
+    const location = document.getElementById("location").value;
 
     const { data, error } = await supabase
         .from('freeclass_leads')
@@ -667,6 +667,22 @@ async function registerUser(event){
 }
 </script>
 
+<section id="register">
+<div class="card">
+<h2>Register For Free Experience Class</h2>
+
+<form onsubmit="registerUser(event)">
+<input id="name" placeholder="Name" required>
+<input id="mobile" placeholder="Mobile Number" required>
+<input id="district" placeholder="District" required>
+
+<button type="submit">Register & Continue Payment</button>
+</form>
+
+</div>
+</section>
+
+  
 <section class="class-details">
 
 <div class="details-right">
