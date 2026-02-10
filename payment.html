@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Complete Registration</title>
+<style>
+body{
+font-family:Arial;
+text-align:center;
+padding:40px;
+background:#f4f6f9;
+}
+
+.card{
+background:white;
+max-width:500px;
+margin:auto;
+padding:30px;
+border-radius:14px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.price{
+font-size:38px;
+font-weight:bold;
+margin:20px 0;
+color:#0a8f3c;
+}
+
+.timer{
+font-size:22px;
+color:red;
+margin-top:10px;
+}
+
+.qr{
+margin:20px 0;
+}
+
+button{
+background:#111;
+color:white;
+padding:14px 28px;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Complete Your Registration</h2>
+
+<p>Special Offer Valid for</p>
+<div class="timer" id="timer">05:00</div>
+
+<div class="price" id="price">₹199</div>
+
+<div class="qr">
+<img id="qrimg" src="qr199.png" width="220">
+</div>
+
+<p>UPI ID : trueselfmindgym@okicici</p>
+
+<button onclick="window.location.href='upload.html'">
+I Have Paid
+</button>
+
+</div>
+
+<script>
+let time = 300; // 5 minutes
+
+let timer = setInterval(()=>{
+let min = Math.floor(time/60);
+let sec = time%60;
+document.getElementById("timer").innerHTML =
+String(min).padStart(2,'0') + ":" + String(sec).padStart(2,'0');
+
+time--;
+
+if(time<0){
+clearInterval(timer);
+document.getElementById("price").innerHTML="₹4999";
+document.getElementById("qrimg").src="qr4999.png";
+document.getElementById("timer").innerHTML="Offer expired";
+}
+},1000);
+</script>
+
+</body>
+</html>
