@@ -638,21 +638,34 @@ Join Free Class Now
 
 </section>
 
-<section id="register">
-<div class="card">
-<h2>Register For Free Class</h2>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<form action="https://formsubmit.co/YOURMAIL@gmail.com" method="POST">
-<input name="name" placeholder="Name" required>
-<input name="mobile" placeholder="Mobile Number" required>
-<input name="district" placeholder="District" required>
+<script>
+const supabaseUrl = "YOUR_SUPABASE_URL";
+const supabaseKey = "YOUR_SUPABASE_PUBLIC_KEY";
 
-<input type="hidden" name="_next" value="https://arithuyilarivom.com/thankyou.html">
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-<button>Register Now</button>
-</form>
-</div>
-</section>
+async function registerUser(event){
+    event.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const mobile = document.getElementById("mobile").value;
+    const district = document.getElementById("location").value;
+
+    const { data, error } = await supabase
+        .from('freeclass_leads')
+        .insert([{ name, mobile, location }]);
+
+    if(error){
+        alert("Error submitting form");
+        return;
+    }
+
+    // go to payment page
+    window.location.href = "payment.html?mobile="+mobile;
+}
+</script>
 
 <section class="class-details">
 
