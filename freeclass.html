@@ -9,6 +9,51 @@
 
 <style>
 
+<style>
+.bonus-section{
+    text-align:center;
+    padding:70px 20px;
+    background:linear-gradient(135deg,#eef7ff,#f9fbff);
+}
+
+.bonus-section h2{
+    font-size:34px;
+    font-weight:700;
+}
+
+.bonus-sub{
+    margin-top:10px;
+    color:#555;
+    font-size:18px;
+}
+
+.timer{
+    font-size:42px;
+    font-weight:700;
+    color:#fff;
+    background:#28a745;
+    display:inline-block;
+    padding:12px 30px;
+    border-radius:10px;
+    margin:25px 0;
+}
+
+.bonus-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
+    margin-top:30px;
+}
+
+.bonus-card{
+    background:#fff;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.08);
+}
+</style>
+
+  
 .cta-btn-main{
   display:inline-block;
   background:linear-gradient(90deg,#ff3b3b,#ff6a00);
@@ -619,7 +664,47 @@ One-time powerful experience session designed to help you realise your inner min
   </div>
 </section>
 
+<section class="bonus-section">
+    <h2>Unlock Exclusive Bonuses Worth ₹3,41,000</h2>
+    <p class="bonus-sub">Register for Free Experience Class to Activate All Bonuses</p>
 
+    <div class="timer" id="countdown">
+        15:00
+    </div>
+
+    <div class="bonus-grid">
+
+        <div class="bonus-card">
+            <h3>Daily Guru Affirmations</h3>
+            <p>Guru-led daily affirmation guidance starting immediately after joining.</p>
+        </div>
+
+        <div class="bonus-card">
+            <h3>Monthly Online Relaxation Session</h3>
+            <p>Every month deep relaxation healing session free access.</p>
+        </div>
+
+        <div class="bonus-card">
+            <h3>Exclusive Direct / Online Guru Class</h3>
+            <p>Priority access to upcoming special direct or online Guru classes.</p>
+        </div>
+
+    </div>
+
+    <a href="#register" class="cta-btn-main">Register For Free Class & Unlock Bonuses</a>
+</section>
+
+<script>
+var time = 900;
+var timer = setInterval(function(){
+    var minutes = Math.floor(time/60);
+    var seconds = time%60;
+    document.getElementById("countdown").innerHTML =
+        minutes + ":" + (seconds<10?"0":"") + seconds;
+    time--;
+    if(time<0){ clearInterval(timer); }
+},1000);
+</script>
 
   
 <div class="sticky">
