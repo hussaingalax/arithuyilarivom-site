@@ -653,9 +653,9 @@ async function registerUser(event){
     const mobile = document.getElementById("mobile").value;
     const location = document.getElementById("location").value;
 
-    const { error } = await supabase
-        .from('freeclass_registrations')   // IMPORTANT — table name same irukkanum
-        .insert([{ name: name, mobile: mobile, location: location }]);
+    const { data, error } = await supabase
+        .from('freeclass_registrations')
+        .insert([{ name, mobile, location, amount:199 }]);
 
     if(error){
         alert(error.message);
