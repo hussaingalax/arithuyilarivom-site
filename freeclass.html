@@ -644,7 +644,11 @@ Join Free Class Now
 const supabaseUrl = "https://pryfnuknwbnerqgiwnmk.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByeWZudWtud2JuZXJxZ2l3bm1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MzI5MjYsImV4cCI6MjA4NjMwODkyNn0.N0rcOIERLUjv_tiE6ofIa1LMGUSLrNb4hWHeWFzCbDs";
 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+if(!window.supabaseClient){
+   window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+}
+const supabase = window.supabaseClient;
+
 
 async function registerUser(event){
     event.preventDefault();
@@ -868,7 +872,11 @@ var timer = setInterval(function(){
     document.getElementById("countdown").innerHTML =
         minutes + ":" + (seconds<10?"0":"") + seconds;
     time--;
-    if(time<0){ clearInterval(timer); }
+    if(time<=0){
+   clearInterval(timer);
+   document.getElementById("countdown").innerHTML="Expired";
+}
+
 },1000);
 </script>
 
@@ -1063,7 +1071,7 @@ var timer = setInterval(function(){
 
     <div class="faq-item">
       <h4>10. What happens after the free experience class?</h4>
-      <p>Participants who wish to continue deeper transformation can join the <b>8-Week Mind Power Transformation Class</p>
+      <p>Participants who wish to continue deeper transformation can join the <b>8-Week Mind Power Transformation Class</b> </p>
     </div>
 
   </div>
