@@ -681,14 +681,14 @@ form.addEventListener("submit", async function(e){
 <div class="card">
 <h2>Register For Free Experience Class</h2>
 
-<form onsubmit="registerUser(event)">
-<input id="name" name="name" placeholder="Name" required>
-<input id="mobile" name="mobile" placeholder="Mobile Number" required>
-<input id="location" name="location" placeholder="Location" required>
+<form id="form">
+<input id="name" placeholder="Name">
+<input id="mobile" placeholder="Mobile">
+<input id="location" placeholder="Location">
 
-  <button type="button" id="registerBtn">Register</button>
-
+<button type="submit">Register</button>
 </form>
+
   
 <script>
 document.getElementById("form").addEventListener("submit", function(e){
