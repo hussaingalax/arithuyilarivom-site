@@ -79,10 +79,18 @@ background:#25D366;
 
 <div class="qr">
 <img id="qrimg"
-src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym%40okicici&pn=ArithuyilArivom&am=199&cu=INR">
+src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym%40okicici&pn=ArithuyilArivom&cu=INR">
+
+<br><br>
+
+<button onclick="downloadQR()">Save QR Code</button>
 </div>
 
-<p>UPI ID : <b>trueselfmindgym@okicici</b></p>
+<p>
+UPI ID : <b id="upiid">trueselfmindgym@okicici</b>
+<button onclick="copyUPI()">Copy</button>
+</p>
+
 
 <button onclick="openUPI()">Pay using UPI App (Open Now)</button>
 
@@ -157,6 +165,22 @@ window.open("https://wa.me/919840851295?text="+msg,"_blank");
 
 alert("Thank you! Seat confirmation message will be sent.");
 }
+
+function downloadQR(){
+    let img = document.getElementById("qrimg").src;
+    let a = document.createElement("a");
+    a.href = img;
+    a.download = "payment_qr.png";
+    a.click();
+}
+
+function copyUPI(){
+    let upi = document.getElementById("upiid").innerText;
+    navigator.clipboard.writeText(upi);
+    alert("UPI ID copied");
+}
+
+  
 </script>
 
 </body>
