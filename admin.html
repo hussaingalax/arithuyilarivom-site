@@ -37,6 +37,30 @@ input{padding:8px;margin:6px}
 <div id="payments"></div>
 </div>
 
+<div class="card">
+<h3>Attendance</h3>
+<div id="attendance"></div>
+</div>
+
+<div class="card">
+<h3>Create Sub User</h3>
+<input id="uname" placeholder="Name">
+<input id="upin" placeholder="PIN">
+<button onclick="createUser()">Create</button>
+</div>
+
+<div class="card">
+<h3>Broadcast Reminder</h3>
+<input id="reminderText"
+value="Reminder: Your Arithuyil Arivom class is scheduled tomorrow.">
+<button onclick="broadcastReminder()">Send Reminder</button>
+</div>
+
+<div class="card">
+<h3>Export Report</h3>
+<button onclick="exportCSV()">Download Excel</button>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -44,18 +68,17 @@ input{padding:8px;margin:6px}
 <script>
 
 const supabaseClient = window.supabase.createClient(
-"https://pryfnuknwbnerqgiwnmk.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByeWZudWtud2JuZXJxZ2l3bm1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MzI5MjYsImV4cCI6MjA4NjMwODkyNn0.N0rcOIERLUjv_tiE6ofIa1LMGUSLrNb4hWHeWFzCbDs"
+"YOUR_PROJECT_URL",
+"YOUR_ANON_KEY"
 );
 
 const MAX_SEATS = 100;
 let currentRole="";
 
 async function login(){
-
 let pin=document.getElementById("pin").value;
 
-let {data,error}=await supabaseClient
+let {data}=await supabaseClient
 .from("admin_users")
 .select("*")
 .eq("pin",pin)
@@ -65,12 +88,17 @@ if(data){
 currentRole=data.role;
 document.getElementById("loginCard").style.display="none";
 document.getElementById("dashboard").style.display="block";
-loadLeads();
-loadPayments();
-loadStats();
+loadAll();
 }else{
 alert("Wrong PIN");
 }
+}
+
+async function loadAll(){
+loadLeads();
+loadPayments();
+loadAttendance();
+loadStats();
 }
 
 async function loadLeads(){
@@ -120,6 +148,24 @@ loadPayments();
 loadStats();
 }
 
+async function loadAttendance(){
+let {data}=await supabaseClient.from("attendance").select("*");
+
+let html="";
+data.forEach(x=>{
+html+=`${x.name}
+<button onclick="markPresent('${x.id}')">Present</button><br>`;
+});
+document.getElementById("attendance").innerHTML=html;
+}
+
+async function markPresent(id){
+await supabaseClient.from("attendance")
+.update({present:true})
+.eq("id",id);
+loadAttendance();
+}
+
 async function loadStats(){
 
 let {data:leads}=await supabaseClient.from("freeclass_registrations").select("*");
@@ -142,6 +188,49 @@ Paid Seats : ${paid}<br>
 Remaining Seats : ${remaining}<br>
 Total Revenue : ₹${revenue}
 `;
+}
+
+async function createUser(){
+if(currentRole!="super"){
+alert("Only super admin allowed");
+return;
+}
+
+let name=document.getElementById("uname").value;
+let pin=document.getElementById("upin").value;
+
+await supabaseClient.from("admin_users")
+.insert({name:name,role:"staff",pin:pin});
+
+alert("User created");
+}
+
+async function broadcastReminder(){
+let {data}=await supabaseClient
+.from("payments")
+.select("*")
+.eq("status","paid");
+
+let text=document.getElementById("reminderText").value;
+
+data.forEach(x=>{
+window.open(`https://wa.me/91${x.mobile}?text=${encodeURIComponent(text)}`,'_blank');
+});
+}
+
+async function exportCSV(){
+let {data}=await supabaseClient.from("freeclass_registrations").select("*");
+
+let csv="Name,Mobile,Location\n";
+data.forEach(x=>{
+csv+=`${x.name},${x.mobile},${x.location}\n`;
+});
+
+let blob=new Blob([csv]);
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="report.csv";
+a.click();
 }
 
 </script>
