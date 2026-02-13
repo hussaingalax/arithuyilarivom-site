@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Complete Registration</title>
+
 <style>
 body{
 font-family:Arial;
@@ -13,7 +14,7 @@ background:#f4f6f9;
 
 .card{
 background:white;
-max-width:500px;
+max-width:520px;
 margin:auto;
 padding:30px;
 border-radius:14px;
@@ -37,6 +38,14 @@ margin-top:10px;
 margin:20px 0;
 }
 
+input{
+width:90%;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
 button{
 background:#111;
 color:white;
@@ -45,8 +54,12 @@ border:none;
 border-radius:8px;
 font-size:16px;
 cursor:pointer;
+margin-top:10px;
 }
 
+.whatsapp{
+background:#25D366;
+}
 </style>
 </head>
 
@@ -57,28 +70,41 @@ cursor:pointer;
 <h2>Complete Your Registration</h2>
 
 <p>Special Offer Valid for</p>
-<div class="timer" id="timer">05:00</div>
+<div class="timer" id="timer">10:00</div>
 
-<div class="price" id="price">₹199</div>
-
-<div class="qr">
-<img id="qrimg" src="qr199.png" width="220">
+<div class="price" id="price">
+<span style="text-decoration:line-through;color:#888;">₹4999</span>
+₹199
 </div>
 
-<p>UPI ID : trueselfmindgym@okicici</p>
+<div class="qr">
+<img id="qrimg"
+src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym@okicici&pn=ArithuyilArivom&am=199">
+</div>
 
-<button onclick="window.location.href='upload.html'">
-I Have Paid
+<p>UPI ID : <b>trueselfmindgym@okicici</b></p>
+
+<input id="utr" placeholder="Enter UTR Number">
+<input type="file" id="screenshot">
+
+<button onclick="sendWhatsapp()">Submit Booking</button>
+
+<br><br>
+
+<button id="offerBtn" class="whatsapp" style="display:none"
+onclick="window.open('https://wa.me/919840851295?text=Offer ended. I want the same ₹199 offer for class booking','_blank')">
+Offer Ended? Message Team for Same Offer
 </button>
 
 </div>
 
 <script>
-let time = 300; // 5 minutes
+let time = 600;
 
 let timer = setInterval(()=>{
 let min = Math.floor(time/60);
 let sec = time%60;
+
 document.getElementById("timer").innerHTML =
 String(min).padStart(2,'0') + ":" + String(sec).padStart(2,'0');
 
@@ -86,11 +112,32 @@ time--;
 
 if(time<0){
 clearInterval(timer);
+
 document.getElementById("price").innerHTML="₹4999";
-document.getElementById("qrimg").src="qr4999.png";
+
+document.getElementById("qrimg").src=
+"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym@okicici&pn=ArithuyilArivom&am=4999";
+
 document.getElementById("timer").innerHTML="Offer expired";
+
+document.getElementById("offerBtn").style.display="inline-block";
 }
 },1000);
+
+function sendWhatsapp(){
+
+let utr = document.getElementById("utr").value;
+
+let msg =
+"Class Booking Payment Done.%0A"+
+"UPI ID: trueselfmindgym@okicici%0A"+
+"UTR: "+utr+"%0A"+
+"Please confirm my seat.";
+
+window.open("https://wa.me/919840851295?text="+msg,"_blank");
+
+alert("Thank you! Seat confirmation message will be sent.");
+}
 </script>
 
 </body>
