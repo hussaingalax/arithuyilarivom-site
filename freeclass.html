@@ -684,7 +684,13 @@ async function registerUser(event){
   <button type="button" id="registerBtn">Register</button>
 
 </form>
-
+  
+<script>
+document.getElementById("form").addEventListener("submit", function(e){
+    e.preventDefault();
+});
+</script>
+  
 </div>
 </section>
   
