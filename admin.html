@@ -37,27 +37,15 @@ input{padding:8px;margin:6px}
 <div id="payments"></div>
 </div>
 
-<div class="card">
-<h3>Create Sub User</h3>
-<input id="uname" placeholder="Name">
-<input id="upin" placeholder="PIN">
-<button onclick="createUser()">Create</button>
-</div>
-
-<div class="card">
-<h3>Export Report</h3>
-<button onclick="exportCSV()">Download Excel</button>
-</div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
 "https://pryfnuknwbnerqgiwnmk.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByeWZudWtud2JuZXJxZ2l3bm1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MzI5MjYsImV4cCI6MjA4NjMwODkyNn0.N0rcOIERLUjv_tiE6ofIa1LMGUSLrNb4hWHeWFzCbDs"
+"YOUR_ANON_KEY"
 );
 
 const MAX_SEATS = 100;
@@ -67,7 +55,7 @@ async function login(){
 
 let pin=document.getElementById("pin").value;
 
-let {data}=await supabase
+let {data,error}=await supabaseClient
 .from("admin_users")
 .select("*")
 .eq("pin",pin)
@@ -86,7 +74,7 @@ alert("Wrong PIN");
 }
 
 async function loadLeads(){
-let {data}=await supabase.from("freeclass_registrations").select("*");
+let {data}=await supabaseClient.from("freeclass_registrations").select("*");
 
 let html="";
 data.forEach(x=>{
@@ -96,8 +84,7 @@ document.getElementById("leads").innerHTML=html;
 }
 
 async function loadPayments(){
-
-let {data}=await supabase.from("payments").select("*");
+let {data}=await supabaseClient.from("payments").select("*");
 
 let html="";
 data.forEach(x=>{
@@ -109,7 +96,7 @@ document.getElementById("payments").innerHTML=html;
 
 async function markPaid(id,mobile,name){
 
-let {data:lastSeat} = await supabase
+let {data:lastSeat} = await supabaseClient
 .from("payments")
 .select("seat_no")
 .eq("status","paid")
@@ -121,7 +108,7 @@ if(lastSeat.length>0){
 nextSeat = (lastSeat[0].seat_no || 0) + 1;
 }
 
-await supabase.from("payments")
+await supabaseClient.from("payments")
 .update({status:"paid", seat_no: nextSeat})
 .eq("id",id);
 
@@ -129,16 +116,14 @@ window.open(
 `https://wa.me/91${mobile}?text=Hello ${name}, Your seat ${nextSeat} is confirmed for Arithuyil Arivom class.`,
 "_blank");
 
-alert("Seat assigned: "+nextSeat);
-
 loadPayments();
 loadStats();
 }
 
 async function loadStats(){
 
-let {data:leads}=await supabase.from("freeclass_registrations").select("*");
-let {data:payments}=await supabase.from("payments").select("*");
+let {data:leads}=await supabaseClient.from("freeclass_registrations").select("*");
+let {data:payments}=await supabaseClient.from("payments").select("*");
 
 let totalLeads = leads.length;
 let paid = payments.filter(x=>x.status=="paid").length;
@@ -157,37 +142,6 @@ Paid Seats : ${paid}<br>
 Remaining Seats : ${remaining}<br>
 Total Revenue : ₹${revenue}
 `;
-}
-
-async function createUser(){
-
-if(currentRole!="super"){
-alert("Only super admin allowed");
-return;
-}
-
-let name=document.getElementById("uname").value;
-let pin=document.getElementById("upin").value;
-
-await supabase.from("admin_users")
-.insert({name:name,role:"staff",pin:pin});
-
-alert("User created");
-}
-
-async function exportCSV(){
-let {data}=await supabase.from("freeclass_registrations").select("*");
-
-let csv="Name,Mobile,Location\n";
-data.forEach(x=>{
-csv+=`${x.name},${x.mobile},${x.location}\n`;
-});
-
-let blob=new Blob([csv]);
-let a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
-a.download="report.csv";
-a.click();
 }
 
 </script>
