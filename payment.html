@@ -79,13 +79,15 @@ background:#25D366;
 
 <div class="qr">
 <img id="qrimg"
-src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym@okicici&pn=ArithuyilArivom&am=199">
+src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym%40okicici&pn=ArithuyilArivom&am=199&cu=INR">
 </div>
 
 <p>UPI ID : <b>trueselfmindgym@okicici</b></p>
 
-<input id="utr" placeholder="Enter UTR Number">
-<input type="file" id="screenshot">
+<button onclick="openUPI()">Pay using UPI App (Open Now)</button>
+
+<input id="utr" placeholder="Enter UTR Number" required>
+<input type="file" id="screenshot" required>
 
 <button onclick="sendWhatsapp()">Submit Booking</button>
 
@@ -99,6 +101,8 @@ Offer Ended? Message Team for Same Offer
 </div>
 
 <script>
+let amount = 199;
+
 let time = 600;
 
 let timer = setInterval(()=>{
@@ -113,10 +117,12 @@ time--;
 if(time<0){
 clearInterval(timer);
 
+amount = 4999;
+
 document.getElementById("price").innerHTML="₹4999";
 
 document.getElementById("qrimg").src=
-"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym@okicici&pn=ArithuyilArivom&am=4999";
+"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym%40okicici&pn=ArithuyilArivom&am=4999&cu=INR";
 
 document.getElementById("timer").innerHTML="Offer expired";
 
@@ -124,13 +130,25 @@ document.getElementById("offerBtn").style.display="inline-block";
 }
 },1000);
 
+function openUPI(){
+window.location.href =
+"upi://pay?pa=trueselfmindgym@okicici&pn=ArithuyilArivom&am="+amount+"&cu=INR";
+}
+
 function sendWhatsapp(){
 
 let utr = document.getElementById("utr").value;
+let file = document.getElementById("screenshot").value;
+
+if(utr=="" || file==""){
+alert("Please enter UTR number and upload screenshot");
+return;
+}
 
 let msg =
 "Class Booking Payment Done.%0A"+
 "UPI ID: trueselfmindgym@okicici%0A"+
+"Amount: "+amount+"%0A"+
 "UTR: "+utr+"%0A"+
 "Please confirm my seat.";
 
