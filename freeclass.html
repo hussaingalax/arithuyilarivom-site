@@ -760,12 +760,50 @@ form.addEventListener("submit", async function(e){
 
   
 <script>
-document.getElementById("form").addEventListener("submit", function(e){
-    e.preventDefault();
-});
-  
+document.getElementById("form").addEventListener("submit", async function(e){
+e.preventDefault();
 
+let name = document.getElementById("name").value.trim();
+let mobile = document.getElementById("mobile").value.trim();
+let location = document.getElementById("location").value.trim();
+
+/* EMPTY VALIDATION */
+if(name=="" || mobile=="" || location==""){
+alert("Please fill all details");
+return;
+}
+
+/* DUPLICATE CHECK */
+let {data:existing} = await supabase
+.from("freeclass_registrations")
+.select("mobile")
+.eq("mobile",mobile);
+
+if(existing.length > 0){
+
+window.open(
+"https://wa.me/919840851295?text=I already registered. I want additional seats for my booking.",
+"_blank"
+);
+
+alert("This mobile already registered. Requesting additional seat.");
+return;
+}
+
+/* INSERT */
+const { error } = await supabase
+.from("freeclass_registrations")
+.insert([{ name:name, mobile:mobile, location:location }]);
+
+if(error){
+alert("Error: " + error.message);
+}else{
+alert("Registration Success");
+window.location.href="payment.html";
+}
+});
 </script>
+
   
 </div>
 </section>
@@ -780,7 +818,7 @@ document.getElementById("form").addEventListener("submit", function(e){
 
 <div class="box">
 <span class="label">Date</span>
-<h3>8th Feb 2026</h3>
+<h3>22nd Feb 2026</h3>
 </div>
 
 <div class="box">
