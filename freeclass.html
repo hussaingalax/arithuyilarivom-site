@@ -715,51 +715,6 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-const form = document.getElementById("form");
-
-form.addEventListener("submit", async function(e){
-    e.preventDefault();
-
-    const name = document.getElementById("name").value;
-    const mobile = document.getElementById("mobile").value;
-    const location = document.getElementById("location").value;
-
-    const { data, error } = await supabase
-      .from("freeclass_registrations")
-      .insert([
-        { name: name, mobile: mobile, location: location }
-      ]);
-
-    if(error){
-        alert("Error: " + error.message);
-        console.log(error);
-    } else {
-        alert("Registration Success");
-        form.reset();
-      window.location.href = "payment.html";
-    }
-});
-
-});
-</script>
-
-
-
-<section id="register">
-<div class="card">
-<h2>Register For Free Experience Class</h2>
-
-<form id="form">
-<input id="name" placeholder="Name">
-<input id="mobile" placeholder="Mobile">
-<input id="location" placeholder="Location">
-
-<button type="submit" id="registerBtn">Register</button>
-
-</form>
-
-  
-<script>
 document.getElementById("form").addEventListener("submit", async function(e){
 e.preventDefault();
 
@@ -780,13 +735,11 @@ let {data:existing} = await supabase
 .eq("mobile",mobile);
 
 if(existing.length > 0){
-
 window.open(
 "https://wa.me/919840851295?text=I already registered. I want additional seats for my booking.",
 "_blank"
 );
-
-alert("This mobile already registered. Requesting additional seat.");
+alert("This mobile already registered.");
 return;
 }
 
@@ -801,6 +754,8 @@ alert("Error: " + error.message);
 alert("Registration Success");
 window.location.href="payment.html";
 }
+});
+
 });
 </script>
 
