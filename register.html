@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Register – Arithuyil Arivom</title>
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+rel="stylesheet"
+>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Poppins,Arial,sans-serif;
+    background:linear-gradient(180deg,#f5f7fb,#eef2f7);
+    min-height:100vh;
+    color:#111827;
+}
+
+/* Header */
+
+.header{
+    background:#111;
+    color:#fff;
+    padding:18px 25px;
+    text-align:center;
+}
+
+.header h2{
+    margin:0;
+    font-size:22px;
+}
+
+.header p{
+    margin:5px 0 0;
+    font-size:13px;
+    opacity:.75;
+}
+
+/* Main */
+
+.main{
+    max-width:700px;
+    margin:50px auto;
+    padding:0 20px;
+}
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:40px;
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.title h1{
+    margin:0 0 10px;
+    font-size:30px;
+}
+
+.title p{
+    margin:0;
+    color:#6b7280;
+    font-size:15px;
+}
+
+/* Form */
+
+.form-group{
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    font-size:14px;
+}
+
+input,
+select{
+    width:100%;
+    padding:15px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:16px;
+    font-family:inherit;
+    outline:none;
+    transition:.2s;
+}
+
+input:focus,
+select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.1);
+}
+
+/* Mode */
+
+.mode-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.mode-option{
+    position:relative;
+}
+
+.mode-option input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.mode-label{
+    display:block;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.mode-label strong{
+    display:block;
+    font-size:16px;
+}
+
+.mode-label span{
+    display:block;
+    margin-top:5px;
+    font-size:12px;
+    color:#6b7280;
+}
+
+.mode-option input:checked + .mode-label{
+    border-color:#111;
+    background:#f3f4f6;
+}
+
+/* Button */
+
+.register-btn{
+    width:100%;
+    border:none;
+    background:linear-gradient(90deg,#111,#000);
+    color:#fff;
+    padding:17px;
+    border-radius:11px;
+    font-size:18px;
+    font-weight:600;
+    font-family:inherit;
+    cursor:pointer;
+    margin-top:10px;
+    transition:.2s;
+}
+
+.register-btn:hover{
+    transform:translateY(-2px);
+}
+
+.register-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
+/* Note */
+
+.note{
+    margin-top:20px;
+    padding:15px;
+    background:#f8fafc;
+    border-radius:10px;
+    font-size:13px;
+    color:#64748b;
+    text-align:center;
+}
+
+/* Success */
+
+.success{
+    display:none;
+    text-align:center;
+}
+
+.success-icon{
+    font-size:50px;
+    margin-bottom:15px;
+}
+
+.success h2{
+    margin:0 0 10px;
+}
+
+.success p{
+    color:#64748b;
+    line-height:1.7;
+}
+
+.registration-number{
+    display:inline-block;
+    background:#f1f5f9;
+    padding:12px 20px;
+    border-radius:8px;
+    font-weight:600;
+    margin:15px 0;
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+
+    .main{
+        margin:25px auto;
+    }
+
+    .card{
+        padding:25px 20px;
+    }
+
+    .title h1{
+        font-size:24px;
+    }
+
+    .mode-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h2>Arithuyil Arivom</h2>
+
+    <p>Unlock Your Hidden Mind Power</p>
+
+</div>
+
+
+<div class="main">
+
+<div class="card">
+
+
+<!-- REGISTRATION FORM -->
+
+<div id="registrationSection">
+
+    <div class="title">
+
+        <h1>Register for Free Experience Class</h1>
+
+        <p>
+            Enter your details to register for the experience session.
+        </p>
+
+    </div>
+
+
+    <form id="registrationForm">
+
+
+        <!-- NAME -->
+
+        <div class="form-group">
+
+            <label for="name">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter your name"
+                autocomplete="name"
+                required
+            >
+
+        </div>
+
+
+        <!-- MOBILE -->
+
+        <div class="form-group">
+
+            <label for="mobile">
+                Mobile Number
+            </label>
+
+            <input
+                type="tel"
+                id="mobile"
+                placeholder="Enter 10 digit mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+                required
+            >
+
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="form-group">
+
+            <label for="location">
+                Location
+            </label>
+
+            <input
+                type="text"
+                id="location"
+                placeholder="City / District"
+                required
+            >
+
+        </div>
+
+
+        <!-- CLASS MODE -->
+
+        <div class="form-group">
+
+            <label>
+                Preferred Class Mode
+            </label>
+
+            <div class="mode-grid">
+
+
+                <div class="mode-option">
+
+                    <input
+                        type="radio"
+                        id="online"
+                        name="class_mode"
+                        value="online"
+                        checked
+                    >
+
+                    <label
+                        for="online"
+                        class="mode-label"
+                    >
+
+                        <strong>Online</strong>
+
+                        <span>Zoom Session</span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="mode-option">
+
+                    <input
+                        type="radio"
+                        id="offline"
+                        name="class_mode"
+                        value="offline"
+                    >
+
+                    <label
+                        for="offline"
+                        class="mode-label"
+                    >
+
+                        <strong>Offline</strong>
+
+                        <span>Chennai</span>
+
+                    </label>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            id="registerBtn"
+            class="register-btn"
+        >
+            Continue Registration
+        </button>
+
+
+    </form>
+
+
+    <div class="note">
+
+        Your registration details will be securely recorded
+        for the Arithuyil Arivom Free Experience Class.
+
+    </div>
+
+</div>
+
+
+<!-- SUCCESS -->
+
+<div id="successSection" class="success">
+
+    <div class="success-icon">
+        ✅
+    </div>
+
+    <h2>
+        Registration Details Saved
+    </h2>
+
+    <p>
+        Your registration has been successfully recorded.
+    </p>
+
+    <div
+        id="registrationNumber"
+        class="registration-number"
+    ></div>
+
+    <p>
+        Payment step will be connected after
+        registration verification.
+    </p>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    /*
+     * =====================================================
+     * ARITHUYIL ARIVOM - NEW REGISTRATION SYSTEM
+     * =====================================================
+     */
+
+    const supabaseUrl =
+        "https://sftfivfmeynceokltbyb.supabase.co";
+
+
+    /*
+     * TEMPORARY TEST:
+     *
+     * Use the NEW project's Legacy ANON key here.
+     *
+     * Do NOT use service_role / secret key.
+     *
+     * After registration is confirmed working,
+     * we can migrate this to the publishable key.
+     */
+
+    const supabaseKey =
+        "PASTE_NEW_PROJECT_ANON_KEY_HERE";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            supabaseUrl,
+            supabaseKey
+        );
+
+
+    const form =
+        document.getElementById("registrationForm");
+
+
+    const button =
+        document.getElementById("registerBtn");
+
+
+    const registrationSection =
+        document.getElementById("registrationSection");
+
+
+    const successSection =
+        document.getElementById("successSection");
+
+
+    const registrationNumber =
+        document.getElementById("registrationNumber");
+
+
+    form.addEventListener("submit", async function(e){
+
+        e.preventDefault();
+
+
+        const name =
+            document.getElementById("name")
+            .value
+            .trim();
+
+
+        const mobile =
+            document.getElementById("mobile")
+            .value
+            .trim();
+
+
+        const location =
+            document.getElementById("location")
+            .value
+            .trim();
+
+
+        const classMode =
+            document.querySelector(
+                'input[name="class_mode"]:checked'
+            ).value;
+
+
+        /* Validation */
+
+        if(name.length < 2){
+
+            alert("Please enter your full name.");
+
+            return;
+        }
+
+
+        if(!/^[0-9]{10}$/.test(mobile)){
+
+            alert(
+                "Please enter a valid 10 digit mobile number."
+            );
+
+            return;
+        }
+
+
+        if(location.length < 2){
+
+            alert("Please enter your location.");
+
+            return;
+        }
+
+
+        /* Loading */
+
+        button.disabled = true;
+
+        button.innerText = "Saving Registration...";
+
+
+        try{
+
+
+            /*
+             * IMPORTANT:
+             *
+             * No SELECT after INSERT.
+             *
+             * This avoids requiring public SELECT permission.
+             */
+
+            const { error } = await supabaseClient
+
+                .from("registrations")
+
+                .insert([
+                    {
+                        name: name,
+                        mobile: mobile,
+                        location: location,
+                        class_mode: classMode,
+                        status: "payment_pending"
+                    }
+                ]);
+
+
+            if(error){
+
+                console.error(
+                    "Supabase registration error:",
+                    error
+                );
+
+                throw error;
+            }
+
+
+            /*
+             * Registration successfully saved.
+             *
+             * We intentionally do NOT redirect
+             * to payment yet.
+             */
+
+            registrationSection.style.display = "none";
+
+            successSection.style.display = "block";
+
+            registrationNumber.innerText =
+                "Registration Submitted";
+
+
+        }catch(error){
+
+
+            console.error(
+                "Registration failed:",
+                error
+            );
+
+
+            alert(
+                "Registration failed.\n\n" +
+                (error.message || "Unknown error")
+            );
+
+
+        }finally{
+
+
+            button.disabled = false;
+
+            button.innerText =
+                "Continue Registration";
+
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+</body>
+
+</html>
