@@ -725,93 +725,48 @@ Trusted by 10,000+ students across Tamil Nadu
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function(){
 
-    const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
+const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
 
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    const supabase = window.supabase.createClient(
-        supabaseUrl,
-        supabaseKey
-    );
+const form = document.getElementById("form");
+if(!form) return;   // prevents null error
 
-    const form = document.getElementById("form");
+form.addEventListener("submit", async function(e){
+e.preventDefault();
 
-    if (!form) {
-        console.error("Registration form not found");
-        return;
-    }
+let name = document.getElementById("name").value.trim();
+let mobile = document.getElementById("mobile").value.trim();
+let location = document.getElementById("location").value.trim();
 
-    form.addEventListener("submit", async function (e) {
+if(name=="" || mobile=="" || location==""){
+alert("Please fill all details");
+return;
+}
 
-        e.preventDefault();
+let {data:existing} = await supabase
+.from("freeclass_registrations")
+.select("mobile")
+.eq("mobile",mobile);
 
-        const name = document.getElementById("name").value.trim();
-        const mobile = document.getElementById("mobile").value.trim();
-        const location = document.getElementById("location").value.trim();
+if(existing.length>0){
+window.open("https://wa.me/919840851295?text=I already registered. I want additional seats","_blank");
+return;
+}
 
-        if (!name || !mobile || !location) {
-            alert("Please fill all details");
-            return;
-        }
+await supabase.from("freeclass_registrations")
+.insert([{name,mobile,location}]);
 
-        const registerBtn = document.getElementById("registerBtn");
-
-        registerBtn.disabled = true;
-        registerBtn.innerText = "Registering...";
-
-        try {
-
-            const { data, error } = await supabase
-                .from("registrations")
-                .insert([
-                    {
-                        name: name,
-                        mobile: mobile,
-                        location: location,
-                        status: "payment_pending"
-                    }
-                ])
-                .select()
-                .single();
-
-            if (error) {
-                console.error("Supabase error:", error);
-                throw error;
-            }
-
-            console.log("Registration saved:", data);
-
-            alert(
-                "Registration details saved successfully!\n\n" +
-                "Registration No: " +
-                data.registration_no
-            );
-
-            form.reset();
-
-        } catch (error) {
-
-            console.error("Registration failed:", error);
-
-            alert(
-                "Registration failed.\n\n" +
-                "Error: " +
-                (error.message || "Unknown error")
-            );
-
-        } finally {
-
-            registerBtn.disabled = false;
-            registerBtn.innerText = "Register";
-
-        }
-
-    });
+alert("Registration Success");
+window.location.href="payment.html";
+});
 
 });
-</script>  
+</script>
+
   
 <section class="class-details">
 
