@@ -724,48 +724,121 @@ Trusted by 10,000+ students across Tamil Nadu
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function(){
+ <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
-const supabaseKey = "sb_publishable_M3U4oKKpjzPWP_11siGxYw_nx879hUk";
+    const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const supabaseKey = "Ysb_publishable_M3U4oKKpjzPWP_11siGxYw_nx879hUk";
 
-const form = document.getElementById("form");
-if(!form) return;   // prevents null error
+    const supabase = window.supabase.createClient(
+        supabaseUrl,
+        supabaseKey
+    );
 
-form.addEventListener("submit", async function(e){
-e.preventDefault();
+    const form = document.getElementById("form");
 
-let name = document.getElementById("name").value.trim();
-let mobile = document.getElementById("mobile").value.trim();
-let location = document.getElementById("location").value.trim();
+    if (!form) {
+        console.error("Registration form not found");
+        return;
+    }
 
-if(name=="" || mobile=="" || location==""){
-alert("Please fill all details");
-return;
-}
+    form.addEventListener("submit", async function (e) {
 
-let {data:existing} = await supabase
-.from("freeclass_registrations")
-.select("mobile")
-.eq("mobile",mobile);
+        e.preventDefault();
 
-if(existing.length>0){
-window.open("https://wa.me/919840851295?text=I already registered. I want additional seats","_blank");
-return;
-}
+        const name = document.getElementById("name").value.trim();
+        const mobile = document.getElementById("mobile").value.trim();
+        const location = document.getElementById("location").value.trim();
 
-await supabase.from("freeclass_registrations")
-.insert([{name,mobile,location}]);
+        if (!name || !mobile || !location) {
+            alert("Please fill all details");
+            return;
+        }
 
-alert("Registration Success");
-window.location.href="payment.html";
+        const registerBtn = document.getElementById("registerBtn");
+
+        registerBtn.disabled = true;
+        registerBtn.innerText = "Registering...";
+
+        try {
+
+            // Check whether mobile already exists
+            const { data: existing, error: checkError } = await supabase
+                .from("registrations")
+                .select("id, registration_no, name, mobile")
+                .eq("mobile", mobile)
+                .limit(1);
+
+            if (checkError) {
+                throw checkError;
+            }
+
+            if (existing && existing.length > 0) {
+
+                alert(
+                    "This mobile number is already registered.\n\n" +
+                    "Registration No: " +
+                    (existing[0].registration_no || "Already Registered")
+                );
+
+                registerBtn.disabled = false;
+                registerBtn.innerText = "Register";
+
+                return;
+            }
+
+            // Insert new registration
+            const { data, error } = await supabase
+                .from("registrations")
+                .insert([
+                    {
+                        name: name,
+                        mobile: mobile,
+                        location: location,
+                        status: "payment_pending"
+                    }
+                ])
+                .select()
+                .single();
+
+            if (error) {
+                throw error;
+            }
+
+            console.log("Registration created:", data);
+
+            alert(
+                "Registration details saved successfully!\n\n" +
+                "Registration No: " +
+                data.registration_no
+            );
+
+            // Keep user on this page for now.
+            // Payment integration will be added after this test succeeds.
+
+            form.reset();
+
+        } catch (error) {
+
+            console.error("Registration error:", error);
+
+            alert(
+                "Registration failed.\n\n" +
+                "Please check the browser console for details."
+            );
+
+        } finally {
+
+            registerBtn.disabled = false;
+            registerBtn.innerText = "Register";
+
+        }
+
+    });
+
 });
-
-});
-</script>
+</script> 
   
 <section class="class-details">
 
