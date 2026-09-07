@@ -724,12 +724,12 @@ Trusted by 10,000+ students across Tamil Nadu
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
- <script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
 
     const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
 
-    const supabaseKey = "Ysb_publishable_M3U4oKKpjzPWP_11siGxYw_nx879hUk";
+    const supabaseKey = "sb_publishable_M3U4oKKpjzPWP_11siGxYw_nx879hUk";
 
     const supabase = window.supabase.createClient(
         supabaseUrl,
@@ -763,32 +763,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            // Check whether mobile already exists
-            const { data: existing, error: checkError } = await supabase
-                .from("registrations")
-                .select("id, registration_no, name, mobile")
-                .eq("mobile", mobile)
-                .limit(1);
-
-            if (checkError) {
-                throw checkError;
-            }
-
-            if (existing && existing.length > 0) {
-
-                alert(
-                    "This mobile number is already registered.\n\n" +
-                    "Registration No: " +
-                    (existing[0].registration_no || "Already Registered")
-                );
-
-                registerBtn.disabled = false;
-                registerBtn.innerText = "Register";
-
-                return;
-            }
-
-            // Insert new registration
             const { data, error } = await supabase
                 .from("registrations")
                 .insert([
@@ -803,10 +777,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 .single();
 
             if (error) {
+                console.error("Supabase error:", error);
                 throw error;
             }
 
-            console.log("Registration created:", data);
+            console.log("Registration saved:", data);
 
             alert(
                 "Registration details saved successfully!\n\n" +
@@ -814,18 +789,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 data.registration_no
             );
 
-            // Keep user on this page for now.
-            // Payment integration will be added after this test succeeds.
-
             form.reset();
 
         } catch (error) {
 
-            console.error("Registration error:", error);
+            console.error("Registration failed:", error);
 
             alert(
                 "Registration failed.\n\n" +
-                "Please check the browser console for details."
+                "Error: " +
+                (error.message || "Unknown error")
             );
 
         } finally {
@@ -838,7 +811,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-</script> 
+</script>  
   
 <section class="class-details">
 
