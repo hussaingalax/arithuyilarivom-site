@@ -687,43 +687,114 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
 
 
-                handler: function (response) {
+               handler: async function (response) {
 
-                    console.log(
-                        "Razorpay payment response:",
-                        response
-                    );
+    console.log(
+        "Razorpay payment response:",
+        response
+    );
 
+    try {
 
-                    // Save temporarily.
-                    // Server verification will be added next.
+        const verifyUrl =
+            "https://sftfivfmeynceokltbyb.supabase.co/functions/v1/verify-razorpay-payment";
 
-                    sessionStorage.setItem(
-                        "razorpay_payment_id",
-                        response.razorpay_payment_id
-                    );
+        const verifyResponse =
+            await fetch(verifyUrl, {
 
-                    sessionStorage.setItem(
-                        "razorpay_order_id",
-                        response.razorpay_order_id
-                    );
+                method: "POST",
 
-                    sessionStorage.setItem(
-                        "razorpay_signature",
-                        response.razorpay_signature
-                    );
-
-                    sessionStorage.setItem(
-                        "registration_id",
-                        registrationId
-                    );
-
-
-                    alert(
-                        "Payment completed. Verifying payment..."
-                    );
+                headers: {
+                    "Content-Type": "application/json",
+                    "apikey": supabaseKey,
+                    "Authorization":
+                        "Bearer " + supabaseKey
                 },
 
+                body: JSON.stringify({
+
+                    registration_id:
+                        registrationId,
+
+                    razorpay_order_id:
+                        response.razorpay_order_id,
+
+                    razorpay_payment_id:
+                        response.razorpay_payment_id,
+
+                    razorpay_signature:
+                        response.razorpay_signature
+
+                })
+
+            });
+
+
+        const verifyData =
+            await verifyResponse.json();
+
+
+        console.log(
+            "Payment verification response:",
+            verifyData
+        );
+
+
+        if (
+            !verifyResponse.ok ||
+            !verifyData.success
+        ) {
+
+            throw new Error(
+                verifyData.error ||
+                "Payment verification failed."
+            );
+
+        }
+
+
+        // Payment successfully verified
+        sessionStorage.setItem(
+            "registration_id",
+            registrationId
+        );
+
+        sessionStorage.setItem(
+            "registration_no",
+            orderData.registration_no
+        );
+
+        sessionStorage.setItem(
+            "razorpay_payment_id",
+            response.razorpay_payment_id
+        );
+
+
+        // Go to success page
+        window.location.href =
+            "/thankyou";
+
+    } catch (error) {
+
+        console.error(
+            "Payment verification error:",
+            error
+        );
+
+
+        alert(
+            "Payment was received, but verification could not be completed. Please contact Arithuyil Arivom support."
+        );
+
+
+        registerBtn.disabled = false;
+
+        registerBtn.innerText =
+            "Continue Registration";
+
+    }
+
+},
 
                 modal: {
 
