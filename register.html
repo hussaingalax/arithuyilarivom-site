@@ -769,6 +769,25 @@ document.addEventListener("DOMContentLoaded", function () {
             response.razorpay_payment_id
         );
 
+        sessionStorage.setItem(
+    "customer_name",
+    name
+);
+
+sessionStorage.setItem(
+    "customer_mobile",
+    mobile
+);
+
+sessionStorage.setItem(
+    "customer_location",
+    location
+);
+
+sessionStorage.setItem(
+    "customer_class_mode",
+    classMode
+);
 
         // Go to success page
         window.location.href =
