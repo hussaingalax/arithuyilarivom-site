@@ -1,33 +1,234 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Thank You</title>
-<meta http-equiv="refresh" content="3;url=https://wa.me/919840851295?text=I%20want%20to%20attend%20Free%20Class">
-<style>
-body{
-font-family:Arial;
-text-align:center;
-padding:80px;
-background:#f5f7fb;
-}
-.box{
-background:#fff;
-padding:40px;
-border-radius:12px;
-max-width:500px;
-margin:auto;
-box-shadow:0 0 15px rgba(0,0,0,0.1);
-}
-</style>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Registration Successful</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 80px 20px;
+            background: #f5f7fb;
+            margin: 0;
+        }
+
+        .box {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #0f2027;
+            margin-bottom: 15px;
+        }
+
+        .success-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .registration-number {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #111;
+        }
+
+        .redirect-text {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .whatsapp-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 24px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
 <div class="box">
-<h2>Registration Successful</h2>
-<p>Thank you for registering.</p>
-<p>You will now be redirected to WhatsApp to confirm your Free Class seat.</p>
+
+    <div class="success-icon">
+        ✅
+    </div>
+
+    <h2>
+        Registration Successful
+    </h2>
+
+    <p>
+        Thank you for registering for the
+        Arithuyil Arivom Free Experience Class.
+    </p>
+
+    <div
+        id="registrationNumber"
+        class="registration-number"
+    >
+    </div>
+
+    <p class="redirect-text">
+        Your payment has been verified successfully.
+        You will now be redirected to WhatsApp
+        to complete your class confirmation.
+    </p>
+
+    <a
+        id="whatsappButton"
+        class="whatsapp-btn"
+        href="#"
+    >
+        Continue to WhatsApp
+    </a>
+
 </div>
 
+
+<script>
+
+    // ==========================================
+    // GET SAVED REGISTRATION DETAILS
+    // ==========================================
+
+    const registrationNo =
+        sessionStorage.getItem(
+            "registration_no"
+        );
+
+    const registrationId =
+        sessionStorage.getItem(
+            "registration_id"
+        );
+
+    const paymentId =
+        sessionStorage.getItem(
+            "razorpay_payment_id"
+        );
+
+
+    // ==========================================
+    // DISPLAY REGISTRATION NUMBER
+    // ==========================================
+
+    const registrationNumberElement =
+        document.getElementById(
+            "registrationNumber"
+        );
+
+
+    if (registrationNo) {
+
+        registrationNumberElement.innerText =
+            "Registration No: " +
+            registrationNo;
+
+    } else {
+
+        registrationNumberElement.innerText =
+            "Registration Confirmed";
+
+    }
+
+
+    // ==========================================
+    // WHATSAPP MESSAGE
+    // ==========================================
+
+    let message =
+        "Hello Arithuyil Arivom,%0A%0A" +
+        "I have successfully registered " +
+        "for the Free Experience Class " +
+        "and completed the ₹199 payment.";
+
+
+    if (registrationNo) {
+
+        message +=
+            "%0A%0ARegistration No: " +
+            encodeURIComponent(
+                registrationNo
+            );
+
+    }
+
+
+    if (paymentId) {
+
+        message +=
+            "%0APayment ID: " +
+            encodeURIComponent(
+                paymentId
+            );
+
+    }
+
+
+    message +=
+        "%0A%0APlease confirm my Free Class seat.";
+
+
+    // ==========================================
+    // WHATSAPP URL
+    // ==========================================
+
+    const whatsappNumber =
+        "919840851295";
+
+
+    const whatsappUrl =
+        "https://wa.me/" +
+        whatsappNumber +
+        "?text=" +
+        message;
+
+
+    // Set button
+    const whatsappButton =
+        document.getElementById(
+            "whatsappButton"
+        );
+
+
+    whatsappButton.href =
+        whatsappUrl;
+
+
+    // ==========================================
+    // AUTO REDIRECT
+    // ==========================================
+
+    setTimeout(function () {
+
+        window.location.href =
+            whatsappUrl;
+
+    }, 3000);
+
+</script>
+
 </body>
+
 </html>
