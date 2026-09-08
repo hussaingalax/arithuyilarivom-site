@@ -1,47 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Registration Successful</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 80px 20px;
+            background: #f5f7fb;
+            margin: 0;
+        }
+
+        .box {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #0f2027;
+            margin-bottom: 15px;
+        }
+
+        .success-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .registration-number {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #111;
+        }
+
+        .redirect-text {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .whatsapp-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 24px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="box">
+
+    <div class="success-icon">
+        ✅
+    </div>
+
+    <h2>
+        Registration Successful
+    </h2>
+
+    <p>
+        Thank you for registering for the
+        Arithuyil Arivom Free Experience Class.
+    </p>
+
+    <div
+        id="registrationNumber"
+        class="registration-number"
+    >
+        Registration Confirmed
+    </div>
+
+    <p class="redirect-text">
+        Your payment has been verified successfully.
+        You will now be redirected to WhatsApp
+        to complete your class confirmation.
+    </p>
+
+    <a
+        id="whatsappButton"
+        class="whatsapp-btn"
+        href="#"
+    >
+        Continue to WhatsApp
+    </a>
+
+</div>
+
+
 <script>
 
+document.addEventListener("DOMContentLoaded", function () {
+
+
     // ==========================================
-    // GET REGISTRATION DETAILS
+    // GET SAVED DETAILS
     // ==========================================
 
     const registrationNo =
-        sessionStorage.getItem(
-            "registration_no"
-        );
-
-    const registrationId =
-        sessionStorage.getItem(
-            "registration_id"
-        );
+        sessionStorage.getItem("registration_no");
 
     const paymentId =
-        sessionStorage.getItem(
-            "razorpay_payment_id"
-        );
+        sessionStorage.getItem("razorpay_payment_id");
 
     const customerName =
-        sessionStorage.getItem(
-            "customer_name"
-        );
+        sessionStorage.getItem("customer_name");
 
     const customerMobile =
-        sessionStorage.getItem(
-            "customer_mobile"
-        );
+        sessionStorage.getItem("customer_mobile");
 
     const customerLocation =
-        sessionStorage.getItem(
-            "customer_location"
-        );
+        sessionStorage.getItem("customer_location");
 
     const customerClassMode =
-        sessionStorage.getItem(
-            "customer_class_mode"
-        );
+        sessionStorage.getItem("customer_class_mode");
 
 
     // ==========================================
-    // DISPLAY REGISTRATION NUMBER
+    // REGISTRATION NUMBER
     // ==========================================
 
     const registrationNumberElement =
@@ -50,26 +146,29 @@
         );
 
 
-    if (registrationNo) {
+    if (registrationNumberElement) {
 
-        registrationNumberElement.innerText =
-            "Registration No: " +
-            registrationNo;
+        if (registrationNo) {
 
-    } else {
+            registrationNumberElement.innerText =
+                "Registration No: " +
+                registrationNo;
 
-        registrationNumberElement.innerText =
-            "Registration Confirmed";
+        } else {
+
+            registrationNumberElement.innerText =
+                "Registration Confirmed";
+
+        }
 
     }
 
 
     // ==========================================
-    // CLASS MODE TEXT
+    // CLASS MODE
     // ==========================================
 
-    let classModeText =
-        "Online";
+    let classModeText = "Online – Zoom";
 
     if (
         customerClassMode === "offline"
@@ -77,11 +176,6 @@
 
         classModeText =
             "Offline – Chennai";
-
-    } else {
-
-        classModeText =
-            "Online – Zoom";
 
     }
 
@@ -93,9 +187,9 @@
     let message =
         "Hello Arithuyil Arivom,%0A%0A" +
 
-        "I have successfully registered " +
-        "for the Free Experience Class " +
-        "and completed the ₹199 payment." +
+        "I have successfully registered for the " +
+        "Free Experience Class and completed the " +
+        "₹199 payment." +
 
         "%0A%0A" +
 
@@ -149,7 +243,7 @@
 
 
     // ==========================================
-    // WHATSAPP
+    // WHATSAPP URLs
     // ==========================================
 
     const whatsappNumber =
@@ -157,16 +251,17 @@
 
 
     const whatsappWebUrl =
-    "https://wa.me/" +
-    whatsappNumber +
-    "?text=" +
-    message;
+        "https://wa.me/" +
+        whatsappNumber +
+        "?text=" +
+        message;
 
-const whatsappAppUrl =
-    "whatsapp://send?phone=" +
-    whatsappNumber +
-    "&text=" +
-    message;
+
+    const whatsappAppUrl =
+        "whatsapp://send?phone=" +
+        whatsappNumber +
+        "&text=" +
+        message;
 
 
     // ==========================================
@@ -179,52 +274,77 @@ const whatsappAppUrl =
         );
 
 
-    const isMobile =
-    /Android|iPhone|iPad|iPod/i.test(
-        navigator.userAgent
-    );
+    if (whatsappButton) {
 
-if (isMobile) {
-
-    whatsappButton.href =
-        whatsappAppUrl;
-
-} else {
-
-    whatsappButton.href =
-        whatsappWebUrl;
-
-}
+        const isMobile =
+            /Android|iPhone|iPad|iPod/i.test(
+                navigator.userAgent
+            );
 
 
-    // ==========================================
-    // AUTO REDIRECT
-    // ==========================================
+        whatsappButton.href =
+            isMobile
+                ? whatsappAppUrl
+                : whatsappWebUrl;
 
-    setTimeout(function () {
 
-    if (isMobile) {
+        // ======================================
+        // BUTTON FALLBACK
+        // ======================================
 
-        // Try opening WhatsApp App
-        window.location.href =
-            whatsappAppUrl;
+        whatsappButton.addEventListener(
+            "click",
+            function () {
 
-        // Fallback to WhatsApp web/link
+                if (isMobile) {
+
+                    setTimeout(function () {
+
+                        window.location.href =
+                            whatsappWebUrl;
+
+                    }, 1800);
+
+                }
+
+            }
+        );
+
+
+        // ======================================
+        // AUTO REDIRECT
+        // ======================================
+
         setTimeout(function () {
 
-            window.location.href =
-                whatsappWebUrl;
+            if (isMobile) {
 
-        }, 1800);
+                window.location.href =
+                    whatsappAppUrl;
 
-    } else {
 
-        // Desktop / Laptop
-        window.location.href =
-            whatsappWebUrl;
+                setTimeout(function () {
+
+                    window.location.href =
+                        whatsappWebUrl;
+
+                }, 1800);
+
+            } else {
+
+                window.location.href =
+                    whatsappWebUrl;
+
+            }
+
+        }, 3000);
 
     }
 
-}, 3000);
+});
 
 </script>
+
+</body>
+
+</html>
