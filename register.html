@@ -472,23 +472,36 @@ select:focus{
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
+    const supabaseUrl =
+        "https://sftfivfmeynceokltbyb.supabase.co";
 
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
+    const supabaseKey =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
 
-    const supabase = window.supabase.createClient(
-        supabaseUrl,
-        supabaseKey
-    );
+    const supabaseClient =
+        window.supabase.createClient(
+            supabaseUrl,
+            supabaseKey
+        );
 
-    const form = document.getElementById("form");
-    const registerBtn = document.getElementById("registerBtn");
 
-    if (!form) return;
+    const form =
+        document.getElementById("registrationForm");
+
+    const registerBtn =
+        document.getElementById("registerBtn");
+
+
+    if (!form) {
+        console.error("Registration form not found.");
+        return;
+    }
+
 
     form.addEventListener("submit", async function (e) {
 
         e.preventDefault();
+
 
         const name =
             document.getElementById("name").value.trim();
@@ -499,16 +512,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const location =
             document.getElementById("location").value.trim();
 
-        const classModeElement =
-            document.getElementById("classMode");
+
+        // Get selected class mode
+        const selectedMode =
+            document.querySelector(
+                'input[name="class_mode"]:checked'
+            );
 
         const classMode =
-            classModeElement
-                ? classModeElement.value
+            selectedMode
+                ? selectedMode.value
                 : "online";
 
 
-        // Basic validation
+        // Validation
         if (!name || !mobile || !location) {
 
             alert("Please fill all details.");
@@ -518,30 +535,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!/^[0-9]{10}$/.test(mobile)) {
 
-            alert("Please enter a valid 10-digit mobile number.");
+            alert(
+                "Please enter a valid 10-digit mobile number."
+            );
+
             return;
         }
 
 
         // Prevent double click
         registerBtn.disabled = true;
-        registerBtn.innerText = "Processing...";
+
+        registerBtn.innerText =
+            "Processing...";
 
 
         try {
 
-            /*
-             * Generate the registration UUID in browser.
-             *
-             * This lets us know the registration ID immediately
-             * without requiring public SELECT permission.
-             */
-            const registrationId = crypto.randomUUID();
+            // Generate registration ID
+            const registrationId =
+                crypto.randomUUID();
 
 
-            // STEP 1 — Create registration
+            // =========================================
+            // STEP 1 — CREATE REGISTRATION
+            // =========================================
+
             const { error: registrationError } =
-                await supabase
+                await supabaseClient
                     .from("registrations")
                     .insert([{
                         id: registrationId,
@@ -561,12 +582,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 throw new Error(
+                    registrationError.message ||
                     "Unable to save registration."
                 );
             }
 
 
-            // STEP 2 — Create Razorpay Order
+            console.log(
+                "Registration created:",
+                registrationId
+            );
+
+
+            // =========================================
+            // STEP 2 — CREATE RAZORPAY ORDER
+            // =========================================
+
             const functionUrl =
                 "https://sftfivfmeynceokltbyb.supabase.co/functions/v1/create-razorpay-order";
 
@@ -579,11 +610,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     headers: {
                         "Content-Type": "application/json",
                         "apikey": supabaseKey,
-                        "Authorization": "Bearer " + supabaseKey
+                        "Authorization":
+                            "Bearer " + supabaseKey
                     },
 
                     body: JSON.stringify({
-                        registration_id: registrationId
+                        registration_id:
+                            registrationId
                     })
                 });
 
@@ -592,7 +625,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 await orderResponse.json();
 
 
-            if (!orderResponse.ok || !orderData.success) {
+            if (!orderResponse.ok ||
+                !orderData.success) {
 
                 console.error(
                     "Order creation error:",
@@ -606,7 +640,16 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            // STEP 3 — Open Razorpay Checkout
+            console.log(
+                "Razorpay order created:",
+                orderData.order_id
+            );
+
+
+            // =========================================
+            // STEP 3 — OPEN RAZORPAY CHECKOUT
+            // =========================================
+
             const options = {
 
                 key: orderData.key_id,
@@ -620,12 +663,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 description:
                     "Free Experience Class Registration",
 
-                order_id: orderData.order_id,
+                order_id:
+                    orderData.order_id,
+
 
                 prefill: {
                     name: name,
                     contact: mobile
                 },
+
 
                 notes: {
                     registration_id:
@@ -635,30 +681,22 @@ document.addEventListener("DOMContentLoaded", function () {
                         orderData.registration_no
                 },
 
+
                 theme: {
                     color: "#0f2027"
                 },
 
 
-                handler: async function (response) {
+                handler: function (response) {
 
                     console.log(
-                        "Razorpay success:",
+                        "Razorpay payment response:",
                         response
                     );
 
 
-                    /*
-                     * IMPORTANT:
-                     *
-                     * Do NOT mark payment as paid here.
-                     *
-                     * Razorpay signature must first be
-                     * verified server-side.
-                     *
-                     * Verification function will be added
-                     * in the next step.
-                     */
+                    // Save temporarily.
+                    // Server verification will be added next.
 
                     sessionStorage.setItem(
                         "razorpay_payment_id",
@@ -681,13 +719,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
 
-                    /*
-                     * Temporary message.
-                     *
-                     * We will replace this with the actual
-                     * server-side verification flow next.
-                     */
-
                     alert(
                         "Payment completed. Verifying payment..."
                     );
@@ -698,7 +729,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     ondismiss: function () {
 
-                        registerBtn.disabled = false;
+                        registerBtn.disabled =
+                            false;
 
                         registerBtn.innerText =
                             "Continue Registration";
@@ -720,11 +752,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         response.error
                     );
 
+
                     alert(
                         "Payment failed. Please try again."
                     );
 
-                    registerBtn.disabled = false;
+
+                    registerBtn.disabled =
+                        false;
 
                     registerBtn.innerText =
                         "Continue Registration";
@@ -737,14 +772,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Registration/payment error:",
+                error
+            );
+
 
             alert(
                 error.message ||
                 "Something went wrong. Please try again."
             );
 
-            registerBtn.disabled = false;
+
+            registerBtn.disabled =
+                false;
 
             registerBtn.innerText =
                 "Continue Registration";
@@ -754,7 +795,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
-
 </body>
 
 </html>
