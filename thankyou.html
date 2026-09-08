@@ -1,116 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Registration Successful</title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 80px 20px;
-            background: #f5f7fb;
-            margin: 0;
-        }
-
-        .box {
-            background: #fff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            max-width: 500px;
-            margin: auto;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-
-        h2 {
-            color: #0f2027;
-            margin-bottom: 15px;
-        }
-
-        .success-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
-
-        .registration-number {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #111;
-        }
-
-        .redirect-text {
-            color: #555;
-            line-height: 1.6;
-        }
-
-        .whatsapp-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 14px 24px;
-            background: #25D366;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<div class="box">
-
-    <div class="success-icon">
-        ✅
-    </div>
-
-    <h2>
-        Registration Successful
-    </h2>
-
-    <p>
-        Thank you for registering for the
-        Arithuyil Arivom Free Experience Class.
-    </p>
-
-    <div
-        id="registrationNumber"
-        class="registration-number"
-    >
-    </div>
-
-    <p class="redirect-text">
-        Your payment has been verified successfully.
-        You will now be redirected to WhatsApp
-        to complete your class confirmation.
-    </p>
-
-    <a
-        id="whatsappButton"
-        class="whatsapp-btn"
-        href="#"
-    >
-        Continue to WhatsApp
-    </a>
-
-</div>
-
-
 <script>
 
     // ==========================================
-    // GET SAVED REGISTRATION DETAILS
+    // GET REGISTRATION DETAILS
     // ==========================================
 
     const registrationNo =
@@ -126,6 +17,26 @@
     const paymentId =
         sessionStorage.getItem(
             "razorpay_payment_id"
+        );
+
+    const customerName =
+        sessionStorage.getItem(
+            "customer_name"
+        );
+
+    const customerMobile =
+        sessionStorage.getItem(
+            "customer_mobile"
+        );
+
+    const customerLocation =
+        sessionStorage.getItem(
+            "customer_location"
+        );
+
+    const customerClassMode =
+        sessionStorage.getItem(
+            "customer_class_mode"
         );
 
 
@@ -154,20 +65,67 @@
 
 
     // ==========================================
+    // CLASS MODE TEXT
+    // ==========================================
+
+    let classModeText =
+        "Online";
+
+    if (
+        customerClassMode === "offline"
+    ) {
+
+        classModeText =
+            "Offline – Chennai";
+
+    } else {
+
+        classModeText =
+            "Online – Zoom";
+
+    }
+
+
+    // ==========================================
     // WHATSAPP MESSAGE
     // ==========================================
 
     let message =
         "Hello Arithuyil Arivom,%0A%0A" +
+
         "I have successfully registered " +
         "for the Free Experience Class " +
-        "and completed the ₹199 payment.";
+        "and completed the ₹199 payment." +
+
+        "%0A%0A" +
+
+        "Registration Details:" +
+
+        "%0AName: " +
+        encodeURIComponent(
+            customerName || ""
+        ) +
+
+        "%0ARegistered Mobile: " +
+        encodeURIComponent(
+            customerMobile || ""
+        ) +
+
+        "%0ALocation: " +
+        encodeURIComponent(
+            customerLocation || ""
+        ) +
+
+        "%0AClass Mode: " +
+        encodeURIComponent(
+            classModeText
+        );
 
 
     if (registrationNo) {
 
         message +=
-            "%0A%0ARegistration No: " +
+            "%0ARegistration No: " +
             encodeURIComponent(
                 registrationNo
             );
@@ -191,7 +149,7 @@
 
 
     // ==========================================
-    // WHATSAPP URL
+    // WHATSAPP
     // ==========================================
 
     const whatsappNumber =
@@ -205,7 +163,10 @@
         message;
 
 
-    // Set button
+    // ==========================================
+    // WHATSAPP BUTTON
+    // ==========================================
+
     const whatsappButton =
         document.getElementById(
             "whatsappButton"
@@ -228,7 +189,3 @@
     }, 3000);
 
 </script>
-
-</body>
-
-</html>
