@@ -467,212 +467,293 @@ select:focus{
 <!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-document.addEventListener("DOMContentLoaded", function(){
+    const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
 
-    /*
-     * =====================================================
-     * ARITHUYIL ARIVOM - NEW REGISTRATION SYSTEM
-     * =====================================================
-     */
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
 
-    const supabaseUrl =
-        "https://sftfivfmeynceokltbyb.supabase.co";
+    const supabase = window.supabase.createClient(
+        supabaseUrl,
+        supabaseKey
+    );
 
+    const form = document.getElementById("form");
+    const registerBtn = document.getElementById("registerBtn");
 
-    /*
-     * TEMPORARY TEST:
-     *
-     * Use the NEW project's Legacy ANON key here.
-     *
-     * Do NOT use service_role / secret key.
-     *
-     * After registration is confirmed working,
-     * we can migrate this to the publishable key.
-     */
+    if (!form) return;
 
-    const supabaseKey =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
-
-
-    const supabaseClient =
-        window.supabase.createClient(
-            supabaseUrl,
-            supabaseKey
-        );
-
-
-    const form =
-        document.getElementById("registrationForm");
-
-
-    const button =
-        document.getElementById("registerBtn");
-
-
-    const registrationSection =
-        document.getElementById("registrationSection");
-
-
-    const successSection =
-        document.getElementById("successSection");
-
-
-    const registrationNumber =
-        document.getElementById("registrationNumber");
-
-
-    form.addEventListener("submit", async function(e){
+    form.addEventListener("submit", async function (e) {
 
         e.preventDefault();
 
-
         const name =
-            document.getElementById("name")
-            .value
-            .trim();
-
+            document.getElementById("name").value.trim();
 
         const mobile =
-            document.getElementById("mobile")
-            .value
-            .trim();
-
+            document.getElementById("mobile").value.trim();
 
         const location =
-            document.getElementById("location")
-            .value
-            .trim();
+            document.getElementById("location").value.trim();
 
+        const classModeElement =
+            document.getElementById("classMode");
 
         const classMode =
-            document.querySelector(
-                'input[name="class_mode"]:checked'
-            ).value;
+            classModeElement
+                ? classModeElement.value
+                : "online";
 
 
-        /* Validation */
+        // Basic validation
+        if (!name || !mobile || !location) {
 
-        if(name.length < 2){
-
-            alert("Please enter your full name.");
-
+            alert("Please fill all details.");
             return;
         }
 
 
-        if(!/^[0-9]{10}$/.test(mobile)){
+        if (!/^[0-9]{10}$/.test(mobile)) {
 
-            alert(
-                "Please enter a valid 10 digit mobile number."
-            );
-
+            alert("Please enter a valid 10-digit mobile number.");
             return;
         }
 
 
-        if(location.length < 2){
-
-            alert("Please enter your location.");
-
-            return;
-        }
+        // Prevent double click
+        registerBtn.disabled = true;
+        registerBtn.innerText = "Processing...";
 
 
-        /* Loading */
-
-        button.disabled = true;
-
-        button.innerText = "Saving Registration...";
-
-
-        try{
-
+        try {
 
             /*
-             * IMPORTANT:
+             * Generate the registration UUID in browser.
              *
-             * No SELECT after INSERT.
-             *
-             * This avoids requiring public SELECT permission.
+             * This lets us know the registration ID immediately
+             * without requiring public SELECT permission.
              */
+            const registrationId = crypto.randomUUID();
 
-            const { error } = await supabaseClient
 
-                .from("registrations")
-
-                .insert([
-                    {
+            // STEP 1 — Create registration
+            const { error: registrationError } =
+                await supabase
+                    .from("registrations")
+                    .insert([{
+                        id: registrationId,
                         name: name,
                         mobile: mobile,
                         location: location,
                         class_mode: classMode,
                         status: "payment_pending"
-                    }
-                ]);
+                    }]);
 
 
-            if(error){
+            if (registrationError) {
 
                 console.error(
-                    "Supabase registration error:",
-                    error
+                    "Registration error:",
+                    registrationError
                 );
 
-                throw error;
+                throw new Error(
+                    "Unable to save registration."
+                );
             }
 
 
-            /*
-             * Registration successfully saved.
-             *
-             * We intentionally do NOT redirect
-             * to payment yet.
-             */
-
-            registrationSection.style.display = "none";
-
-            successSection.style.display = "block";
-
-            registrationNumber.innerText =
-                "Registration Submitted";
+            // STEP 2 — Create Razorpay Order
+            const functionUrl =
+                "https://sftfivfmeynceokltbyb.supabase.co/functions/v1/create-razorpay-order";
 
 
-        }catch(error){
+            const orderResponse =
+                await fetch(functionUrl, {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": supabaseKey,
+                        "Authorization": "Bearer " + supabaseKey
+                    },
+
+                    body: JSON.stringify({
+                        registration_id: registrationId
+                    })
+                });
 
 
-            console.error(
-                "Registration failed:",
-                error
+            const orderData =
+                await orderResponse.json();
+
+
+            if (!orderResponse.ok || !orderData.success) {
+
+                console.error(
+                    "Order creation error:",
+                    orderData
+                );
+
+                throw new Error(
+                    orderData.error ||
+                    "Unable to create payment order."
+                );
+            }
+
+
+            // STEP 3 — Open Razorpay Checkout
+            const options = {
+
+                key: orderData.key_id,
+
+                amount: orderData.amount,
+
+                currency: orderData.currency,
+
+                name: "Arithuyil Arivom",
+
+                description:
+                    "Free Experience Class Registration",
+
+                order_id: orderData.order_id,
+
+                prefill: {
+                    name: name,
+                    contact: mobile
+                },
+
+                notes: {
+                    registration_id:
+                        registrationId,
+
+                    registration_no:
+                        orderData.registration_no
+                },
+
+                theme: {
+                    color: "#0f2027"
+                },
+
+
+                handler: async function (response) {
+
+                    console.log(
+                        "Razorpay success:",
+                        response
+                    );
+
+
+                    /*
+                     * IMPORTANT:
+                     *
+                     * Do NOT mark payment as paid here.
+                     *
+                     * Razorpay signature must first be
+                     * verified server-side.
+                     *
+                     * Verification function will be added
+                     * in the next step.
+                     */
+
+                    sessionStorage.setItem(
+                        "razorpay_payment_id",
+                        response.razorpay_payment_id
+                    );
+
+                    sessionStorage.setItem(
+                        "razorpay_order_id",
+                        response.razorpay_order_id
+                    );
+
+                    sessionStorage.setItem(
+                        "razorpay_signature",
+                        response.razorpay_signature
+                    );
+
+                    sessionStorage.setItem(
+                        "registration_id",
+                        registrationId
+                    );
+
+
+                    /*
+                     * Temporary message.
+                     *
+                     * We will replace this with the actual
+                     * server-side verification flow next.
+                     */
+
+                    alert(
+                        "Payment completed. Verifying payment..."
+                    );
+                },
+
+
+                modal: {
+
+                    ondismiss: function () {
+
+                        registerBtn.disabled = false;
+
+                        registerBtn.innerText =
+                            "Continue Registration";
+                    }
+                }
+            };
+
+
+            const razorpay =
+                new Razorpay(options);
+
+
+            razorpay.on(
+                "payment.failed",
+                function (response) {
+
+                    console.error(
+                        "Payment failed:",
+                        response.error
+                    );
+
+                    alert(
+                        "Payment failed. Please try again."
+                    );
+
+                    registerBtn.disabled = false;
+
+                    registerBtn.innerText =
+                        "Continue Registration";
+                }
             );
 
+
+            razorpay.open();
+
+
+        } catch (error) {
+
+            console.error(error);
 
             alert(
-                "Registration failed.\n\n" +
-                (error.message || "Unknown error")
+                error.message ||
+                "Something went wrong. Please try again."
             );
 
+            registerBtn.disabled = false;
 
-        }finally{
-
-
-            button.disabled = false;
-
-            button.innerText =
+            registerBtn.innerText =
                 "Continue Registration";
-
-
         }
 
     });
 
 });
-
 </script>
-
 
 </body>
 
