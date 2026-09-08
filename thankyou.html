@@ -156,11 +156,17 @@
         "919840851295";
 
 
-    const whatsappUrl =
-        "https://wa.me/" +
-        whatsappNumber +
-        "?text=" +
-        message;
+    const whatsappWebUrl =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    message;
+
+const whatsappAppUrl =
+    "whatsapp://send?phone=" +
+    whatsappNumber +
+    "&text=" +
+    message;
 
 
     // ==========================================
@@ -173,8 +179,22 @@
         );
 
 
+    const isMobile =
+    /Android|iPhone|iPad|iPod/i.test(
+        navigator.userAgent
+    );
+
+if (isMobile) {
+
     whatsappButton.href =
-        whatsappUrl;
+        whatsappAppUrl;
+
+} else {
+
+    whatsappButton.href =
+        whatsappWebUrl;
+
+}
 
 
     // ==========================================
@@ -183,9 +203,28 @@
 
     setTimeout(function () {
 
-        window.location.href =
-            whatsappUrl;
+    if (isMobile) {
 
-    }, 3000);
+        // Try opening WhatsApp App
+        window.location.href =
+            whatsappAppUrl;
+
+        // Fallback to WhatsApp web/link
+        setTimeout(function () {
+
+            window.location.href =
+                whatsappWebUrl;
+
+        }, 1800);
+
+    } else {
+
+        // Desktop / Laptop
+        window.location.href =
+            whatsappWebUrl;
+
+    }
+
+}, 3000);
 
 </script>
