@@ -1,235 +1,1428 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arithuyil Arivom</title>
+
+<title>Arithuyil Arivom | Mind Power & Inner Transformation</title>
+
 <link rel="icon" type="image/png" href="favicon.png">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<meta name="description" content="Arithuyil Arivom – Practical Mind Power, Subconscious Training and Inner Transformation with Shiek Guru in Chennai.">
+<meta name="keywords" content="Arithuyil Arivom, Shiek Guru, Mind Power, Subconscious Mind, Self Healing, Hypnotism Training, Inner Transformation, Chennai">
+<meta name="author" content="Shiek Guru">
 
 <style>
-  h1{
-  font-size:38px;
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:#f7f9fc;
+  color:#1b1b1b;
+  overflow-x:hidden;
+}
+
+/* =========================
+   TOP HEADER
+========================= */
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:9999;
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(12px);
+  box-shadow:0 3px 18px rgba(0,0,0,0.08);
+}
+
+/* Top information bar */
+
+.top-bar{
+  background:#111;
+  color:#fff;
+  min-height:36px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  font-size:12px;
+  padding:7px 20px;
+}
+
+.top-bar span{
+  opacity:.9;
+}
+
+/* Main navigation */
+
+.main-nav{
+  max-width:1400px;
+  margin:auto;
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  gap:25px;
+}
+
+/* Logo */
+
+.logo-area{
+  display:flex;
+  align-items:center;
+  text-decoration:none;
+  color:#111;
+  min-width:max-content;
+}
+
+.logo-text{
+  line-height:1.05;
+}
+
+.logo-main{
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+.logo-sub{
+  font-size:10px;
+  letter-spacing:2px;
+  color:#777;
+  margin-top:4px;
+}
+
+/* Navigation links */
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:25px;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:#333;
+  font-size:13px;
+  font-weight:500;
+  white-space:nowrap;
+  transition:.25s;
+}
+
+.nav-links a:hover{
+  color:#000;
+}
+
+/* IMPORTANT:
+   Join Free Class remains linked to freeclass.html
+*/
+
+.free-class-btn{
+  background:#111;
+  color:#fff !important;
+  padding:11px 18px;
+  border-radius:6px;
+  font-weight:600 !important;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.free-class-btn:hover{
+  background:#333;
+  transform:translateY(-1px);
+}
+
+/* Language */
+
+.language-switch{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  border:1px solid #ddd;
+  padding:5px;
+  border-radius:20px;
+  background:#fff;
   white-space:nowrap;
 }
 
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background:linear-gradient(135deg,#eef2f7,#f9fbff);
-  color:#222;
+.language-switch span{
+  font-size:11px;
+  padding:5px 8px;
+  border-radius:15px;
+  cursor:pointer;
 }
 
-header{
-  background:linear-gradient(90deg,#111,#222);
-  padding:18px;
-  text-align:center;
-  box-shadow:0 3px 10px rgba(0,0,0,0.2);
+.language-switch .active{
+  background:#111;
+  color:#fff;
 }
 
-nav{
+/* =========================
+   HERO SLIDER
+========================= */
+
+.hero{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+  background:#111;
+}
+
+.slider{
   display:flex;
-  justify-content:center;
-  gap:18px;
-  flex-wrap:wrap;
+  width:100%;
+  transition:transform .65s cubic-bezier(.77,0,.18,1);
+  touch-action:pan-y;
 }
 
-nav a{
+.slide{
+  min-width:100%;
+  height:calc(100vh - 108px);
+  min-height:520px;
+  max-height:720px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(circle at 80% 30%,rgba(70,90,140,.25),transparent 35%),
+    linear-gradient(110deg,#0d0f17,#171b2b);
+}
+
+/* subtle background */
+
+.slide::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,
+      rgba(8,10,16,.96) 0%,
+      rgba(8,10,16,.82) 38%,
+      rgba(8,10,16,.20) 75%,
+      rgba(8,10,16,.05) 100%);
+  z-index:1;
+}
+
+/* Content */
+
+.slide-content{
+  width:54%;
+  max-width:760px;
+  margin-left:8%;
+  position:relative;
+  z-index:3;
   color:#fff;
-  text-decoration:none;
+}
+
+.slide-small{
+  font-size:14px;
+  letter-spacing:3px;
+  text-transform:uppercase;
   font-weight:500;
-  font-size:15px;
-  opacity:0.9;
+  opacity:.85;
+  margin-bottom:18px;
 }
 
-nav a:hover{
-  opacity:1;
-  text-decoration:underline;
+.slide-title{
+  font-size:clamp(38px,5vw,72px);
+  line-height:1.08;
+  font-weight:800;
+  letter-spacing:-1.5px;
+  margin-bottom:20px;
 }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:30px 20px;
+.slide-title span{
+  display:block;
+  font-weight:400;
 }
 
-h1,h2{
-  text-align:center;
-  font-weight:600;
+.slide-description{
+  font-size:17px;
+  line-height:1.7;
+  max-width:580px;
+  color:rgba(255,255,255,.82);
+  margin-bottom:30px;
 }
 
-.card{
-  background:#fff;
-  padding:26px;
-  border-radius:16px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.08);
-  margin:28px 0;
-  transition:0.3s;
-}
-
-.card:hover{
-  transform:translateY(-4px);
-}
-
-.center{text-align:center}
-
-img.guru{
-  width:220px;
-  max-width:90%;
-  border-radius:18px;
-  margin-top:15px;
-  box-shadow:0 8px 18px rgba(0,0,0,0.2);
-}
-
-.btn{
+.hero-btn{
   display:inline-block;
-  background:linear-gradient(90deg,#111,#333);
-  color:#fff;
-  padding:14px 28px;
+  background:#fff;
+  color:#111;
+  padding:14px 26px;
+  border-radius:7px;
   text-decoration:none;
-  border-radius:10px;
-  margin-top:18px;
-  font-size:16px;
-  box-shadow:0 6px 15px rgba(0,0,0,0.25);
-  transition:0.3s;
+  font-weight:600;
+  font-size:14px;
+  transition:.3s;
 }
 
-.btn:hover{
+.hero-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+/* Guru image */
+
+.slide-image{
+  position:absolute;
+  right:3%;
+  bottom:0;
+  height:92%;
+  width:48%;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:2;
+}
+
+.slide-image img{
+  max-height:100%;
+  max-width:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 15px 30px rgba(0,0,0,.35));
+}
+
+/* Different image positioning for visual variation */
+
+.slide:nth-child(2) .slide-image img{
+  transform:scale(.94);
+}
+
+.slide:nth-child(3) .slide-image img{
+  transform:scale(1.02);
+}
+
+.slide:nth-child(4) .slide-image img{
+  transform:scale(.96);
+}
+
+.slide:nth-child(5) .slide-image img{
   transform:scale(1.05);
 }
 
-ul{line-height:1.9}
+/* Arrow controls */
 
-/* Mobile */
-@media(max-width:768px){
-  nav{
-    overflow-x:auto;
-    white-space:nowrap;
-    justify-content:flex-start;
-  }
-  img.guru{width:140px}
-  .btn{width:100%;text-align:center}
+.slider-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.4);
+  background:rgba(0,0,0,.25);
+  color:#fff;
+  font-size:25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:10;
+  transition:.25s;
+  user-select:none;
 }
-</style>
-  <meta name="description" content="Arithuyil Arivom is a mind power and self healing class conducted by Shiek Guru in Adambakkam, Chennai. Learn subconscious techniques, healing methods, and inner transformation.">
-<meta name="keywords" content="Arithuyil Arivom, Shiek Guru, Mind Power Tamil, Self Healing Class Chennai, Hypnotism Training, Subconscious Mind Tamil">
-<meta name="author" content="Shiek Guru">
 
+.slider-arrow:hover{
+  background:#fff;
+  color:#111;
+}
+
+.prev{
+  left:22px;
+}
+
+.next{
+  right:22px;
+}
+
+/* Dots */
+
+.slider-dots{
+  position:absolute;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  display:flex;
+  gap:8px;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  background:rgba(255,255,255,.45);
+  border-radius:50%;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.dot.active{
+  width:28px;
+  border-radius:10px;
+  background:#fff;
+}
+
+/* =========================
+   INTRO SECTION
+========================= */
+
+.intro{
+  max-width:1150px;
+  margin:auto;
+  padding:90px 25px;
+  text-align:center;
+}
+
+.section-label{
+  font-size:12px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:#777;
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.intro h2{
+  font-size:38px;
+  line-height:1.2;
+  margin-bottom:20px;
+  font-weight:700;
+}
+
+.intro p{
+  max-width:800px;
+  margin:auto;
+  color:#666;
+  line-height:1.9;
+  font-size:16px;
+}
+
+/* =========================
+   HIGHLIGHTS
+========================= */
+
+.highlights{
+  background:#111;
+  color:#fff;
+  padding:75px 25px;
+}
+
+.highlight-container{
+  max-width:1150px;
+  margin:auto;
+}
+
+.highlight-title{
+  text-align:center;
+  margin-bottom:45px;
+}
+
+.highlight-title h2{
+  font-size:34px;
+}
+
+.highlight-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+.highlight-card{
+  padding:28px 22px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+}
+
+.highlight-card h3{
+  font-size:18px;
+  margin-bottom:10px;
+}
+
+.highlight-card p{
+  font-size:13px;
+  line-height:1.7;
+  color:#bbb;
+}
+
+/* =========================
+   PROGRAM SECTION
+========================= */
+
+.programs{
+  max-width:1150px;
+  margin:auto;
+  padding:90px 25px;
+}
+
+.programs-header{
+  text-align:center;
+  margin-bottom:45px;
+}
+
+.programs-header h2{
+  font-size:38px;
+  margin-bottom:12px;
+}
+
+.programs-header p{
+  color:#777;
+}
+
+.program-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:25px;
+}
+
+.program-card{
+  background:#fff;
+  padding:32px 26px;
+  border-radius:14px;
+  box-shadow:0 8px 30px rgba(0,0,0,.07);
+  border:1px solid #eee;
+  transition:.3s;
+}
+
+.program-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 15px 35px rgba(0,0,0,.1);
+}
+
+.program-number{
+  font-size:12px;
+  letter-spacing:2px;
+  color:#888;
+  margin-bottom:15px;
+}
+
+.program-card h3{
+  font-size:21px;
+  margin-bottom:12px;
+}
+
+.program-card p{
+  color:#666;
+  line-height:1.7;
+  font-size:14px;
+}
+
+/* =========================
+   CTA
+========================= */
+
+.final-cta{
+  background:linear-gradient(120deg,#111,#242424);
+  color:#fff;
+  padding:90px 25px;
+  text-align:center;
+}
+
+.final-cta h2{
+  font-size:42px;
+  margin-bottom:15px;
+}
+
+.final-cta p{
+  color:#ccc;
+  max-width:650px;
+  margin:0 auto 30px;
+  line-height:1.8;
+}
+
+.cta-button{
+  display:inline-block;
+  background:#fff;
+  color:#111;
+  padding:15px 30px;
+  border-radius:7px;
+  text-decoration:none;
+  font-weight:600;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  background:#090909;
+  color:#aaa;
+  text-align:center;
+  padding:35px 20px;
+  font-size:13px;
+}
+
+footer strong{
+  color:#fff;
+}
+
+/* WhatsApp */
+
+.whatsapp{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:#25D366;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  text-decoration:none;
+  box-shadow:0 5px 20px rgba(0,0,0,.25);
+  z-index:9998;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1100px){
+
+  .nav-links{
+    gap:15px;
+  }
+
+  .nav-links a{
+    font-size:12px;
+  }
+
+  .main-nav{
+    padding:0 18px;
+  }
+
+}
+
+@media(max-width:850px){
+
+  .top-bar{
+    display:none;
+  }
+
+  .site-header{
+    position:sticky;
+    top:0;
+  }
+
+  .main-nav{
+    min-height:64px;
+    padding:10px 15px;
+  }
+
+  .logo-main{
+    font-size:20px;
+  }
+
+  .logo-sub{
+    font-size:8px;
+  }
+
+  .nav-links{
+    overflow-x:auto;
+    justify-content:flex-start;
+    max-width:58%;
+    padding-bottom:3px;
+  }
+
+  .nav-links a{
+    font-size:11px;
+  }
+
+  .language-switch{
+    display:none;
+  }
+
+  .slide{
+    height:650px;
+    min-height:650px;
+    align-items:flex-start;
+  }
+
+  .slide::before{
+    background:
+      linear-gradient(180deg,
+        rgba(8,10,16,.93) 0%,
+        rgba(8,10,16,.70) 45%,
+        rgba(8,10,16,.15) 100%);
+  }
+
+  .slide-content{
+    width:90%;
+    margin:55px auto 0;
+    text-align:center;
+    z-index:4;
+  }
+
+  .slide-title{
+    font-size:40px;
+  }
+
+  .slide-description{
+    font-size:14px;
+    margin:0 auto 25px;
+  }
+
+  .slide-image{
+    width:100%;
+    height:55%;
+    right:0;
+    bottom:0;
+  }
+
+  .slide-image img{
+    max-height:100%;
+    max-width:90%;
+  }
+
+  .slider-arrow{
+    width:40px;
+    height:40px;
+    font-size:20px;
+  }
+
+  .prev{
+    left:10px;
+  }
+
+  .next{
+    right:10px;
+  }
+
+  .highlight-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .program-grid{
+    grid-template-columns:1fr;
+  }
+
+  .intro h2,
+  .programs-header h2{
+    font-size:30px;
+  }
+
+  .final-cta h2{
+    font-size:32px;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .nav-links{
+    max-width:52%;
+  }
+
+  .nav-links a:nth-child(n+5){
+    display:none;
+  }
+
+  .slide{
+    height:620px;
+    min-height:620px;
+  }
+
+  .slide-title{
+    font-size:34px;
+  }
+
+  .slide-small{
+    font-size:10px;
+    letter-spacing:2px;
+  }
+
+  .slide-description{
+    font-size:13px;
+  }
+
+  .highlight-grid{
+    grid-template-columns:1fr;
+  }
+
+  .intro,
+  .programs{
+    padding:65px 20px;
+  }
+
+  .whatsapp{
+    width:50px;
+    height:50px;
+    right:15px;
+    bottom:15px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
-<header>
-<nav>
-<a href="index.html">Home</a>
-<a href="programs.html">Programs</a>
-  <a href="results.html">Results</a>
-<a href="8week.html">8 Week Class</a>
-  <a href="freeclass.html">Join Free Class</a>
-  <a href="join.html">Join Class</a>
-  <a href="problem.html">Problems</a>
-<a href="amavasai.html">Amavasai</a>
-<a href="deekshai.html">Deekshai</a>
-  <a href="about.html">About</a>
+<!-- =========================
+     HEADER
+========================= -->
 
-</nav>
+<header class="site-header">
+
+  <div class="top-bar">
+    <span>📞 +91 98408 51295</span>
+    <span>Arithuyil Arivom • TrueSelf Mind Gym</span>
+    <span>Chennai, Tamil Nadu</span>
+  </div>
+
+  <div class="main-nav">
+
+    <a href="index.html" class="logo-area">
+      <div class="logo-text">
+        <div class="logo-main">Arithuyil Arivom</div>
+        <div class="logo-sub">TRUESELF MIND GYM</div>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+
+      <a href="index.html">Home</a>
+
+      <a href="programs.html">Programs</a>
+
+      <a href="results.html">Results</a>
+
+      <a href="8week.html">8 Week Class</a>
+
+      <!-- DO NOT CHANGE THIS -->
+      <a href="freeclass.html" class="free-class-btn">
+        Join Free Class
+      </a>
+
+      <a href="join.html">Join Class</a>
+
+      <a href="problem.html">Problems</a>
+
+      <a href="amavasai.html">Amavasai</a>
+
+      <a href="deekshai.html">Deekshai</a>
+
+      <a href="about.html">About</a>
+
+    </nav>
+
+    <!-- Language switch UI -->
+    <div class="language-switch">
+      <span>தமிழ்</span>
+      <span class="active">English</span>
+    </div>
+
+  </div>
+
 </header>
 
-<div class="container">
-<div style="
-background:linear-gradient(135deg,#ffffff,#eef3ff);
-padding:50px 20px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-text-align:center;
-margin-bottom:40px;
-">
 
-<h1 style="font-size:40px;margin-bottom:10px;">Arithuyil Arivom</h1>
+<!-- =========================
+     5 BANNER HERO SLIDER
+========================= -->
 
-<img src="guru.jpg" class="guru">
+<section class="hero">
 
-<h3 style="margin-top:15px;">Shiek Guru</h3>
+  <div class="slider" id="slider">
 
-<p style="font-size:20px;margin:15px 0;">
-“அறிதுயில் அறிவோம், அற்புதமாய் வாழ்வோம்”
-</p>
 
-<a class="btn" href="https://wa.me/919840851295">
-WhatsApp for Free Class
+    <!-- SLIDE 1 -->
+
+    <div class="slide">
+
+      <div class="slide-content">
+
+        <div class="slide-small">
+          Arithuyil Arivom • TrueSelf Mind Gym
+        </div>
+
+        <h1 class="slide-title">
+          You Are Not Stuck.
+          <span>You Can Change Your Life.</span>
+        </h1>
+
+        <p class="slide-description">
+          Discover practical mind power and subconscious training
+          designed to help you create positive changes from within.
+        </p>
+
+        <a href="freeclass.html" class="hero-btn">
+          Join Free Class
+        </a>
+
+      </div>
+
+      <div class="slide-image">
+        <img src="guru.jpg" alt="Shiek Guru">
+      </div>
+
+    </div>
+
+
+    <!-- SLIDE 2 -->
+
+    <div class="slide">
+
+      <div class="slide-content">
+
+        <div class="slide-small">
+          Transform From Within
+        </div>
+
+        <h2 class="slide-title">
+          Unlock The
+          <span>Power Within You.</span>
+        </h2>
+
+        <p class="slide-description">
+          Learn how to understand your inner mind,
+          develop confidence and create a more peaceful,
+          purposeful life.
+        </p>
+
+        <a href="freeclass.html" class="hero-btn">
+          Join Free Class
+        </a>
+
+      </div>
+
+      <div class="slide-image">
+        <img src="guru.jpg" alt="Shiek Guru">
+      </div>
+
+    </div>
+
+
+    <!-- SLIDE 3 -->
+
+    <div class="slide">
+
+      <div class="slide-content">
+
+        <div class="slide-small">
+          Practical Mind Training
+        </div>
+
+        <h2 class="slide-title">
+          Train Your Mind.
+          <span>Transform Your Life.</span>
+        </h2>
+
+        <p class="slide-description">
+          Experience practical techniques for relaxation,
+          subconscious awareness, confidence and inner transformation.
+        </p>
+
+        <a href="freeclass.html" class="hero-btn">
+          Join Free Class
+        </a>
+
+      </div>
+
+      <div class="slide-image">
+        <img src="guru.jpg" alt="Shiek Guru">
+      </div>
+
+    </div>
+
+
+    <!-- SLIDE 4 -->
+
+    <div class="slide">
+
+      <div class="slide-content">
+
+        <div class="slide-small">
+          Arithuyil Arivom Training
+        </div>
+
+        <h2 class="slide-title">
+          Change Your
+          <span>Inner Patterns.</span>
+        </h2>
+
+        <p class="slide-description">
+          Identify limiting thoughts and negative patterns,
+          and learn practical methods to develop a stronger,
+          calmer and more positive mind.
+        </p>
+
+        <a href="freeclass.html" class="hero-btn">
+          Join Free Class
+        </a>
+
+      </div>
+
+      <div class="slide-image">
+        <img src="guru.jpg" alt="Shiek Guru">
+      </div>
+
+    </div>
+
+
+    <!-- SLIDE 5 -->
+
+    <div class="slide">
+
+      <div class="slide-content">
+
+        <div class="slide-small">
+          Begin Your Transformation
+        </div>
+
+        <h2 class="slide-title">
+          Know Your Mind.
+          <span>Live With Greater Clarity.</span>
+        </h2>
+
+        <p class="slide-description">
+          Start exploring practical mind power techniques
+          and experience the possibilities of inner transformation.
+        </p>
+
+        <a href="freeclass.html" class="hero-btn">
+          Join Free Class
+        </a>
+
+      </div>
+
+      <div class="slide-image">
+        <img src="guru.jpg" alt="Shiek Guru">
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- PREVIOUS -->
+
+  <button class="slider-arrow prev" id="prevBtn" aria-label="Previous slide">
+    ‹
+  </button>
+
+
+  <!-- NEXT -->
+
+  <button class="slider-arrow next" id="nextBtn" aria-label="Next slide">
+    ›
+  </button>
+
+
+  <!-- DOTS -->
+
+  <div class="slider-dots">
+
+    <span class="dot active" data-slide="0"></span>
+    <span class="dot" data-slide="1"></span>
+    <span class="dot" data-slide="2"></span>
+    <span class="dot" data-slide="3"></span>
+    <span class="dot" data-slide="4"></span>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     INTRO
+========================= -->
+
+<section class="intro">
+
+  <div class="section-label">
+    Arithuyil Arivom
+  </div>
+
+  <h2>
+    Understand Your Mind.<br>
+    Transform Your Life.
+  </h2>
+
+  <p>
+    Arithuyil Arivom is a practical mind power and
+    inner transformation training platform guided by
+    Shiek Guru. The approach focuses on practical
+    experiences and techniques that help participants
+    understand their mind, develop confidence and
+    create positive changes in their lives.
+  </p>
+
+</section>
+
+
+<!-- =========================
+     HIGHLIGHTS
+========================= -->
+
+<section class="highlights">
+
+  <div class="highlight-container">
+
+    <div class="highlight-title">
+
+      <div class="section-label">
+        What You Can Explore
+      </div>
+
+      <h2>
+        Practical Training For Real Life
+      </h2>
+
+    </div>
+
+
+    <div class="highlight-grid">
+
+      <div class="highlight-card">
+        <h3>Mind Power</h3>
+        <p>
+          Understand your mental patterns and
+          learn practical techniques to develop
+          a more focused and confident mind.
+        </p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Subconscious Training</h3>
+        <p>
+          Explore practical methods to work with
+          your subconscious patterns and inner beliefs.
+        </p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Self Healing</h3>
+        <p>
+          Learn relaxation and self-healing based
+          practices as part of your personal
+          inner transformation journey.
+        </p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Inner Transformation</h3>
+        <p>
+          Build greater clarity, confidence,
+          peace and positive direction in everyday life.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     PROGRAMS
+========================= -->
+
+<section class="programs">
+
+  <div class="programs-header">
+
+    <div class="section-label">
+      Explore Arithuyil Arivom
+    </div>
+
+    <h2>
+      Our Training Programs
+    </h2>
+
+    <p>
+      Practical experiences designed for personal growth and transformation.
+    </p>
+
+  </div>
+
+
+  <div class="program-grid">
+
+    <div class="program-card">
+
+      <div class="program-number">
+        PROGRAM 01
+      </div>
+
+      <h3>8 Week Class</h3>
+
+      <p>
+        A structured practical training journey
+        covering mind power, subconscious techniques,
+        confidence, healing practices and inner transformation.
+      </p>
+
+    </div>
+
+
+    <div class="program-card">
+
+      <div class="program-number">
+        PROGRAM 02
+      </div>
+
+      <h3>Mahasakthi Raajayoga Dheekshai</h3>
+
+      <p>
+        Explore deeper levels of personal practice,
+        awareness and inner development through
+        guided training.
+      </p>
+
+    </div>
+
+
+    <div class="program-card">
+
+      <div class="program-number">
+        PROGRAM 03
+      </div>
+
+      <h3>Special Programs</h3>
+
+      <p>
+        Special workshops and practical sessions
+        focused on specific areas of personal
+        transformation and life improvement.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     FINAL CTA
+========================= -->
+
+<section class="final-cta">
+
+  <h2>
+    Ready To Explore Your Inner Potential?
+  </h2>
+
+  <p>
+    Start your journey with Arithuyil Arivom
+    and experience practical mind power training.
+  </p>
+
+  <!-- IMPORTANT: Same landing page -->
+  <a href="freeclass.html" class="cta-button">
+    Join Free Class
+  </a>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+  <p>
+    <strong>Arithuyil Arivom</strong> • TrueSelf Mind Gym
+  </p>
+
+  <p style="margin-top:8px;">
+    Adambakkam, Chennai • +91 98408 51295
+  </p>
+
+  <p style="margin-top:15px;font-size:11px;">
+    © 2026 Arithuyil Arivom. All Rights Reserved.
+  </p>
+
+</footer>
+
+
+<!-- WhatsApp -->
+
+<a
+  href="https://wa.me/919840851295"
+  class="whatsapp"
+  aria-label="WhatsApp">
+  💬
 </a>
 
-</div>
+
+<!-- =========================
+     SLIDER JAVASCRIPT
+========================= -->
+
+<script>
+
+const slider = document.getElementById("slider");
+const slides = document.querySelectorAll(".slide");
+const dots = document.querySelectorAll(".dot");
+
+let currentSlide = 0;
+let autoSlide;
+
+function showSlide(index){
+
+  if(index < 0){
+    index = slides.length - 1;
+  }
+
+  if(index >= slides.length){
+    index = 0;
+  }
+
+  currentSlide = index;
+
+  slider.style.transform =
+    `translateX(-${currentSlide * 100}%)`;
+
+  dots.forEach((dot,i)=>{
+    dot.classList.toggle(
+      "active",
+      i === currentSlide
+    );
+  });
+}
 
 
-<div class="card">
-<h2>இந்த Class யாருக்காக?</h2>
-<ul>
-<li>மன அழுத்தம், பயம், overthinking உள்ளவர்கள்</li>
-<li>Health issue இருந்தும் clear reason தெரியாதவர்கள்</li>
-<li>Life-ல் stuck ஆன உணர்வு கொண்டவர்கள்</li>
-<li>Mind power, healing, inner transformation தேடுபவர்கள்</li>
-</ul>
-</div>
-
-<div class="card">
-<h2>இந்த Class ல என்ன கற்றுக்கொடுக்கப்படும்?</h2>
-<ul>
-<li>ஆழ்மனத்தை அணுகும் முறைகள்</li>
-<li>Self-healing basic techniques</li>
-<li>Mind relaxation & energy balance</li>
-<li>Negative patterns release செய்வது எப்படி</li>
-<li>Daily practice for peaceful & powerful mind</li>
-</ul>
-</div>
-
-<div class="card">
-<h2>Class Result என்ன?</h2>
-<ul>
-<li>Mind calm ஆகும்</li>
-<li>Body light feel ஆகும்</li>
-<li>Clarity in thoughts</li>
-<li>Positive life changes ஆரம்பம்</li>
-</ul>
-</div>
-
-<div class="card">
-<h2>Arithuyil Arivom Class Details</h2>
-<p>
-Arithuyil Arivom is a mind power and self-healing training class conducted to help people
-overcome stress, fear, overthinking, unexplained health issues, and negative life patterns.
-This class teaches practical techniques to access the subconscious mind, practice self-healing,
-and bring inner transformation for a peaceful and powerful life.
-</p>
-</div>
-  <div class="card center">
-<h2>Contact & Location</h2>
-<p><b>Ayyappan Leelaram</b></p>
-<p>📞 9840851295</p>
-<p>📍 Adambakkam, Chennai</p>
-<a class="btn" href="https://wa.me/919840851295">Chat on WhatsApp</a>
-</div>
+function nextSlide(){
+  showSlide(currentSlide + 1);
+}
 
 
-</div>
- <a href="https://wa.me/919840851295" 
-style="
-position:fixed;
-bottom:20px;
-right:20px;
-background:#25D366;
-color:white;
-padding:14px 16px;
-border-radius:50%;
-font-size:22px;
-text-decoration:none;
-box-shadow:0 0 10px #555;
-z-index:1000;">
-💬
-</a>
+function previousSlide(){
+  showSlide(currentSlide - 1);
+}
+
+
+/* Buttons */
+
+document
+  .getElementById("nextBtn")
+  .addEventListener("click", nextSlide);
+
+document
+  .getElementById("prevBtn")
+  .addEventListener("click", previousSlide);
+
+
+/* Dots */
+
+dots.forEach((dot,index)=>{
+
+  dot.addEventListener("click",()=>{
+
+    showSlide(index);
+    restartAutoSlide();
+
+  });
+
+});
+
+
+/* =========================
+   AUTO SLIDE
+========================= */
+
+function startAutoSlide(){
+
+  autoSlide = setInterval(()=>{
+    nextSlide();
+  },5000);
+
+}
+
+function stopAutoSlide(){
+
+  clearInterval(autoSlide);
+
+}
+
+function restartAutoSlide(){
+
+  stopAutoSlide();
+  startAutoSlide();
+
+}
+
+
+/* Pause while mouse is over banner */
+
+const hero = document.querySelector(".hero");
+
+hero.addEventListener("mouseenter",stopAutoSlide);
+
+hero.addEventListener("mouseleave",startAutoSlide);
+
+
+/* =========================
+   MOBILE SWIPE
+========================= */
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+hero.addEventListener("touchstart",(e)=>{
+
+  touchStartX = e.changedTouches[0].screenX;
+
+  stopAutoSlide();
+
+},{passive:true});
+
+
+hero.addEventListener("touchend",(e)=>{
+
+  touchEndX = e.changedTouches[0].screenX;
+
+  handleSwipe();
+
+  startAutoSlide();
+
+},{passive:true});
+
+
+function handleSwipe(){
+
+  const distance =
+    touchEndX - touchStartX;
+
+  if(Math.abs(distance) < 50){
+    return;
+  }
+
+  if(distance < 0){
+    nextSlide();
+  }else{
+    previousSlide();
+  }
+
+}
+
+
+/* Start */
+
+showSlide(0);
+startAutoSlide();
+
+</script>
 
 </body>
 </html>
