@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Arithuyil Arivom | Mind Power & Inner Transformation</title>
+<title>Arithuyil Arivom</title>
 
 <link rel="icon" type="image/png" href="favicon.png">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<meta name="description" content="Arithuyil Arivom – Practical Mind Power, Subconscious Training and Inner Transformation with Shiek Guru in Chennai.">
-<meta name="keywords" content="Arithuyil Arivom, Shiek Guru, Mind Power, Subconscious Mind, Self Healing, Hypnotism Training, Inner Transformation, Chennai">
-<meta name="author" content="Shiek Guru">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
+
+/* =========================
+   RESET
+========================= */
 
 *{
   box-sizing:border-box;
@@ -28,310 +28,274 @@ html{
 
 body{
   font-family:'Poppins',sans-serif;
-  background:#f7f9fc;
-  color:#1b1b1b;
+  background:#f7f8fb;
+  color:#222;
   overflow-x:hidden;
 }
 
+
 /* =========================
-   TOP HEADER
+   HEADER
 ========================= */
 
-.site-header{
-  position:sticky;
-  top:0;
-  z-index:9999;
-  background:rgba(255,255,255,0.97);
-  backdrop-filter:blur(12px);
-  box-shadow:0 3px 18px rgba(0,0,0,0.08);
+header{
+  background:#111;
+  box-shadow:0 3px 12px rgba(0,0,0,.25);
+  position:relative;
+  z-index:1000;
 }
 
-/* Top information bar */
-
-.top-bar{
-  background:#111;
-  color:#fff;
-  min-height:36px;
+nav{
+  min-height:64px;
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:28px;
-  font-size:12px;
-  padding:7px 20px;
+  gap:22px;
+  padding:10px 20px;
 }
 
-.top-bar span{
-  opacity:.9;
-}
-
-/* Main navigation */
-
-.main-nav{
-  max-width:1400px;
-  margin:auto;
-  min-height:72px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 30px;
-  gap:25px;
-}
-
-/* Logo */
-
-.logo-area{
-  display:flex;
-  align-items:center;
+nav a{
+  color:#fff;
   text-decoration:none;
-  color:#111;
-  min-width:max-content;
-}
-
-.logo-text{
-  line-height:1.05;
-}
-
-.logo-main{
-  font-size:25px;
-  font-weight:800;
-  letter-spacing:-.5px;
-}
-
-.logo-sub{
-  font-size:10px;
-  letter-spacing:2px;
-  color:#777;
-  margin-top:4px;
-}
-
-/* Navigation links */
-
-.nav-links{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:25px;
-}
-
-.nav-links a{
-  text-decoration:none;
-  color:#333;
-  font-size:13px;
+  font-size:14px;
   font-weight:500;
   white-space:nowrap;
   transition:.25s;
 }
 
-.nav-links a:hover{
-  color:#000;
+nav a:hover{
+  opacity:.75;
 }
 
-/* IMPORTANT:
-   Join Free Class remains linked to freeclass.html
+
+/* IMPORTANT
+   DO NOT CHANGE FREE CLASS LINK
 */
 
-.free-class-btn{
-  background:#111;
-  color:#fff !important;
-  padding:11px 18px;
-  border-radius:6px;
-  font-weight:600 !important;
-  box-shadow:0 5px 15px rgba(0,0,0,.15);
-}
-
-.free-class-btn:hover{
-  background:#333;
-  transform:translateY(-1px);
-}
-
-/* Language */
-
-.language-switch{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  border:1px solid #ddd;
-  padding:5px;
-  border-radius:20px;
+nav a.free-class{
   background:#fff;
-  white-space:nowrap;
+  color:#111;
+  padding:10px 18px;
+  border-radius:7px;
+  font-weight:700;
 }
 
-.language-switch span{
-  font-size:11px;
-  padding:5px 8px;
-  border-radius:15px;
-  cursor:pointer;
-}
-
-.language-switch .active{
-  background:#111;
-  color:#fff;
-}
 
 /* =========================
    HERO SLIDER
 ========================= */
 
-.hero{
-  position:relative;
+.hero-slider{
   width:100%;
+  position:relative;
   overflow:hidden;
-  background:#111;
+  background:#000;
 }
 
-.slider{
+
+/* Track */
+
+.slider-track{
   display:flex;
   width:100%;
-  transition:transform .65s cubic-bezier(.77,0,.18,1);
+  transition:transform .75s cubic-bezier(.77,0,.18,1);
   touch-action:pan-y;
 }
 
+
+/* Each slide */
+
 .slide{
   min-width:100%;
-  height:calc(100vh - 108px);
-  min-height:520px;
-  max-height:720px;
   position:relative;
+  aspect-ratio:1983 / 793;
   overflow:hidden;
-  display:flex;
-  align-items:center;
-  background:
-    radial-gradient(circle at 80% 30%,rgba(70,90,140,.25),transparent 35%),
-    linear-gradient(110deg,#0d0f17,#171b2b);
+  flex-shrink:0;
 }
 
-/* subtle background */
 
-.slide::before{
+/* Banner image */
+
+.slide img.banner-image{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+
+/* =========================
+   DARK OVERLAY
+========================= */
+
+/*
+   This makes the HTML text readable.
+   It does NOT change the original image.
+*/
+
+.slide::after{
   content:"";
   position:absolute;
   inset:0;
-  background:
-    linear-gradient(90deg,
-      rgba(8,10,16,.96) 0%,
-      rgba(8,10,16,.82) 38%,
-      rgba(8,10,16,.20) 75%,
-      rgba(8,10,16,.05) 100%);
   z-index:1;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.62) 0%,
+      rgba(0,0,0,.35) 42%,
+      rgba(0,0,0,.05) 75%,
+      rgba(0,0,0,0) 100%
+    );
+
+  pointer-events:none;
 }
 
-/* Content */
+
+/* =========================
+   SLIDE CONTENT
+========================= */
 
 .slide-content{
-  width:54%;
-  max-width:760px;
-  margin-left:8%;
-  position:relative;
+  position:absolute;
   z-index:3;
+
+  left:7%;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  width:46%;
+  max-width:720px;
+
   color:#fff;
 }
 
-.slide-small{
+
+/* Small label */
+
+.slide-label{
   font-size:14px;
+  font-weight:600;
   letter-spacing:3px;
   text-transform:uppercase;
-  font-weight:500;
-  opacity:.85;
+
   margin-bottom:18px;
+
+  opacity:.9;
 }
 
+
+/* Main heading */
+
 .slide-title{
-  font-size:clamp(38px,5vw,72px);
+  font-size:clamp(32px,4.3vw,68px);
   line-height:1.08;
+
   font-weight:800;
-  letter-spacing:-1.5px;
+  letter-spacing:-1px;
+
   margin-bottom:20px;
+
+  text-shadow:
+    0 3px 15px rgba(0,0,0,.4);
 }
+
+
+/* Highlight */
 
 .slide-title span{
   display:block;
-  font-weight:400;
 }
+
+
+/* Description */
 
 .slide-description{
-  font-size:17px;
+  font-size:clamp(13px,1.35vw,18px);
   line-height:1.7;
-  max-width:580px;
-  color:rgba(255,255,255,.82);
-  margin-bottom:30px;
+
+  max-width:600px;
+
+  color:rgba(255,255,255,.9);
+
+  margin-bottom:28px;
 }
 
-.hero-btn{
+
+/* CTA */
+
+.slide-button{
   display:inline-block;
+
+  padding:13px 25px;
+
   background:#fff;
   color:#111;
-  padding:14px 26px;
+
   border-radius:7px;
+
   text-decoration:none;
-  font-weight:600;
+
   font-size:14px;
+  font-weight:700;
+
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
+
   transition:.3s;
 }
 
-.hero-btn:hover{
+.slide-button:hover{
   transform:translateY(-3px);
-  box-shadow:0 10px 25px rgba(0,0,0,.25);
 }
 
-/* Guru image */
 
-.slide-image{
-  position:absolute;
-  right:3%;
-  bottom:0;
-  height:92%;
+/* =========================
+   SLIDE 2 SPECIAL POSITION
+========================= */
+
+.slide-2 .slide-content{
+  left:8%;
   width:48%;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  z-index:2;
 }
 
-.slide-image img{
-  max-height:100%;
-  max-width:100%;
-  object-fit:contain;
-  filter:drop-shadow(0 15px 30px rgba(0,0,0,.35));
-}
 
-/* Different image positioning for visual variation */
-
-.slide:nth-child(2) .slide-image img{
-  transform:scale(.94);
-}
-
-.slide:nth-child(3) .slide-image img{
-  transform:scale(1.02);
-}
-
-.slide:nth-child(4) .slide-image img{
-  transform:scale(.96);
-}
-
-.slide:nth-child(5) .slide-image img{
-  transform:scale(1.05);
-}
-
-/* Arrow controls */
+/* =========================
+   ARROWS
+========================= */
 
 .slider-arrow{
   position:absolute;
+
   top:50%;
   transform:translateY(-50%);
+
+  z-index:10;
+
   width:48px;
   height:48px;
+
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.4);
-  background:rgba(0,0,0,.25);
+
+  border:1px solid rgba(255,255,255,.45);
+
+  background:rgba(0,0,0,.30);
+
   color:#fff;
-  font-size:25px;
+
+  font-size:30px;
+  line-height:1;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   cursor:pointer;
-  z-index:10;
+
   transition:.25s;
+
   user-select:none;
 }
 
@@ -341,31 +305,42 @@ body{
 }
 
 .prev{
-  left:22px;
+  left:20px;
 }
 
 .next{
-  right:22px;
+  right:20px;
 }
 
-/* Dots */
+
+/* =========================
+   DOTS
+========================= */
 
 .slider-dots{
   position:absolute;
-  bottom:24px;
+
+  bottom:18px;
   left:50%;
+
   transform:translateX(-50%);
+
   z-index:10;
+
   display:flex;
   gap:8px;
 }
 
 .dot{
-  width:8px;
-  height:8px;
-  background:rgba(255,255,255,.45);
+  width:9px;
+  height:9px;
+
   border-radius:50%;
+
+  background:rgba(255,255,255,.5);
+
   cursor:pointer;
+
   transition:.3s;
 }
 
@@ -375,326 +350,162 @@ body{
   background:#fff;
 }
 
+
 /* =========================
-   INTRO SECTION
+   TEST CONTENT BELOW
 ========================= */
 
-.intro{
-  max-width:1150px;
+.test-section{
+  max-width:1100px;
   margin:auto;
-  padding:90px 25px;
+  padding:70px 25px;
   text-align:center;
 }
 
-.section-label{
-  font-size:12px;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  color:#777;
-  font-weight:600;
-  margin-bottom:12px;
-}
-
-.intro h2{
-  font-size:38px;
-  line-height:1.2;
-  margin-bottom:20px;
-  font-weight:700;
-}
-
-.intro p{
-  max-width:800px;
-  margin:auto;
-  color:#666;
-  line-height:1.9;
-  font-size:16px;
-}
-
-/* =========================
-   HIGHLIGHTS
-========================= */
-
-.highlights{
-  background:#111;
-  color:#fff;
-  padding:75px 25px;
-}
-
-.highlight-container{
-  max-width:1150px;
-  margin:auto;
-}
-
-.highlight-title{
-  text-align:center;
-  margin-bottom:45px;
-}
-
-.highlight-title h2{
-  font-size:34px;
-}
-
-.highlight-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:20px;
-}
-
-.highlight-card{
-  padding:28px 22px;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:12px;
-  background:rgba(255,255,255,.04);
-}
-
-.highlight-card h3{
-  font-size:18px;
-  margin-bottom:10px;
-}
-
-.highlight-card p{
-  font-size:13px;
-  line-height:1.7;
-  color:#bbb;
-}
-
-/* =========================
-   PROGRAM SECTION
-========================= */
-
-.programs{
-  max-width:1150px;
-  margin:auto;
-  padding:90px 25px;
-}
-
-.programs-header{
-  text-align:center;
-  margin-bottom:45px;
-}
-
-.programs-header h2{
-  font-size:38px;
-  margin-bottom:12px;
-}
-
-.programs-header p{
-  color:#777;
-}
-
-.program-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:25px;
-}
-
-.program-card{
-  background:#fff;
-  padding:32px 26px;
-  border-radius:14px;
-  box-shadow:0 8px 30px rgba(0,0,0,.07);
-  border:1px solid #eee;
-  transition:.3s;
-}
-
-.program-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 15px 35px rgba(0,0,0,.1);
-}
-
-.program-number{
-  font-size:12px;
-  letter-spacing:2px;
-  color:#888;
+.test-section h2{
+  font-size:32px;
   margin-bottom:15px;
 }
 
-.program-card h3{
-  font-size:21px;
-  margin-bottom:12px;
-}
-
-.program-card p{
+.test-section p{
   color:#666;
-  line-height:1.7;
-  font-size:14px;
-}
-
-/* =========================
-   CTA
-========================= */
-
-.final-cta{
-  background:linear-gradient(120deg,#111,#242424);
-  color:#fff;
-  padding:90px 25px;
-  text-align:center;
-}
-
-.final-cta h2{
-  font-size:42px;
-  margin-bottom:15px;
-}
-
-.final-cta p{
-  color:#ccc;
-  max-width:650px;
-  margin:0 auto 30px;
   line-height:1.8;
 }
 
-.cta-button{
-  display:inline-block;
-  background:#fff;
-  color:#111;
-  padding:15px 30px;
-  border-radius:7px;
-  text-decoration:none;
-  font-weight:600;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-  background:#090909;
-  color:#aaa;
-  text-align:center;
-  padding:35px 20px;
-  font-size:13px;
-}
-
-footer strong{
-  color:#fff;
-}
-
-/* WhatsApp */
-
-.whatsapp{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  background:#25D366;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:25px;
-  text-decoration:none;
-  box-shadow:0 5px 20px rgba(0,0,0,.25);
-  z-index:9998;
-}
 
 /* =========================
    MOBILE
 ========================= */
 
-@media(max-width:1100px){
+@media(max-width:768px){
 
-  .nav-links{
-    gap:15px;
+  nav{
+    justify-content:flex-start;
+
+    overflow-x:auto;
+
+    gap:16px;
+
+    padding:10px 15px;
+
+    scrollbar-width:none;
   }
 
-  .nav-links a{
+  nav::-webkit-scrollbar{
+    display:none;
+  }
+
+  nav a{
     font-size:12px;
   }
 
-  .main-nav{
-    padding:0 18px;
-  }
 
-}
-
-@media(max-width:850px){
-
-  .top-bar{
-    display:none;
-  }
-
-  .site-header{
-    position:sticky;
-    top:0;
-  }
-
-  .main-nav{
-    min-height:64px;
-    padding:10px 15px;
-  }
-
-  .logo-main{
-    font-size:20px;
-  }
-
-  .logo-sub{
-    font-size:8px;
-  }
-
-  .nav-links{
-    overflow-x:auto;
-    justify-content:flex-start;
-    max-width:58%;
-    padding-bottom:3px;
-  }
-
-  .nav-links a{
-    font-size:11px;
-  }
-
-  .language-switch{
-    display:none;
-  }
+  /*
+     Mobile banner is still the same image.
+     We use a taller viewing area so the
+     text remains readable.
+  */
 
   .slide{
-    height:650px;
-    min-height:650px;
-    align-items:flex-start;
+    aspect-ratio:auto;
+    height:560px;
   }
 
-  .slide::before{
+
+  /*
+     Mobile overlay
+  */
+
+  .slide::after{
+
     background:
-      linear-gradient(180deg,
-        rgba(8,10,16,.93) 0%,
-        rgba(8,10,16,.70) 45%,
-        rgba(8,10,16,.15) 100%);
+      linear-gradient(
+        180deg,
+        rgba(0,0,0,.45) 0%,
+        rgba(0,0,0,.38) 45%,
+        rgba(0,0,0,.72) 100%
+      );
+
   }
+
+
+  /*
+     Text moves to bottom-left.
+  */
 
   .slide-content{
-    width:90%;
-    margin:55px auto 0;
-    text-align:center;
-    z-index:4;
+
+    left:7%;
+    right:7%;
+
+    bottom:55px;
+    top:auto;
+
+    transform:none;
+
+    width:auto;
+    max-width:none;
+
+    text-align:left;
   }
+
+
+  .slide-2 .slide-content{
+
+    left:7%;
+    right:7%;
+
+    width:auto;
+  }
+
+
+  .slide-label{
+    font-size:10px;
+    letter-spacing:2px;
+    margin-bottom:10px;
+  }
+
 
   .slide-title{
-    font-size:40px;
+
+    font-size:clamp(27px,8vw,42px);
+
+    line-height:1.08;
+
+    margin-bottom:12px;
+
+    letter-spacing:-.5px;
   }
+
 
   .slide-description{
-    font-size:14px;
-    margin:0 auto 25px;
+
+    font-size:13px;
+
+    line-height:1.55;
+
+    margin-bottom:18px;
+
+    max-width:430px;
   }
 
-  .slide-image{
-    width:100%;
-    height:55%;
-    right:0;
-    bottom:0;
+
+  .slide-button{
+
+    padding:11px 19px;
+
+    font-size:13px;
   }
 
-  .slide-image img{
-    max-height:100%;
-    max-width:90%;
-  }
 
   .slider-arrow{
-    width:40px;
-    height:40px;
-    font-size:20px;
+
+    width:38px;
+    height:38px;
+
+    font-size:23px;
   }
+
 
   .prev{
     left:10px;
@@ -704,67 +515,40 @@ footer strong{
     right:10px;
   }
 
-  .highlight-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
 
-  .program-grid{
-    grid-template-columns:1fr;
-  }
-
-  .intro h2,
-  .programs-header h2{
-    font-size:30px;
-  }
-
-  .final-cta h2{
-    font-size:32px;
+  .slider-dots{
+    bottom:16px;
   }
 
 }
 
-@media(max-width:520px){
 
-  .nav-links{
-    max-width:52%;
-  }
+/* =========================
+   SMALL MOBILE
+========================= */
 
-  .nav-links a:nth-child(n+5){
-    display:none;
-  }
+@media(max-width:480px){
 
   .slide{
-    height:620px;
-    min-height:620px;
+    height:520px;
   }
+
+
+  .slide-content{
+
+    bottom:48px;
+  }
+
 
   .slide-title{
-    font-size:34px;
+
+    font-size:29px;
   }
 
-  .slide-small{
-    font-size:10px;
-    letter-spacing:2px;
-  }
 
   .slide-description{
-    font-size:13px;
-  }
 
-  .highlight-grid{
-    grid-template-columns:1fr;
-  }
-
-  .intro,
-  .programs{
-    padding:65px 20px;
-  }
-
-  .whatsapp{
-    width:50px;
-    height:50px;
-    right:15px;
-    bottom:15px;
+    font-size:12px;
   }
 
 }
@@ -772,511 +556,252 @@ footer strong{
 </style>
 </head>
 
+
 <body>
+
 
 <!-- =========================
      HEADER
 ========================= -->
 
-<header class="site-header">
+<header>
 
-  <div class="top-bar">
-    <span>📞 +91 98408 51295</span>
-    <span>Arithuyil Arivom • TrueSelf Mind Gym</span>
-    <span>Chennai, Tamil Nadu</span>
-  </div>
+<nav>
 
-  <div class="main-nav">
+<a href="index.html">Home</a>
 
-    <a href="index.html" class="logo-area">
-      <div class="logo-text">
-        <div class="logo-main">Arithuyil Arivom</div>
-        <div class="logo-sub">TRUESELF MIND GYM</div>
-      </div>
-    </a>
+<a href="programs.html">Programs</a>
 
-    <nav class="nav-links">
+<a href="results.html">Results</a>
 
-      <a href="index.html">Home</a>
+<a href="8week.html">8 Week Class</a>
 
-      <a href="programs.html">Programs</a>
 
-      <a href="results.html">Results</a>
+<!-- ==================================
+     IMPORTANT:
+     KEEP THIS EXACTLY AS IT IS
+================================== -->
 
-      <a href="8week.html">8 Week Class</a>
+<a href="freeclass.html" class="free-class">
+Join Free Class
+</a>
 
-      <!-- DO NOT CHANGE THIS -->
-      <a href="freeclass.html" class="free-class-btn">
-        Join Free Class
-      </a>
 
-      <a href="join.html">Join Class</a>
+<a href="join.html">Join Class</a>
 
-      <a href="problem.html">Problems</a>
+<a href="problem.html">Problems</a>
 
-      <a href="amavasai.html">Amavasai</a>
+<a href="amavasai.html">Amavasai</a>
 
-      <a href="deekshai.html">Deekshai</a>
+<a href="deekshai.html">Deekshai</a>
 
-      <a href="about.html">About</a>
+<a href="about.html">About</a>
 
-    </nav>
-
-    <!-- Language switch UI -->
-    <div class="language-switch">
-      <span>தமிழ்</span>
-      <span class="active">English</span>
-    </div>
-
-  </div>
+</nav>
 
 </header>
 
 
-<!-- =========================
-     5 BANNER HERO SLIDER
-========================= -->
-
-<section class="hero">
-
-  <div class="slider" id="slider">
-
-
-    <!-- SLIDE 1 -->
-
-    <div class="slide">
-
-      <div class="slide-content">
-
-        <div class="slide-small">
-          Arithuyil Arivom • TrueSelf Mind Gym
-        </div>
-
-        <h1 class="slide-title">
-          You Are Not Stuck.
-          <span>You Can Change Your Life.</span>
-        </h1>
-
-        <p class="slide-description">
-          Discover practical mind power and subconscious training
-          designed to help you create positive changes from within.
-        </p>
-
-        <a href="freeclass.html" class="hero-btn">
-          Join Free Class
-        </a>
-
-      </div>
-
-      <div class="slide-image">
-        <img src="guru.jpg" alt="Shiek Guru">
-      </div>
-
-    </div>
-
-
-    <!-- SLIDE 2 -->
-
-    <div class="slide">
-
-      <div class="slide-content">
-
-        <div class="slide-small">
-          Transform From Within
-        </div>
-
-        <h2 class="slide-title">
-          Unlock The
-          <span>Power Within You.</span>
-        </h2>
-
-        <p class="slide-description">
-          Learn how to understand your inner mind,
-          develop confidence and create a more peaceful,
-          purposeful life.
-        </p>
-
-        <a href="freeclass.html" class="hero-btn">
-          Join Free Class
-        </a>
-
-      </div>
-
-      <div class="slide-image">
-        <img src="guru.jpg" alt="Shiek Guru">
-      </div>
-
-    </div>
-
-
-    <!-- SLIDE 3 -->
-
-    <div class="slide">
-
-      <div class="slide-content">
-
-        <div class="slide-small">
-          Practical Mind Training
-        </div>
-
-        <h2 class="slide-title">
-          Train Your Mind.
-          <span>Transform Your Life.</span>
-        </h2>
-
-        <p class="slide-description">
-          Experience practical techniques for relaxation,
-          subconscious awareness, confidence and inner transformation.
-        </p>
-
-        <a href="freeclass.html" class="hero-btn">
-          Join Free Class
-        </a>
-
-      </div>
-
-      <div class="slide-image">
-        <img src="guru.jpg" alt="Shiek Guru">
-      </div>
-
-    </div>
-
-
-    <!-- SLIDE 4 -->
-
-    <div class="slide">
-
-      <div class="slide-content">
-
-        <div class="slide-small">
-          Arithuyil Arivom Training
-        </div>
-
-        <h2 class="slide-title">
-          Change Your
-          <span>Inner Patterns.</span>
-        </h2>
-
-        <p class="slide-description">
-          Identify limiting thoughts and negative patterns,
-          and learn practical methods to develop a stronger,
-          calmer and more positive mind.
-        </p>
-
-        <a href="freeclass.html" class="hero-btn">
-          Join Free Class
-        </a>
-
-      </div>
-
-      <div class="slide-image">
-        <img src="guru.jpg" alt="Shiek Guru">
-      </div>
-
-    </div>
-
-
-    <!-- SLIDE 5 -->
-
-    <div class="slide">
-
-      <div class="slide-content">
-
-        <div class="slide-small">
-          Begin Your Transformation
-        </div>
-
-        <h2 class="slide-title">
-          Know Your Mind.
-          <span>Live With Greater Clarity.</span>
-        </h2>
-
-        <p class="slide-description">
-          Start exploring practical mind power techniques
-          and experience the possibilities of inner transformation.
-        </p>
-
-        <a href="freeclass.html" class="hero-btn">
-          Join Free Class
-        </a>
-
-      </div>
-
-      <div class="slide-image">
-        <img src="guru.jpg" alt="Shiek Guru">
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- PREVIOUS -->
-
-  <button class="slider-arrow prev" id="prevBtn" aria-label="Previous slide">
-    ‹
-  </button>
-
-
-  <!-- NEXT -->
-
-  <button class="slider-arrow next" id="nextBtn" aria-label="Next slide">
-    ›
-  </button>
-
-
-  <!-- DOTS -->
-
-  <div class="slider-dots">
-
-    <span class="dot active" data-slide="0"></span>
-    <span class="dot" data-slide="1"></span>
-    <span class="dot" data-slide="2"></span>
-    <span class="dot" data-slide="3"></span>
-    <span class="dot" data-slide="4"></span>
-
-  </div>
-
-</section>
-
 
 <!-- =========================
-     INTRO
+     HERO SLIDER
 ========================= -->
 
-<section class="intro">
+<section class="hero-slider">
 
-  <div class="section-label">
-    Arithuyil Arivom
-  </div>
 
-  <h2>
-    Understand Your Mind.<br>
-    Transform Your Life.
-  </h2>
+<div class="slider-track" id="sliderTrack">
 
-  <p>
-    Arithuyil Arivom is a practical mind power and
-    inner transformation training platform guided by
-    Shiek Guru. The approach focuses on practical
-    experiences and techniques that help participants
-    understand their mind, develop confidence and
-    create positive changes in their lives.
-  </p>
 
-</section>
+<!-- ==================================
+     BANNER A
+================================== -->
 
+<div class="slide">
 
-<!-- =========================
-     HIGHLIGHTS
-========================= -->
+<img
+  src="banner A.png"
+  class="banner-image"
+  alt="Arithuyil Arivom Mind Power Training"
+>
 
-<section class="highlights">
 
-  <div class="highlight-container">
+<div class="slide-content">
 
-    <div class="highlight-title">
+<div class="slide-label">
+Arithuyil Arivom
+</div>
 
-      <div class="section-label">
-        What You Can Explore
-      </div>
 
-      <h2>
-        Practical Training For Real Life
-      </h2>
+<h1 class="slide-title">
 
-    </div>
+If Others Can Do It,
+<span>Why Can't You?</span>
 
+</h1>
 
-    <div class="highlight-grid">
 
-      <div class="highlight-card">
-        <h3>Mind Power</h3>
-        <p>
-          Understand your mental patterns and
-          learn practical techniques to develop
-          a more focused and confident mind.
-        </p>
-      </div>
+<p class="slide-description">
 
-      <div class="highlight-card">
-        <h3>Subconscious Training</h3>
-        <p>
-          Explore practical methods to work with
-          your subconscious patterns and inner beliefs.
-        </p>
-      </div>
+Your possibilities begin when you believe
+that change is possible.
 
-      <div class="highlight-card">
-        <h3>Self Healing</h3>
-        <p>
-          Learn relaxation and self-healing based
-          practices as part of your personal
-          inner transformation journey.
-        </p>
-      </div>
+</p>
 
-      <div class="highlight-card">
-        <h3>Inner Transformation</h3>
-        <p>
-          Build greater clarity, confidence,
-          peace and positive direction in everyday life.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     PROGRAMS
-========================= -->
-
-<section class="programs">
-
-  <div class="programs-header">
-
-    <div class="section-label">
-      Explore Arithuyil Arivom
-    </div>
-
-    <h2>
-      Our Training Programs
-    </h2>
-
-    <p>
-      Practical experiences designed for personal growth and transformation.
-    </p>
-
-  </div>
-
-
-  <div class="program-grid">
-
-    <div class="program-card">
-
-      <div class="program-number">
-        PROGRAM 01
-      </div>
-
-      <h3>8 Week Class</h3>
-
-      <p>
-        A structured practical training journey
-        covering mind power, subconscious techniques,
-        confidence, healing practices and inner transformation.
-      </p>
-
-    </div>
-
-
-    <div class="program-card">
-
-      <div class="program-number">
-        PROGRAM 02
-      </div>
-
-      <h3>Mahasakthi Raajayoga Dheekshai</h3>
-
-      <p>
-        Explore deeper levels of personal practice,
-        awareness and inner development through
-        guided training.
-      </p>
-
-    </div>
-
-
-    <div class="program-card">
-
-      <div class="program-number">
-        PROGRAM 03
-      </div>
-
-      <h3>Special Programs</h3>
-
-      <p>
-        Special workshops and practical sessions
-        focused on specific areas of personal
-        transformation and life improvement.
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     FINAL CTA
-========================= -->
-
-<section class="final-cta">
-
-  <h2>
-    Ready To Explore Your Inner Potential?
-  </h2>
-
-  <p>
-    Start your journey with Arithuyil Arivom
-    and experience practical mind power training.
-  </p>
-
-  <!-- IMPORTANT: Same landing page -->
-  <a href="freeclass.html" class="cta-button">
-    Join Free Class
-  </a>
-
-</section>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer>
-
-  <p>
-    <strong>Arithuyil Arivom</strong> • TrueSelf Mind Gym
-  </p>
-
-  <p style="margin-top:8px;">
-    Adambakkam, Chennai • +91 98408 51295
-  </p>
-
-  <p style="margin-top:15px;font-size:11px;">
-    © 2026 Arithuyil Arivom. All Rights Reserved.
-  </p>
-
-</footer>
-
-
-<!-- WhatsApp -->
 
 <a
-  href="https://wa.me/919840851295"
-  class="whatsapp"
-  aria-label="WhatsApp">
-  💬
+  href="freeclass.html"
+  class="slide-button"
+>
+Join Free Class →
 </a>
+
+</div>
+
+</div>
+
+
+
+<!-- ==================================
+     BANNER B
+================================== -->
+
+<div class="slide slide-2">
+
+<img
+  src="banner B.png"
+  class="banner-image"
+  alt="Arithuyil Arivom Inner Transformation"
+>
+
+
+<div class="slide-content">
+
+<div class="slide-label">
+Transform From Within
+</div>
+
+
+<h1 class="slide-title">
+
+If You Know How To
+<span>Change Your Mindset,</span>
+
+</h1>
+
+
+<p class="slide-description">
+
+You can shape your life to suit
+the future you truly desire.
+
+</p>
+
+
+<a
+  href="freeclass.html"
+  class="slide-button"
+>
+Join Free Class →
+</a>
+
+</div>
+
+</div>
+
+
+</div>
 
 
 <!-- =========================
-     SLIDER JAVASCRIPT
+     ARROWS
+========================= -->
+
+<button
+  class="slider-arrow prev"
+  id="prevBtn"
+  aria-label="Previous Banner"
+>
+‹
+</button>
+
+
+<button
+  class="slider-arrow next"
+  id="nextBtn"
+  aria-label="Next Banner"
+>
+›
+</button>
+
+
+
+<!-- =========================
+     DOTS
+========================= -->
+
+<div class="slider-dots">
+
+<span class="dot active" data-slide="0"></span>
+
+<span class="dot" data-slide="1"></span>
+
+</div>
+
+
+</section>
+
+
+
+<!-- =========================
+     TEMPORARY TEST SECTION
+========================= -->
+
+<section class="test-section">
+
+<h2>
+Understand Your Mind. Transform Your Life.
+</h2>
+
+<p>
+Arithuyil Arivom is a practical mind power and
+inner transformation training platform.
+</p>
+
+</section>
+
+
+
+<!-- =========================
+     SLIDER SCRIPT
 ========================= -->
 
 <script>
 
-const slider = document.getElementById("slider");
-const slides = document.querySelectorAll(".slide");
-const dots = document.querySelectorAll(".dot");
+const sliderTrack =
+  document.getElementById("sliderTrack");
+
+const slides =
+  document.querySelectorAll(".slide");
+
+const dots =
+  document.querySelectorAll(".dot");
+
+const nextBtn =
+  document.getElementById("nextBtn");
+
+const prevBtn =
+  document.getElementById("prevBtn");
+
 
 let currentSlide = 0;
+
 let autoSlide;
+
+
+/* =========================
+   SHOW SLIDE
+========================= */
 
 function showSlide(index){
 
@@ -1290,64 +815,99 @@ function showSlide(index){
 
   currentSlide = index;
 
-  slider.style.transform =
+
+  sliderTrack.style.transform =
     `translateX(-${currentSlide * 100}%)`;
 
+
   dots.forEach((dot,i)=>{
+
     dot.classList.toggle(
       "active",
       i === currentSlide
     );
+
   });
+
 }
 
+
+/* =========================
+   NEXT
+========================= */
 
 function nextSlide(){
+
   showSlide(currentSlide + 1);
+
 }
 
+
+/* =========================
+   PREVIOUS
+========================= */
 
 function previousSlide(){
+
   showSlide(currentSlide - 1);
+
 }
 
 
-/* Buttons */
+/* =========================
+   BUTTONS
+========================= */
 
-document
-  .getElementById("nextBtn")
-  .addEventListener("click", nextSlide);
+nextBtn.addEventListener(
+  "click",
+  ()=>{
+    nextSlide();
+    restartAutoSlide();
+  }
+);
 
-document
-  .getElementById("prevBtn")
-  .addEventListener("click", previousSlide);
+
+prevBtn.addEventListener(
+  "click",
+  ()=>{
+    previousSlide();
+    restartAutoSlide();
+  }
+);
 
 
-/* Dots */
+/* =========================
+   DOTS
+========================= */
 
 dots.forEach((dot,index)=>{
 
-  dot.addEventListener("click",()=>{
-
-    showSlide(index);
-    restartAutoSlide();
-
-  });
+  dot.addEventListener(
+    "click",
+    ()=>{
+      showSlide(index);
+      restartAutoSlide();
+    }
+  );
 
 });
 
 
 /* =========================
-   AUTO SLIDE
+   AUTO ROTATION
 ========================= */
 
 function startAutoSlide(){
 
-  autoSlide = setInterval(()=>{
-    nextSlide();
-  },5000);
+  autoSlide = setInterval(
+    ()=>{
+      nextSlide();
+    },
+    5000
+  );
 
 }
+
 
 function stopAutoSlide(){
 
@@ -1355,74 +915,101 @@ function stopAutoSlide(){
 
 }
 
+
 function restartAutoSlide(){
 
   stopAutoSlide();
+
   startAutoSlide();
 
 }
 
 
-/* Pause while mouse is over banner */
+/* =========================
+   PAUSE ON DESKTOP HOVER
+========================= */
 
-const hero = document.querySelector(".hero");
+const hero =
+  document.querySelector(".hero-slider");
 
-hero.addEventListener("mouseenter",stopAutoSlide);
 
-hero.addEventListener("mouseleave",startAutoSlide);
+hero.addEventListener(
+  "mouseenter",
+  stopAutoSlide
+);
+
+
+hero.addEventListener(
+  "mouseleave",
+  startAutoSlide
+);
 
 
 /* =========================
    MOBILE SWIPE
 ========================= */
 
-let touchStartX = 0;
-let touchEndX = 0;
-
-hero.addEventListener("touchstart",(e)=>{
-
-  touchStartX = e.changedTouches[0].screenX;
-
-  stopAutoSlide();
-
-},{passive:true});
+let startX = 0;
+let endX = 0;
 
 
-hero.addEventListener("touchend",(e)=>{
+hero.addEventListener(
+  "touchstart",
+  function(e){
 
-  touchEndX = e.changedTouches[0].screenX;
+    startX =
+      e.changedTouches[0].screenX;
 
-  handleSwipe();
+    stopAutoSlide();
 
-  startAutoSlide();
-
-},{passive:true});
-
-
-function handleSwipe(){
-
-  const distance =
-    touchEndX - touchStartX;
-
-  if(Math.abs(distance) < 50){
-    return;
-  }
-
-  if(distance < 0){
-    nextSlide();
-  }else{
-    previousSlide();
-  }
-
-}
+  },
+  {passive:true}
+);
 
 
-/* Start */
+hero.addEventListener(
+  "touchend",
+  function(e){
+
+    endX =
+      e.changedTouches[0].screenX;
+
+    const distance =
+      endX - startX;
+
+
+    if(Math.abs(distance) > 50){
+
+      if(distance < 0){
+
+        nextSlide();
+
+      }else{
+
+        previousSlide();
+
+      }
+
+    }
+
+
+    startAutoSlide();
+
+  },
+  {passive:true}
+);
+
+
+/* =========================
+   INITIALIZE
+========================= */
 
 showSlide(0);
+
 startAutoSlide();
 
 </script>
+
 
 </body>
 </html>
