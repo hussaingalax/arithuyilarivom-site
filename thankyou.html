@@ -2,349 +2,481 @@
 <html lang="en">
 
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
+<title>Registration Successful – Arithuyil Arivom</title>
+<link rel="icon" type="image/png" href="favicon.png">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<style>
+*{box-sizing:border-box}
 
-    <title>Registration Successful</title>
+body{
+    font-family:Arial,Poppins,sans-serif;
+    text-align:center;
+    padding:70px 20px;
+    background:#f5f7fb;
+    margin:0;
+    color:#111827;
+}
 
-    <style>
+/* LANGUAGE SWITCH */
+.language-switcher{
+    position:fixed;
+    top:14px;
+    right:14px;
+    z-index:9998;
+    display:flex;
+    background:rgba(255,255,255,.97);
+    padding:4px;
+    border-radius:30px;
+    box-shadow:0 5px 18px rgba(0,0,0,.18);
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 80px 20px;
-            background: #f5f7fb;
-            margin: 0;
-        }
+.language-switcher button{
+    border:0;
+    background:transparent;
+    color:#333;
+    padding:8px 12px;
+    border-radius:22px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:700;
+    width:auto;
+}
 
-        .box {
-            background: #fff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            max-width: 500px;
-            margin: auto;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
+.language-switcher button.active{
+    background:#111;
+    color:#fff;
+}
 
-        h2 {
-            color: #0f2027;
-            margin-bottom: 15px;
-        }
+.box{
+    background:#fff;
+    padding:40px 30px;
+    border-radius:16px;
+    max-width:520px;
+    margin:auto;
+    box-shadow:0 0 15px rgba(0,0,0,.1);
+}
 
-        .success-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
+.success-icon{
+    font-size:50px;
+    margin-bottom:10px;
+}
 
-        .registration-number {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #111;
-        }
+h2{
+    color:#0f2027;
+    margin:0 0 15px;
+}
 
-        .redirect-text {
-            color: #555;
-            line-height: 1.6;
-        }
+.registration-number{
+    display:inline-block;
+    font-size:24px;
+    font-weight:bold;
+    letter-spacing:2px;
+    margin:20px 0;
+    color:#111;
+    background:#eef2f7;
+    padding:13px 22px;
+    border-radius:10px;
+}
 
-        .whatsapp-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 14px 24px;
-            background: #25D366;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-        }
+.redirect-text{
+    color:#555;
+    line-height:1.7;
+}
 
-    </style>
+.whatsapp-btn{
+    display:inline-block;
+    margin-top:20px;
+    padding:14px 24px;
+    background:#25D366;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
+}
 
+.mode-text{
+    margin:8px 0;
+    font-weight:600;
+}
+
+@media(max-width:600px){
+    body{padding:80px 15px 30px}
+    .box{padding:35px 20px}
+    .language-switcher{top:10px;right:10px}
+    .language-switcher button{padding:7px 10px}
+}
+</style>
 </head>
-
 
 <body>
 
+<!-- SAME LANGUAGE PREFERENCE AS FREECLASS / REGISTER / PAYMENT -->
+<div class="language-switcher" aria-label="Language selector">
+    <button id="langTa" type="button" onclick="setLanguage('ta')">தமிழ்</button>
+    <button id="langEn" type="button" onclick="setLanguage('en')">English</button>
+</div>
+
 <div class="box">
 
-    <div class="success-icon">
-        ✅
+    <div class="success-icon">✅</div>
+
+    <h2 data-en="Registration Successful"
+        data-ta="பதிவு வெற்றிகரமாக நிறைவு பெற்றது"></h2>
+
+    <p data-en="Thank you for registering for the Arithuyil Arivom Free Experience Class."
+       data-ta="Arithuyil Arivom இலவச அனுபவ வகுப்பிற்கு பதிவு செய்ததற்கு நன்றி."></p>
+
+    <div id="registrationNumber"
+         class="registration-number">
+        A00000
     </div>
 
-    <h2>
-        Registration Successful
-    </h2>
+    <p id="modeText" class="mode-text"></p>
 
-    <p>
-        Thank you for registering for the
-        Arithuyil Arivom Free Experience Class.
-    </p>
+    <p class="redirect-text"
+       data-en="Your payment has been verified successfully. Please continue to WhatsApp to complete your class confirmation."
+       data-ta="உங்கள் கட்டணம் வெற்றிகரமாகச் சரிபார்க்கப்பட்டது. உங்கள் வகுப்பு உறுதிப்படுத்தலை நிறைவு செய்ய வாட்ஸ்அப்பில் தொடருங்கள்."></p>
 
-    <div
-        id="registrationNumber"
-        class="registration-number"
-    >
-        Registration Confirmed
-    </div>
-
-    <p class="redirect-text">
-        Your payment has been verified successfully.
-        You will now be redirected to WhatsApp
-        to complete your class confirmation.
-    </p>
-
-    <a
-        id="whatsappButton"
-        class="whatsapp-btn"
-        href="#"
-    >
-        Continue to WhatsApp
-    </a>
+    <a id="whatsappButton"
+       class="whatsapp-btn"
+       href="#"
+       data-en="Continue to WhatsApp"
+       data-ta="வாட்ஸ்அப்பில் தொடருங்கள்"></a>
 
 </div>
 
-
 <script>
+/* =========================================
+   LANGUAGE
+   ========================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
+let currentLanguage =
+    localStorage.getItem("freeclassLanguage") ||
+    sessionStorage.getItem("selected_language");
 
+if(currentLanguage !== "ta" && currentLanguage !== "en"){
+    currentLanguage = "ta";
+}
 
-    // ==========================================
-    // GET SAVED DETAILS
-    // ==========================================
+function setLanguage(lang){
 
-    const registrationNo =
-        sessionStorage.getItem("registration_no");
+    if(lang !== "ta" && lang !== "en") return;
 
-    const paymentId =
-        sessionStorage.getItem("razorpay_payment_id");
+    currentLanguage = lang;
 
-    const customerName =
-        sessionStorage.getItem("customer_name");
+    localStorage.setItem("freeclassLanguage",lang);
+    sessionStorage.setItem("selected_language",lang);
 
-    const customerMobile =
-        sessionStorage.getItem("customer_mobile");
+    document.querySelectorAll("[data-en]").forEach(function(el){
 
-    const customerLocation =
-        sessionStorage.getItem("customer_location");
+        const value =
+            lang === "ta"
+            ? el.getAttribute("data-ta")
+            : el.getAttribute("data-en");
 
-    const customerClassMode =
-        sessionStorage.getItem("customer_class_mode");
-
-
-    // ==========================================
-    // REGISTRATION NUMBER
-    // ==========================================
-
-    const registrationNumberElement =
-        document.getElementById(
-            "registrationNumber"
-        );
-
-
-    if (registrationNumberElement) {
-
-        if (registrationNo) {
-
-            registrationNumberElement.innerText =
-                "Registration No: " +
-                registrationNo;
-
-        } else {
-
-            registrationNumberElement.innerText =
-                "Registration Confirmed";
-
+        if(value !== null){
+            el.innerHTML = value;
         }
+    });
 
+    document.documentElement.lang =
+        lang === "ta" ? "ta" : "en";
+
+    const taBtn = document.getElementById("langTa");
+    const enBtn = document.getElementById("langEn");
+
+    if(taBtn && enBtn){
+        taBtn.classList.toggle("active",lang === "ta");
+        enBtn.classList.toggle("active",lang === "en");
     }
 
+    updateModeText();
+}
 
-    // ==========================================
-    // CLASS MODE
-    // ==========================================
+function msg(en,ta){
+    return currentLanguage === "ta" ? ta : en;
+}
 
-    let classModeText = "Online – Zoom";
 
-    if (
-        customerClassMode === "offline"
-    ) {
+/* =========================================
+   GET SAVED DETAILS
+   ========================================= */
 
-        classModeText =
-            "Offline – Chennai";
+const registrationNo =
+    sessionStorage.getItem("registration_no");
 
+const paymentId =
+    sessionStorage.getItem("razorpay_payment_id");
+
+const customerName =
+    sessionStorage.getItem("customer_name");
+
+const customerMobile =
+    sessionStorage.getItem("customer_mobile");
+
+const customerLocation =
+    sessionStorage.getItem("customer_location");
+
+const customerClassMode =
+    sessionStorage.getItem("customer_class_mode");
+
+
+/* =========================================
+   REGISTRATION NUMBER
+   =========================================
+   Preferred format: 1 letter + 5 numbers = 6 characters.
+   If the backend already supplies a 6-character number,
+   it is displayed unchanged.
+
+   If an older backend returns a longer value, only the
+   last 6 characters are displayed here so the customer-facing
+   number remains within 6 characters.
+   ========================================= */
+
+function getDisplayRegistrationNumber(value){
+
+    if(!value){
+        return "A00000";
     }
 
+    value = String(value)
+        .replace(/[^a-zA-Z0-9]/g,"")
+        .toUpperCase();
 
-    // ==========================================
-    // WHATSAPP MESSAGE
-    // ==========================================
+    if(value.length === 6){
+        return value;
+    }
 
-    let message =
-        "Hello Arithuyil Arivom,%0A%0A" +
+    if(value.length > 6){
+        return value.slice(-6);
+    }
 
-        "I have successfully registered for the " +
-        "Free Experience Class and completed the " +
-        "₹99 payment." +
+    return value.padStart(6,"0").slice(0,6);
+}
 
-        "%0A%0A" +
+const displayRegistrationNo =
+    getDisplayRegistrationNumber(registrationNo);
 
-        "Registration Details:" +
+document.getElementById("registrationNumber").innerText =
+    displayRegistrationNo;
 
-        "%0AName: " +
-        encodeURIComponent(
-            customerName || ""
-        ) +
 
-        "%0ARegistered Mobile: " +
-        encodeURIComponent(
-            customerMobile || ""
-        ) +
+/* =========================================
+   CLASS MODE
+   ========================================= */
 
-        "%0ALocation: " +
-        encodeURIComponent(
-            customerLocation || ""
-        ) +
+function updateModeText(){
 
-        "%0AClass Mode: " +
-        encodeURIComponent(
-            classModeText
+    let mode;
+
+    if(customerClassMode === "offline"){
+
+        mode = msg(
+            "Class Mode: Offline – Chennai",
+            "வகுப்பு முறை: நேரடி வகுப்பு – சென்னை"
         );
 
+    }else{
 
-    if (registrationNo) {
-
-        message +=
-            "%0ARegistration No: " +
-            encodeURIComponent(
-                registrationNo
-            );
+        mode = msg(
+            "Class Mode: Online – Zoom",
+            "வகுப்பு முறை: இணையவழி – ஜூம்"
+        );
 
     }
 
+    document.getElementById("modeText").innerText = mode;
+}
 
-    if (paymentId) {
 
-        message +=
-            "%0APayment ID: " +
-            encodeURIComponent(
-                paymentId
-            );
+/* =========================================
+   WHATSAPP MESSAGE
+   ========================================= */
 
-    }
+let classModeText =
+    customerClassMode === "offline"
+    ? msg("Offline – Chennai","நேரடி வகுப்பு – சென்னை")
+    : msg("Online – Zoom","இணையவழி – ஜூம்");
 
+let message =
+    "Hello Arithuyil Arivom,%0A%0A" +
+
+    (
+        currentLanguage === "ta"
+        ? "Arithuyil Arivom இலவச அனுபவ வகுப்பிற்கு பதிவு செய்து ₹99 கட்டணம் செலுத்தியுள்ளேன்."
+        : "I have successfully registered for the Arithuyil Arivom Free Experience Class and completed the ₹99 payment."
+    ) +
+
+    "%0A%0A" +
+
+    (
+        currentLanguage === "ta"
+        ? "பதிவு விவரங்கள்:"
+        : "Registration Details:"
+    ) +
+
+    "%0A" +
+
+    (
+        currentLanguage === "ta"
+        ? "பெயர்: "
+        : "Name: "
+    ) +
+
+    encodeURIComponent(customerName || "") +
+
+    "%0A" +
+
+    (
+        currentLanguage === "ta"
+        ? "பதிவு செய்த கைபேசி எண்: "
+        : "Registered Mobile: "
+    ) +
+
+    encodeURIComponent(customerMobile || "") +
+
+    "%0A" +
+
+    (
+        currentLanguage === "ta"
+        ? "இருப்பிடம்: "
+        : "Location: "
+    ) +
+
+    encodeURIComponent(customerLocation || "") +
+
+    "%0A" +
+
+    (
+        currentLanguage === "ta"
+        ? "வகுப்பு முறை: "
+        : "Class Mode: "
+    ) +
+
+    encodeURIComponent(classModeText) +
+
+    "%0A" +
+
+    (
+        currentLanguage === "ta"
+        ? "பதிவு எண்: "
+        : "Registration No: "
+    ) +
+
+    encodeURIComponent(displayRegistrationNo);
+
+
+if(paymentId){
 
     message +=
-        "%0A%0APlease confirm my Free Class seat.";
+        "%0A" +
+        (
+            currentLanguage === "ta"
+            ? "கட்டண அடையாள எண்: "
+            : "Payment ID: "
+        ) +
+        encodeURIComponent(paymentId);
+}
+
+message +=
+    "%0A%0A" +
+    (
+        currentLanguage === "ta"
+        ? "என் இலவச வகுப்பு இருக்கையை உறுதிப்படுத்துங்கள்."
+        : "Please confirm my Free Class seat."
+    );
 
 
-    // ==========================================
-    // WHATSAPP URLs
-    // ==========================================
+/* =========================================
+   WHATSAPP URLs
+   ========================================= */
 
-    const whatsappNumber =
-        "919840851295";
+const whatsappNumber = "919840851295";
 
+const whatsappWebUrl =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    message;
 
-    const whatsappWebUrl =
-        "https://wa.me/" +
-        whatsappNumber +
-        "?text=" +
-        message;
-
-
-    const whatsappAppUrl =
-        "whatsapp://send?phone=" +
-        whatsappNumber +
-        "&text=" +
-        message;
+const whatsappAppUrl =
+    "whatsapp://send?phone=" +
+    whatsappNumber +
+    "&text=" +
+    message;
 
 
-    // ==========================================
-    // WHATSAPP BUTTON
-    // ==========================================
+/* =========================================
+   BUTTON
+   ========================================= */
 
-    const whatsappButton =
-        document.getElementById(
-            "whatsappButton"
+const whatsappButton =
+    document.getElementById("whatsappButton");
+
+if(whatsappButton){
+
+    const isMobile =
+        /Android|iPhone|iPad|iPod/i.test(
+            navigator.userAgent
         );
 
+    whatsappButton.href =
+        isMobile
+        ? whatsappAppUrl
+        : whatsappWebUrl;
 
-    if (whatsappButton) {
+    whatsappButton.addEventListener(
+        "click",
+        function(){
 
-        const isMobile =
-            /Android|iPhone|iPad|iPod/i.test(
-                navigator.userAgent
-            );
+            if(isMobile){
 
-
-        whatsappButton.href =
-            isMobile
-                ? whatsappAppUrl
-                : whatsappWebUrl;
-
-
-        // ======================================
-        // BUTTON FALLBACK
-        // ======================================
-
-        whatsappButton.addEventListener(
-            "click",
-            function () {
-
-                if (isMobile) {
-
-                    setTimeout(function () {
-
-                        window.location.href =
-                            whatsappWebUrl;
-
-                    }, 1800);
-
-                }
-
-            }
-        );
-
-
-        // ======================================
-        // AUTO REDIRECT
-        // ======================================
-
-        setTimeout(function () {
-
-            if (isMobile) {
-
-                window.location.href =
-                    whatsappAppUrl;
-
-
-                setTimeout(function () {
+                setTimeout(function(){
 
                     window.location.href =
                         whatsappWebUrl;
 
-                }, 1800);
+                },1800);
 
-            } else {
+            }
+
+        }
+    );
+
+
+    /* AUTO REDIRECT AFTER 3 SECONDS */
+
+    setTimeout(function(){
+
+        if(isMobile){
+
+            window.location.href =
+                whatsappAppUrl;
+
+            setTimeout(function(){
 
                 window.location.href =
                     whatsappWebUrl;
 
-            }
+            },1800);
 
-        }, 3000);
+        }else{
 
-    }
+            window.location.href =
+                whatsappWebUrl;
 
-});
+        }
 
+    },3000);
+}
+
+
+/* Initial language + mode */
+setLanguage(currentLanguage);
 </script>
 
 </body>
-
 </html>
