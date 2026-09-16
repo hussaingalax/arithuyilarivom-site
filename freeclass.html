@@ -667,20 +667,96 @@ width:100%;
 border-radius:8px;
 font-size:16px;
 }
+
+  /* LANGUAGE POPUP */
+
+.language-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:99999;
+  backdrop-filter:blur(5px);
+}
+
+.language-box{
+  width:90%;
+  max-width:380px;
+  background:white;
+  padding:35px 25px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+
+.language-icon{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.language-box h2{
+  margin:5px 0;
+  font-size:25px;
+}
+
+.language-box p{
+  color:#666;
+  margin-bottom:25px;
+}
+
+.language-box button{
+  display:block;
+  width:100%;
+  margin:12px 0;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:#111;
+  color:white;
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.language-box button:first-of-type{
+  background:#ff3b3b;
+}
+
 </style>
 </head>
 
 <body>
-<section class="hero">
+
+  <!-- LANGUAGE POPUP -->
+<div id="languagePopup" class="language-popup">
+  <div class="language-box">
+    <div class="language-icon">🌐</div>
+
+    <h2>Choose Your Language</h2>
+    <p>உங்கள் மொழியை தேர்வு செய்யுங்கள்</p>
+
+    <button onclick="selectLanguage('ta')">
+      🇮🇳 தமிழ்
+    </button>
+
+    <button onclick="selectLanguage('en')">
+      🇬🇧 English
+    </button>
+  </div>
+</div>
+  
+  <section class="hero">
 
 <div class="hero-box">
 
-<h1>
-Unlock Your Hidden Mind Power
+<h1 data-en="Unlock Your Hidden Mind Power"
+    data-ta="உங்கள் ஆழ்மன சக்தியை அறிந்து கொள்ளுங்கள்">
 </h1>
 
-<h2>
-Remove Stress • Heal Body • Attract Success
+<h2 data-en="Remove Stress • Heal Body • Attract Success"
+    data-ta="மன அழுத்தத்தை குறைக்கவும் • உடல் நலத்தை மேம்படுத்தவும் • வெற்றியை ஈர்க்கவும்">
 </h2>
 
 <p class="hero-sub">
@@ -1199,5 +1275,43 @@ var timer = setInterval(function(){
 
 </div>
 
+<script>
+
+function selectLanguage(lang){
+
+  document.querySelectorAll('[data-en]').forEach(function(el){
+
+    if(lang === 'ta'){
+      el.innerHTML = el.getAttribute('data-ta');
+    }else{
+      el.innerHTML = el.getAttribute('data-en');
+    }
+
+  });
+
+  localStorage.setItem('freeclassLanguage', lang);
+
+  document.getElementById('languagePopup').style.display = 'none';
+}
+
+
+document.addEventListener("DOMContentLoaded", function(){
+
+  const savedLanguage = localStorage.getItem('freeclassLanguage');
+
+  if(savedLanguage){
+
+    selectLanguage(savedLanguage);
+
+  }else{
+
+    document.getElementById('languagePopup').style.display = 'flex';
+
+  }
+
+});
+
+</script>
+  
 </body>
 </html>
