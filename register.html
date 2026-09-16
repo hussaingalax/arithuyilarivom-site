@@ -2,24 +2,16 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Register – Arithuyil Arivom</title>
-
 <link rel="icon" type="image/png" href="favicon.png">
 
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-rel="stylesheet"
->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -29,8 +21,37 @@ body{
     color:#111827;
 }
 
-/* Header */
+/* LANGUAGE SWITCH */
+.language-switcher{
+    position:fixed;
+    top:14px;
+    right:14px;
+    z-index:9998;
+    display:flex;
+    background:rgba(255,255,255,.97);
+    padding:4px;
+    border-radius:30px;
+    box-shadow:0 5px 18px rgba(0,0,0,.18);
+}
 
+.language-switcher button{
+    border:0;
+    background:transparent;
+    color:#333;
+    padding:8px 12px;
+    border-radius:22px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:700;
+    width:auto;
+}
+
+.language-switcher button.active{
+    background:#111;
+    color:#fff;
+}
+
+/* Header */
 .header{
     background:#111;
     color:#fff;
@@ -38,19 +59,10 @@ body{
     text-align:center;
 }
 
-.header h2{
-    margin:0;
-    font-size:22px;
-}
-
-.header p{
-    margin:5px 0 0;
-    font-size:13px;
-    opacity:.75;
-}
+.header h2{margin:0;font-size:22px}
+.header p{margin:5px 0 0;font-size:13px;opacity:.75}
 
 /* Main */
-
 .main{
     max-width:700px;
     margin:50px auto;
@@ -64,27 +76,12 @@ body{
     box-shadow:0 10px 35px rgba(0,0,0,.08);
 }
 
-.title{
-    text-align:center;
-    margin-bottom:30px;
-}
-
-.title h1{
-    margin:0 0 10px;
-    font-size:30px;
-}
-
-.title p{
-    margin:0;
-    color:#6b7280;
-    font-size:15px;
-}
+.title{text-align:center;margin-bottom:30px}
+.title h1{margin:0 0 10px;font-size:30px}
+.title p{margin:0;color:#6b7280;font-size:15px}
 
 /* Form */
-
-.form-group{
-    margin-bottom:20px;
-}
+.form-group{margin-bottom:20px}
 
 label{
     display:block;
@@ -93,8 +90,7 @@ label{
     font-size:14px;
 }
 
-input,
-select{
+input,select{
     width:100%;
     padding:15px;
     border:1px solid #d1d5db;
@@ -105,24 +101,19 @@ select{
     transition:.2s;
 }
 
-input:focus,
-select:focus{
+input:focus,select:focus{
     border-color:#2563eb;
     box-shadow:0 0 0 3px rgba(37,99,235,.1);
 }
 
 /* Mode */
-
 .mode-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:15px;
 }
 
-.mode-option{
-    position:relative;
-}
-
+.mode-option{position:relative}
 .mode-option input{
     position:absolute;
     opacity:0;
@@ -139,11 +130,7 @@ select:focus{
     transition:.2s;
 }
 
-.mode-label strong{
-    display:block;
-    font-size:16px;
-}
-
+.mode-label strong{display:block;font-size:16px}
 .mode-label span{
     display:block;
     margin-top:5px;
@@ -157,7 +144,6 @@ select:focus{
 }
 
 /* Button */
-
 .register-btn{
     width:100%;
     border:none;
@@ -173,17 +159,12 @@ select:focus{
     transition:.2s;
 }
 
-.register-btn:hover{
-    transform:translateY(-2px);
-}
-
+.register-btn:hover{transform:translateY(-2px)}
 .register-btn:disabled{
     opacity:.6;
     cursor:not-allowed;
     transform:none;
 }
-
-/* Note */
 
 .note{
     margin-top:20px;
@@ -195,26 +176,10 @@ select:focus{
     text-align:center;
 }
 
-/* Success */
-
-.success{
-    display:none;
-    text-align:center;
-}
-
-.success-icon{
-    font-size:50px;
-    margin-bottom:15px;
-}
-
-.success h2{
-    margin:0 0 10px;
-}
-
-.success p{
-    color:#64748b;
-    line-height:1.7;
-}
+.success{display:none;text-align:center}
+.success-icon{font-size:50px;margin-bottom:15px}
+.success h2{margin:0 0 10px}
+.success p{color:#64748b;line-height:1.7}
 
 .registration-number{
     display:inline-block;
@@ -225,258 +190,234 @@ select:focus{
     margin:15px 0;
 }
 
-/* Mobile */
-
 @media(max-width:600px){
-
-    .main{
-        margin:25px auto;
-    }
-
-    .card{
-        padding:25px 20px;
-    }
-
-    .title h1{
-        font-size:24px;
-    }
-
-    .mode-grid{
-        grid-template-columns:1fr;
-    }
-
+    .main{margin:25px auto}
+    .card{padding:25px 20px}
+    .title h1{font-size:24px}
+    .mode-grid{grid-template-columns:1fr}
+    .language-switcher{top:10px;right:10px}
+    .language-switcher button{padding:7px 10px}
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<div class="header">
-
-    <h2>Arithuyil Arivom</h2>
-
-    <p>Unlock Your Hidden Mind Power</p>
-
+<!-- LANGUAGE SWITCH: SAME PREFERENCE AS FREECLASS -->
+<div class="language-switcher" aria-label="Language selector">
+    <button id="langTa" type="button" onclick="setLanguage('ta')">தமிழ்</button>
+    <button id="langEn" type="button" onclick="setLanguage('en')">English</button>
 </div>
 
+<div class="header">
+    <h2>Arithuyil Arivom</h2>
+    <p id="headerTagline"
+       data-en="Unlock Your Hidden Mind Power"
+       data-ta="உங்கள் ஆழ்மன சக்தியை அறிந்து கொள்ளுங்கள்"></p>
+</div>
 
 <div class="main">
-
 <div class="card">
-
-
-<!-- REGISTRATION FORM -->
 
 <div id="registrationSection">
 
     <div class="title">
+        <h1 data-en="Register for Free Experience Class"
+            data-ta="இலவச அனுபவ வகுப்பிற்குப் பதிவு செய்யுங்கள்"></h1>
 
-        <h1>Register for Free Experience Class</h1>
-
-        <p>
-            Enter your details to register for the experience session.
-        </p>
-
+        <p data-en="Enter your details to register for the experience session."
+           data-ta="அனுபவ வகுப்பில் பதிவு செய்ய உங்கள் விவரங்களை உள்ளிடுங்கள்."></p>
     </div>
-
 
     <form id="registrationForm">
 
-
-        <!-- NAME -->
-
         <div class="form-group">
+            <label for="name"
+                   data-en="Full Name"
+                   data-ta="முழுப் பெயர்"></label>
 
-            <label for="name">
-                Full Name
-            </label>
-
-            <input
-                type="text"
-                id="name"
-                placeholder="Enter your name"
-                autocomplete="name"
-                required
-            >
-
+            <input type="text"
+                   id="name"
+                   placeholder="Enter your name"
+                   data-placeholder-en="Enter your name"
+                   data-placeholder-ta="உங்கள் பெயரை உள்ளிடுங்கள்"
+                   autocomplete="name"
+                   required>
         </div>
 
-
-        <!-- MOBILE -->
-
         <div class="form-group">
+            <label for="mobile"
+                   data-en="Mobile Number"
+                   data-ta="கைபேசி எண்"></label>
 
-            <label for="mobile">
-                Mobile Number
-            </label>
-
-            <input
-                type="tel"
-                id="mobile"
-                placeholder="Enter 10 digit mobile number"
-                maxlength="10"
-                inputmode="numeric"
-                autocomplete="tel"
-                required
-            >
-
+            <input type="tel"
+                   id="mobile"
+                   placeholder="Enter 10 digit mobile number"
+                   data-placeholder-en="Enter 10 digit mobile number"
+                   data-placeholder-ta="10 இலக்க கைபேசி எண்ணை உள்ளிடுங்கள்"
+                   maxlength="10"
+                   inputmode="numeric"
+                   autocomplete="tel"
+                   required>
         </div>
 
-
-        <!-- LOCATION -->
-
         <div class="form-group">
+            <label for="location"
+                   data-en="Location"
+                   data-ta="இருப்பிடம்"></label>
 
-            <label for="location">
-                Location
-            </label>
-
-            <input
-                type="text"
-                id="location"
-                placeholder="City / District"
-                required
-            >
-
+            <input type="text"
+                   id="location"
+                   placeholder="City / District"
+                   data-placeholder-en="City / District"
+                   data-placeholder-ta="நகரம் / மாவட்டம்"
+                   required>
         </div>
 
-
-        <!-- CLASS MODE -->
-
         <div class="form-group">
 
-            <label>
-                Preferred Class Mode
-            </label>
+            <label data-en="Preferred Class Mode"
+                   data-ta="விரும்பும் வகுப்பு முறை"></label>
 
             <div class="mode-grid">
 
-
                 <div class="mode-option">
+                    <input type="radio"
+                           id="online"
+                           name="class_mode"
+                           value="online"
+                           checked>
 
-                    <input
-                        type="radio"
-                        id="online"
-                        name="class_mode"
-                        value="online"
-                        checked
-                    >
+                    <label for="online" class="mode-label">
+                        <strong data-en="Online"
+                                data-ta="இணையவழி"></strong>
 
-                    <label
-                        for="online"
-                        class="mode-label"
-                    >
-
-                        <strong>Online</strong>
-
-                        <span>Zoom Session</span>
-
+                        <span data-en="Zoom Session"
+                              data-ta="ஜூம் வகுப்பு"></span>
                     </label>
-
                 </div>
 
-
                 <div class="mode-option">
+                    <input type="radio"
+                           id="offline"
+                           name="class_mode"
+                           value="offline">
 
-                    <input
-                        type="radio"
-                        id="offline"
-                        name="class_mode"
-                        value="offline"
-                    >
+                    <label for="offline" class="mode-label">
+                        <strong data-en="Offline"
+                                data-ta="நேரடி வகுப்பு"></strong>
 
-                    <label
-                        for="offline"
-                        class="mode-label"
-                    >
-
-                        <strong>Offline</strong>
-
-                        <span>Chennai</span>
-
+                        <span data-en="Chennai"
+                              data-ta="சென்னை"></span>
                     </label>
-
                 </div>
-
 
             </div>
-
         </div>
 
-
-        <button
-            type="submit"
-            id="registerBtn"
-            class="register-btn"
-        >
-            Continue Registration
-        </button>
-
+        <button type="submit"
+                id="registerBtn"
+                class="register-btn"
+                data-en="Continue Registration – ₹99"
+                data-ta="பதிவைத் தொடருங்கள் – ₹99"></button>
 
     </form>
 
-
-    <div class="note">
-
-        Your registration details will be securely recorded
-        for the Arithuyil Arivom Free Experience Class.
-
-    </div>
+    <div class="note"
+         data-en="Your registration details will be securely recorded for the Arithuyil Arivom Free Experience Class. ₹99 is the registration fee and is 100% refundable after attending the class, on request."
+         data-ta="உங்கள் பதிவு விவரங்கள் Arithuyil Arivom இலவச அனுபவ வகுப்பிற்காக பாதுகாப்பாகப் பதிவு செய்யப்படும். ₹99 பதிவு கட்டணம் வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் 100% திருப்பி வழங்கப்படும்."></div>
 
 </div>
-
-
-<!-- SUCCESS -->
 
 <div id="successSection" class="success">
+    <div class="success-icon">✅</div>
 
-    <div class="success-icon">
-        ✅
-    </div>
+    <h2 data-en="Registration Details Saved"
+        data-ta="பதிவு விவரங்கள் சேமிக்கப்பட்டன"></h2>
 
-    <h2>
-        Registration Details Saved
-    </h2>
+    <p data-en="Your registration has been successfully recorded."
+       data-ta="உங்கள் பதிவு வெற்றிகரமாகப் பதிவு செய்யப்பட்டது."></p>
 
-    <p>
-        Your registration has been successfully recorded.
-    </p>
+    <div id="registrationNumber" class="registration-number"></div>
 
-    <div
-        id="registrationNumber"
-        class="registration-number"
-    ></div>
-
-    <p>
-        Payment step will be connected after
-        registration verification.
-    </p>
-
-</div>
-
-
+    <p data-en="Proceeding to secure payment..."
+       data-ta="பாதுகாப்பான கட்டணப் பக்கத்திற்கு அழைத்துச் செல்கிறோம்..."></p>
 </div>
 
 </div>
-
-
-<!-- SUPABASE -->
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
+/* =========================================
+   LANGUAGE SYSTEM
+   Uses the same localStorage key as freeclass.html
+   ========================================= */
+
+let currentLanguage = localStorage.getItem("freeclassLanguage");
+
+if(currentLanguage !== "ta" && currentLanguage !== "en"){
+    currentLanguage = "ta";
+}
+
+function setLanguage(lang){
+
+    if(lang !== "ta" && lang !== "en") return;
+
+    currentLanguage = lang;
+
+    localStorage.setItem("freeclassLanguage", lang);
+
+    document.querySelectorAll("[data-en]").forEach(function(el){
+        const value =
+            lang === "ta"
+            ? el.getAttribute("data-ta")
+            : el.getAttribute("data-en");
+
+        if(value !== null){
+            el.innerHTML = value;
+        }
+    });
+
+    document.querySelectorAll("[data-placeholder-en]").forEach(function(el){
+        el.placeholder =
+            lang === "ta"
+            ? el.getAttribute("data-placeholder-ta")
+            : el.getAttribute("data-placeholder-en");
+    });
+
+    document.documentElement.lang =
+        lang === "ta" ? "ta" : "en";
+
+    const taBtn = document.getElementById("langTa");
+    const enBtn = document.getElementById("langEn");
+
+    if(taBtn && enBtn){
+        taBtn.classList.toggle("active", lang === "ta");
+        enBtn.classList.toggle("active", lang === "en");
+    }
+}
+
+function msg(en, ta){
+    return currentLanguage === "ta" ? ta : en;
+}
+
+setLanguage(currentLanguage);
+
+
+/* =========================================
+   EXISTING REGISTRATION + PAYMENT FLOW
+   ========================================= */
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const supabaseUrl =
         "https://sftfivfmeynceokltbyb.supabase.co";
 
     const supabaseKey =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sIjoiZGVmYXVsdCIsImlhdCI6MTc4ODc1NDY5MiwiZXhwIjoxMjQwNDMzMDY5fQ.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
 
     const supabaseClient =
         window.supabase.createClient(
@@ -484,24 +425,20 @@ document.addEventListener("DOMContentLoaded", function () {
             supabaseKey
         );
 
-
     const form =
         document.getElementById("registrationForm");
 
     const registerBtn =
         document.getElementById("registerBtn");
 
-
     if (!form) {
         console.error("Registration form not found.");
         return;
     }
 
-
     form.addEventListener("submit", async function (e) {
 
         e.preventDefault();
-
 
         const name =
             document.getElementById("name").value.trim();
@@ -512,8 +449,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const location =
             document.getElementById("location").value.trim();
 
-
-        // Get selected class mode
         const selectedMode =
             document.querySelector(
                 'input[name="class_mode"]:checked'
@@ -524,42 +459,33 @@ document.addEventListener("DOMContentLoaded", function () {
                 ? selectedMode.value
                 : "online";
 
-
-        // Validation
         if (!name || !mobile || !location) {
-
-            alert("Please fill all details.");
+            alert(msg(
+                "Please fill all details.",
+                "தயவுசெய்து அனைத்து விவரங்களையும் நிரப்புங்கள்."
+            ));
             return;
         }
-
 
         if (!/^[0-9]{10}$/.test(mobile)) {
-
-            alert(
-                "Please enter a valid 10-digit mobile number."
-            );
-
+            alert(msg(
+                "Please enter a valid 10-digit mobile number.",
+                "சரியான 10 இலக்க கைபேசி எண்ணை உள்ளிடுங்கள்."
+            ));
             return;
         }
 
-
-        // Prevent double click
         registerBtn.disabled = true;
 
         registerBtn.innerText =
-            "Processing...";
-
+            msg("Processing...", "செயலாக்கப்படுகிறது...");
 
         try {
 
-            // Generate registration ID
             const registrationId =
                 crypto.randomUUID();
 
-
-            // =========================================
-            // STEP 1 — CREATE REGISTRATION
-            // =========================================
+            /* STEP 1 — CREATE REGISTRATION */
 
             const { error: registrationError } =
                 await supabaseClient
@@ -572,7 +498,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         class_mode: classMode,
                         status: "payment_pending"
                     }]);
-
 
             if (registrationError) {
 
@@ -587,20 +512,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
             }
 
-
-            console.log(
-                "Registration created:",
-                registrationId
-            );
-
-
-            // =========================================
-            // STEP 2 — CREATE RAZORPAY ORDER
-            // =========================================
+            /* STEP 2 — CREATE RAZORPAY ORDER */
 
             const functionUrl =
                 "https://sftfivfmeynceokltbyb.supabase.co/functions/v1/create-razorpay-order";
-
 
             const orderResponse =
                 await fetch(functionUrl, {
@@ -620,10 +535,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                 });
 
-
             const orderData =
                 await orderResponse.json();
-
 
             if (!orderResponse.ok ||
                 !orderData.success) {
@@ -639,16 +552,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
             }
 
-
-            console.log(
-                "Razorpay order created:",
-                orderData.order_id
-            );
-
-
-            // =========================================
-            // STEP 3 — OPEN RAZORPAY CHECKOUT
-            // =========================================
+            /* STEP 3 — OPEN RAZORPAY */
 
             const options = {
 
@@ -661,177 +565,173 @@ document.addEventListener("DOMContentLoaded", function () {
                 name: "Arithuyil Arivom",
 
                 description:
-                    "Free Experience Class Registration",
+                    currentLanguage === "ta"
+                    ? "இலவச அனுபவ வகுப்பு பதிவு"
+                    : "Free Experience Class Registration",
 
                 order_id:
                     orderData.order_id,
-
 
                 prefill: {
                     name: name,
                     contact: mobile
                 },
 
-
                 notes: {
                     registration_id:
                         registrationId,
 
                     registration_no:
-                        orderData.registration_no
-                },
+                        orderData.registration_no,
 
+                    language:
+                        currentLanguage
+                },
 
                 theme: {
                     color: "#0f2027"
                 },
 
+                handler: async function (response) {
 
-               handler: async function (response) {
+                    console.log(
+                        "Razorpay payment response:",
+                        response
+                    );
 
-    console.log(
-        "Razorpay payment response:",
-        response
-    );
+                    try {
 
-    try {
+                        const verifyUrl =
+                            "https://sftfivfmeynceokltbyb.supabase.co/functions/v1/verify-razorpay-payment";
 
-        const verifyUrl =
-            "https://sftfivfmeynceokltbyb.supabase.co/functions/v1/verify-razorpay-payment";
+                        const verifyResponse =
+                            await fetch(verifyUrl, {
 
-        const verifyResponse =
-            await fetch(verifyUrl, {
+                                method: "POST",
 
-                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "apikey": supabaseKey,
+                                    "Authorization":
+                                        "Bearer " + supabaseKey
+                                },
 
-                headers: {
-                    "Content-Type": "application/json",
-                    "apikey": supabaseKey,
-                    "Authorization":
-                        "Bearer " + supabaseKey
-                },
+                                body: JSON.stringify({
 
-                body: JSON.stringify({
+                                    registration_id:
+                                        registrationId,
 
-                    registration_id:
-                        registrationId,
+                                    razorpay_order_id:
+                                        response.razorpay_order_id,
 
-                    razorpay_order_id:
-                        response.razorpay_order_id,
+                                    razorpay_payment_id:
+                                        response.razorpay_payment_id,
 
-                    razorpay_payment_id:
-                        response.razorpay_payment_id,
+                                    razorpay_signature:
+                                        response.razorpay_signature
+                                })
+                            });
 
-                    razorpay_signature:
-                        response.razorpay_signature
+                        const verifyData =
+                            await verifyResponse.json();
 
-                })
+                        console.log(
+                            "Payment verification response:",
+                            verifyData
+                        );
 
-            });
+                        if (
+                            !verifyResponse.ok ||
+                            !verifyData.success
+                        ) {
+                            throw new Error(
+                                verifyData.error ||
+                                "Payment verification failed."
+                            );
+                        }
 
+                        sessionStorage.setItem(
+                            "registration_id",
+                            registrationId
+                        );
 
-        const verifyData =
-            await verifyResponse.json();
+                        sessionStorage.setItem(
+                            "registration_no",
+                            orderData.registration_no
+                        );
 
+                        sessionStorage.setItem(
+                            "razorpay_payment_id",
+                            response.razorpay_payment_id
+                        );
 
-        console.log(
-            "Payment verification response:",
-            verifyData
-        );
+                        sessionStorage.setItem(
+                            "customer_name",
+                            name
+                        );
 
+                        sessionStorage.setItem(
+                            "customer_mobile",
+                            mobile
+                        );
 
-        if (
-            !verifyResponse.ok ||
-            !verifyData.success
-        ) {
+                        sessionStorage.setItem(
+                            "customer_location",
+                            location
+                        );
 
-            throw new Error(
-                verifyData.error ||
-                "Payment verification failed."
-            );
+                        sessionStorage.setItem(
+                            "customer_class_mode",
+                            classMode
+                        );
 
-        }
+                        /* Preserve selected language for thankyou.html */
+                        sessionStorage.setItem(
+                            "selected_language",
+                            currentLanguage
+                        );
 
+                        /* Keep existing site route */
+                        window.location.href = "/thankyou";
 
-        // Payment successfully verified
-        sessionStorage.setItem(
-            "registration_id",
-            registrationId
-        );
+                    } catch (error) {
 
-        sessionStorage.setItem(
-            "registration_no",
-            orderData.registration_no
-        );
+                        console.error(
+                            "Payment verification error:",
+                            error
+                        );
 
-        sessionStorage.setItem(
-            "razorpay_payment_id",
-            response.razorpay_payment_id
-        );
+                        alert(msg(
+                            "Payment was received, but verification could not be completed. Please contact Arithuyil Arivom support.",
+                            "கட்டணம் பெறப்பட்டது. ஆனால் சரிபார்ப்பு நிறைவு பெறவில்லை. தயவுசெய்து Arithuyil Arivom ஆதரவு எண்ணைத் தொடர்புகொள்ளுங்கள்."
+                        ));
 
-        sessionStorage.setItem(
-    "customer_name",
-    name
-);
-
-sessionStorage.setItem(
-    "customer_mobile",
-    mobile
-);
-
-sessionStorage.setItem(
-    "customer_location",
-    location
-);
-
-sessionStorage.setItem(
-    "customer_class_mode",
-    classMode
-);
-
-        // Go to success page
-        window.location.href =
-            "/thankyou";
-
-    } catch (error) {
-
-        console.error(
-            "Payment verification error:",
-            error
-        );
-
-
-        alert(
-            "Payment was received, but verification could not be completed. Please contact Arithuyil Arivom support."
-        );
-
-
-        registerBtn.disabled = false;
-
-        registerBtn.innerText =
-            "Continue Registration";
-
-    }
-
-},
-
-                modal: {
-
-                    ondismiss: function () {
-
-                        registerBtn.disabled =
-                            false;
+                        registerBtn.disabled = false;
 
                         registerBtn.innerText =
-                            "Continue Registration";
+                            msg(
+                                "Continue Registration – ₹99",
+                                "பதிவைத் தொடருங்கள் – ₹99"
+                            );
+                    }
+                },
+
+                modal: {
+                    ondismiss: function () {
+
+                        registerBtn.disabled = false;
+
+                        registerBtn.innerText =
+                            msg(
+                                "Continue Registration – ₹99",
+                                "பதிவைத் தொடருங்கள் – ₹99"
+                            );
                     }
                 }
             };
 
-
             const razorpay =
                 new Razorpay(options);
-
 
             razorpay.on(
                 "payment.failed",
@@ -842,23 +742,22 @@ sessionStorage.setItem(
                         response.error
                     );
 
+                    alert(msg(
+                        "Payment failed. Please try again.",
+                        "கட்டணம் தோல்வியடைந்தது. தயவுசெய்து மீண்டும் முயற்சிக்கவும்."
+                    ));
 
-                    alert(
-                        "Payment failed. Please try again."
-                    );
-
-
-                    registerBtn.disabled =
-                        false;
+                    registerBtn.disabled = false;
 
                     registerBtn.innerText =
-                        "Continue Registration";
+                        msg(
+                            "Continue Registration – ₹99",
+                            "பதிவைத் தொடருங்கள் – ₹99"
+                        );
                 }
             );
 
-
             razorpay.open();
-
 
         } catch (error) {
 
@@ -867,24 +766,25 @@ sessionStorage.setItem(
                 error
             );
 
-
             alert(
                 error.message ||
-                "Something went wrong. Please try again."
+                msg(
+                    "Something went wrong. Please try again.",
+                    "ஏதோ ஒரு சிக்கல் ஏற்பட்டுள்ளது. தயவுசெய்து மீண்டும் முயற்சிக்கவும்."
+                )
             );
 
-
-            registerBtn.disabled =
-                false;
+            registerBtn.disabled = false;
 
             registerBtn.innerText =
-                "Continue Registration";
+                msg(
+                    "Continue Registration – ₹99",
+                    "பதிவைத் தொடருங்கள் – ₹99"
+                );
         }
-
     });
-
 });
 </script>
-</body>
 
+</body>
 </html>
