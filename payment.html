@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Complete Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete Registration – Arithuyil Arivom</title>
 
 <style>
+*{box-sizing:border-box}
+
 body{
-font-family:Arial;
+font-family:Arial,Poppins,sans-serif;
 text-align:center;
-padding:40px;
+padding:40px 20px;
+margin:0;
 background:#f4f6f9;
+color:#111827;
 }
 
 .card{
@@ -18,7 +23,36 @@ max-width:520px;
 margin:auto;
 padding:30px;
 border-radius:14px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
+box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+.language-switcher{
+position:fixed;
+top:14px;
+right:14px;
+z-index:9998;
+display:flex;
+background:rgba(255,255,255,.97);
+padding:4px;
+border-radius:30px;
+box-shadow:0 5px 18px rgba(0,0,0,.18);
+}
+
+.language-switcher button{
+border:0;
+background:transparent;
+color:#333;
+padding:8px 12px;
+border-radius:22px;
+cursor:pointer;
+font-size:13px;
+font-weight:700;
+width:auto;
+}
+
+.language-switcher button.active{
+background:#111;
+color:#fff;
 }
 
 .price{
@@ -28,14 +62,25 @@ margin:20px 0;
 color:#0a8f3c;
 }
 
+.price .old{
+text-decoration:line-through;
+color:#888;
+font-size:24px;
+margin-right:8px;
+}
+
 .timer{
 font-size:22px;
 color:red;
 margin-top:10px;
 }
 
-.qr{
-margin:20px 0;
+.qr{margin:20px 0}
+
+.qr img{
+width:220px;
+height:220px;
+max-width:100%;
 }
 
 input{
@@ -44,9 +89,10 @@ padding:12px;
 margin:10px 0;
 border-radius:8px;
 border:1px solid #ccc;
+font-size:15px;
 }
 
-button{
+button.action{
 background:#111;
 color:white;
 padding:14px 28px;
@@ -58,129 +104,343 @@ margin-top:10px;
 }
 
 .whatsapp{
-background:#25D366;
+background:#25D366 !important;
+}
+
+.note{
+font-size:13px;
+color:#666;
+line-height:1.6;
+margin-top:15px;
+}
+
+.offer-expired{
+color:#d00;
+font-weight:700;
+margin-top:10px;
+}
+
+@media(max-width:600px){
+body{padding:70px 15px 30px}
+.card{padding:25px 18px}
+.price{font-size:34px}
+.language-switcher{top:10px;right:10px}
+.language-switcher button{padding:7px 10px}
 }
 </style>
 </head>
 
 <body>
 
+<!-- LANGUAGE SWITCH
+     Uses the SAME language preference selected in freeclass.html / register.html -->
+<div class="language-switcher" aria-label="Language selector">
+<button id="langTa" type="button" onclick="setLanguage('ta')">தமிழ்</button>
+<button id="langEn" type="button" onclick="setLanguage('en')">English</button>
+</div>
+
 <div class="card">
 
-<h2>Complete Your Registration</h2>
+<h2 data-en="Complete Your Registration"
+    data-ta="உங்கள் பதிவை நிறைவு செய்யுங்கள்"></h2>
 
-<p>Special Offer Valid for</p>
+<p data-en="Special Offer Valid For"
+   data-ta="சிறப்பு சலுகை செல்லுபடியாகும் நேரம்"></p>
+
 <div class="timer" id="timer">10:00</div>
 
 <div class="price" id="price">
-<span style="text-decoration:line-through;color:#888;">₹4999</span>
-₹99
+<span class="old">₹4999</span>₹99
 </div>
 
+<p class="note"
+   data-en="₹99 registration fee is 100% refundable after attending the class, on request."
+   data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் ₹99 பதிவு கட்டணம் 100% திருப்பி வழங்கப்படும்."></p>
+
 <div class="qr">
+
 <img id="qrimg"
-src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym%40okicici&pn=ArithuyilArivom&cu=INR">
+src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym%40okicici%26pn=ArithuyilArivom%26cu=INR"
+alt="UPI QR Code">
 
 <br><br>
 
-<button onclick="downloadQR()">Save QR Code</button>
+<button type="button"
+        class="action"
+        onclick="downloadQR()"
+        data-en="Save QR Code"
+        data-ta="QR குறியீட்டை சேமிக்கவும்"></button>
+
 </div>
 
 <p>
-UPI ID : <b id="upiid">trueselfmindgym@okicici</b>
-<button onclick="copyUPI()">Copy</button>
+<span data-en="UPI ID :" data-ta="UPI அடையாள எண் :"></span>
+<b id="upiid">trueselfmindgym@okicici</b>
+<button type="button"
+        class="action"
+        onclick="copyUPI()"
+        data-en="Copy"
+        data-ta="நகலெடுக்கவும்"></button>
 </p>
 
+<button type="button"
+        class="action"
+        onclick="openUPI()"
+        data-en="Pay using UPI App (Open Now)"
+        data-ta="UPI செயலி மூலம் பணம் செலுத்துங்கள் (இப்போது திறக்கவும்)"></button>
 
-<button onclick="openUPI()">Pay using UPI App (Open Now)</button>
+<input id="utr"
+       placeholder="Enter UTR Number"
+       data-placeholder-en="Enter UTR Number"
+       data-placeholder-ta="UTR எண்ணை உள்ளிடுங்கள்"
+       required>
 
-<input id="utr" placeholder="Enter UTR Number" required>
-<input type="file" id="screenshot" required>
+<input type="file"
+       id="screenshot"
+       required>
 
-<button onclick="sendWhatsapp()">Submit Booking</button>
+<p class="note"
+   data-en="After payment, enter the UTR number and upload your payment screenshot."
+   data-ta="பணம் செலுத்திய பிறகு UTR எண்ணை உள்ளிட்டு, பணம் செலுத்தியதற்கான திரைப்பிடிப்பை பதிவேற்றுங்கள்."></p>
+
+<button type="button"
+        class="action"
+        onclick="sendWhatsapp()"
+        data-en="Submit Booking"
+        data-ta="பதிவு விவரங்களைச் சமர்ப்பிக்கவும்"></button>
 
 <br><br>
 
-<button id="offerBtn" class="whatsapp" style="display:none"
-onclick="window.open('https://wa.me/919840851295?text=Offer ended. I want the same ₹199 offer for class booking','_blank')">
-Offer Ended? Message Team for Same Offer
-</button>
+<button id="offerBtn"
+        type="button"
+        class="action whatsapp"
+        style="display:none"
+        onclick="window.open('https://wa.me/919840851295?text=Offer ended. I want the same ₹99 offer for class booking','_blank')"
+        data-en="Offer Ended? Message Team for Same Offer"
+        data-ta="சலுகை முடிந்துவிட்டதா? இதே ₹99 சலுகைக்காக குழுவிற்கு செய்தி அனுப்புங்கள்"></button>
+
+<div id="expiredText"
+     class="offer-expired"
+     style="display:none"
+     data-en="Offer expired"
+     data-ta="சலுகை காலாவதியானது"></div>
 
 </div>
 
 <script>
-let amount = 99;
+/* =========================================
+   LANGUAGE SYSTEM
+   Same key used by freeclass.html/register.html
+   ========================================= */
 
+let currentLanguage = localStorage.getItem("freeclassLanguage");
+
+if(currentLanguage !== "ta" && currentLanguage !== "en"){
+    currentLanguage = sessionStorage.getItem("selected_language");
+}
+
+if(currentLanguage !== "ta" && currentLanguage !== "en"){
+    currentLanguage = "ta";
+}
+
+function setLanguage(lang){
+
+    if(lang !== "ta" && lang !== "en") return;
+
+    currentLanguage = lang;
+
+    localStorage.setItem("freeclassLanguage", lang);
+    sessionStorage.setItem("selected_language", lang);
+
+    document.querySelectorAll("[data-en]").forEach(function(el){
+
+        const value =
+            lang === "ta"
+            ? el.getAttribute("data-ta")
+            : el.getAttribute("data-en");
+
+        if(value !== null){
+            el.innerHTML = value;
+        }
+    });
+
+    document.querySelectorAll("[data-placeholder-en]").forEach(function(el){
+
+        el.placeholder =
+            lang === "ta"
+            ? el.getAttribute("data-placeholder-ta")
+            : el.getAttribute("data-placeholder-en");
+    });
+
+    document.documentElement.lang =
+        lang === "ta" ? "ta" : "en";
+
+    const taBtn = document.getElementById("langTa");
+    const enBtn = document.getElementById("langEn");
+
+    if(taBtn && enBtn){
+        taBtn.classList.toggle("active",lang === "ta");
+        enBtn.classList.toggle("active",lang === "en");
+    }
+}
+
+function msg(en,ta){
+    return currentLanguage === "ta" ? ta : en;
+}
+
+setLanguage(currentLanguage);
+
+
+/* =========================================
+   PAYMENT OFFER
+   ₹99 — KEEP THIS CONSISTENT WITH
+   create-razorpay-order EDGE FUNCTION
+   ========================================= */
+
+let amount = 99;
 let time = 600;
 
-let timer = setInterval(()=>{
-let min = Math.floor(time/60);
-let sec = time%60;
+let timer = setInterval(function(){
 
-document.getElementById("timer").innerHTML =
-String(min).padStart(2,'0') + ":" + String(sec).padStart(2,'0');
+    const min = Math.floor(time/60);
+    const sec = time%60;
 
-time--;
+    document.getElementById("timer").innerHTML =
+        String(min).padStart(2,'0') + ":" +
+        String(sec).padStart(2,'0');
 
-if(time<0){
-clearInterval(timer);
+    time--;
 
-amount = 4999;
+    if(time < 0){
 
-document.getElementById("price").innerHTML="₹4999";
+        clearInterval(timer);
 
-document.getElementById("qrimg").src=
-"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym%40okicici&pn=ArithuyilArivom&am=4999&cu=INR";
+        amount = 4999;
 
-document.getElementById("timer").innerHTML="Offer expired";
+        document.getElementById("price").innerHTML =
+            '<span class="old">₹4999</span> ₹4999';
 
-document.getElementById("offerBtn").style.display="inline-block";
-}
+        document.getElementById("qrimg").src =
+            "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=trueselfmindgym%40okicici%26pn=ArithuyilArivom%26am=4999%26cu=INR";
+
+        document.getElementById("timer").innerHTML =
+            msg("Offer expired","சலுகை காலாவதியானது");
+
+        document.getElementById("offerBtn").style.display =
+            "inline-block";
+
+        document.getElementById("expiredText").style.display =
+            "block";
+    }
+
 },1000);
 
+
+/* =========================================
+   UPI PAYMENT
+   ========================================= */
+
 function openUPI(){
-window.location.href =
-"upi://pay?pa=trueselfmindgym@okicici&pn=ArithuyilArivom&cu=INR";
+
+    window.location.href =
+        "upi://pay?pa=trueselfmindgym@okicici&pn=ArithuyilArivom&cu=INR";
 }
 
+
+/* =========================================
+   WHATSAPP SUBMISSION
+   Existing behavior preserved:
+   UTR + screenshot are checked in browser,
+   then WhatsApp confirmation message opens.
+   ========================================= */
 
 function sendWhatsapp(){
 
-let utr = document.getElementById("utr").value;
-let file = document.getElementById("screenshot").value;
+    const utr =
+        document.getElementById("utr").value.trim();
 
-if(utr=="" || file==""){
-alert("Please enter UTR number and upload screenshot");
-return;
+    const file =
+        document.getElementById("screenshot").value;
+
+    if(utr === "" || file === ""){
+
+        alert(msg(
+            "Please enter UTR number and upload screenshot.",
+            "தயவுசெய்து UTR எண்ணை உள்ளிட்டு, பணம் செலுத்தியதற்கான திரைப்பிடிப்பை பதிவேற்றுங்கள்."
+        ));
+
+        return;
+    }
+
+    const message =
+        "Class Booking Payment Done.%0A" +
+        "UPI ID: trueselfmindgym@okicici%0A" +
+        "Amount: " + amount + "%0A" +
+        "UTR: " + encodeURIComponent(utr) + "%0A" +
+        "Please confirm my seat.";
+
+    window.open(
+        "https://wa.me/919840851295?text=" + message,
+        "_blank"
+    );
+
+    alert(msg(
+        "Thank you! Seat confirmation message will be sent.",
+        "நன்றி! உங்கள் இருக்கை உறுதிப்படுத்தல் செய்தி அனுப்பப்படும்."
+    ));
 }
 
-let msg =
-"Class Booking Payment Done.%0A"+
-"UPI ID: trueselfmindgym@okicici%0A"+
-"Amount: "+amount+"%0A"+
-"UTR: "+utr+"%0A"+
-"Please confirm my seat.";
 
-window.open("https://wa.me/919840851295?text="+msg,"_blank");
-
-alert("Thank you! Seat confirmation message will be sent.");
-}
+/* =========================================
+   QR DOWNLOAD
+   ========================================= */
 
 function downloadQR(){
-    let img = document.getElementById("qrimg").src;
-    let a = document.createElement("a");
+
+    const img =
+        document.getElementById("qrimg").src;
+
+    const a =
+        document.createElement("a");
+
     a.href = img;
     a.download = "payment_qr.png";
+    a.target = "_blank";
+
     a.click();
 }
 
-function copyUPI(){
-    let upi = document.getElementById("upiid").innerText;
-    navigator.clipboard.writeText(upi);
-    alert("UPI ID copied");
-}
 
-  
+/* =========================================
+   COPY UPI
+   ========================================= */
+
+function copyUPI(){
+
+    const upi =
+        document.getElementById("upiid").innerText;
+
+    if(navigator.clipboard){
+
+        navigator.clipboard.writeText(upi).then(function(){
+
+            alert(msg(
+                "UPI ID copied.",
+                "UPI அடையாள எண் நகலெடுக்கப்பட்டது."
+            ));
+
+        }).catch(function(){
+
+            alert(upi);
+
+        });
+
+    }else{
+
+        alert(upi);
+
+    }
+}
 </script>
 
 </body>
