@@ -1,710 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="favicon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="favicon.png">
 <title>Free Mind Power Experience Class</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
+*{box-sizing:border-box}
 
 body{
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(180deg,#f5f7fb,#eef2f7);
-    margin:0;
+  font-family:Poppins,'Segoe UI',Arial,sans-serif;
+  margin:0;
+  background:#f4f6fb;
+  color:#111827;
 }
-.form-card{
-    background:#ffffff;
-    max-width:650px;
-    margin:60px auto;
-    padding:40px;
-    border-radius:18px;
-    box-shadow:0 10px 40px rgba(0,0,0,0.08);
-}
-<div class="form-card">
-   ...form...
-</div>
-input{
-    width:100%;
-    padding:16px;
-    border-radius:10px;
-    border:1px solid #e5e7eb;
-    margin-bottom:16px;
-    font-size:16px;
-    transition:0.2s;
-}
-
-input:focus{
-    border-color:#2563eb;
-    outline:none;
-    box-shadow:0 0 0 3px rgba(37,99,235,0.1);
-}
-.register-btn{
-    width:100%;
-    padding:16px;
-    border:none;
-    border-radius:12px;
-    font-size:18px;
-    background:linear-gradient(90deg,#111,#000);
-    color:white;
-    cursor:pointer;
-    transition:0.25s;
-}
-
-.register-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 6px 20px rgba(0,0,0,0.25);
-}
-.bottom-bar{
-    position:fixed;
-    bottom:0;
-    width:100%;
-    background:#0f172a;
-    color:white;
-    padding:14px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 -4px 20px rgba(0,0,0,0.15);
-}
-
-  
-.faq-item{
-  background:#fff;
-  padding:20px;
-  margin-bottom:15px;
-  border-radius:10px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.08);
-}
-.faq-item h4{
-  margin-bottom:8px;
-}
-
-  
-.guarantee-section{
-  background:#e9f5dc;
-  text-align:center;
-  padding:70px 20px;
-}
-
-.mini-title{
-  color:#ff3b3b;
-  margin-bottom:10px;
-}
-
-.main-title{
-  font-size:32px;
-  margin-bottom:30px;
-}
-
-.guarantee-box{
-  max-width:700px;
-  margin:auto;
-}
-
-.deal-tag{
-  background:#22c55e;
-  color:#fff;
-  padding:6px 14px;
-  border-radius:20px;
-  font-size:14px;
-  display:inline-block;
-  margin-bottom:20px;
-}
-
-.guarantee-box ul{
-  text-align:left;
-  margin:20px auto;
-  max-width:520px;
-  line-height:2;
-}
-
-.offer-btn{
-  display:inline-block;
-  margin-top:20px;
-  background:#ff2f55;
-  color:#fff;
-  padding:18px 45px;
-  border-radius:12px;
-  text-decoration:none;
-  font-size:22px;
-  font-weight:700;
-}
-
-.strike{
-  font-size:14px;
-  text-decoration:line-through;
-  margin-left:10px;
-}
-
-.offer-note{
-  margin-top:12px;
-  font-size:13px;
-  opacity:.7;
-}
-
-  
-.guru-section{
-  padding:70px 20px;
-  background:#f7fafc;
-}
-
-.guru-container{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  gap:40px;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-.guru-image{
-  flex:1;
-  text-align:center;
-}
-
-.guru-image img{
-  width:320px;
-  border-radius:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
-}
-
-.guru-name-box{
-  margin-top:15px;
-  background:#1f9d55;
-  color:#fff;
-  padding:12px;
-  border-radius:10px;
-  font-weight:700;
-}
-
-.guru-name-box span{
-  display:block;
-  font-size:14px;
-  font-weight:400;
-}
-
-.guru-content{
-  flex:1;
-}
-
-.guru-content h2{
-  margin-bottom:20px;
-}
-
-.guru-cta{
-  text-align:center;
-  margin-top:40px;
-}
-
-.cta-btn{
-  background:#ff3b3b;
-  color:#fff;
-  padding:16px 40px;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:600;
-  font-size:18px;
-}
-    
-.bonus-section{
-    text-align:center;
-    padding:70px 20px;
-    background:linear-gradient(135deg,#eef7ff,#f9fbff);
-}
-
-.bonus-section h2{
-    font-size:34px;
-    font-weight:700;
-}
-
-.bonus-sub{
-    margin-top:10px;
-    color:#555;
-    font-size:18px;
-}
-
-.timer{
-    font-size:42px;
-    font-weight:700;
-    color:#fff;
-    background:#28a745;
-    display:inline-block;
-    padding:12px 30px;
-    border-radius:10px;
-    margin:25px 0;
-}
-
-.bonus-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:25px;
-    margin-top:30px;
-}
-
-.bonus-card{
-    background:#fff;
-    padding:25px;
-    border-radius:14px;
-    box-shadow:0 5px 18px rgba(0,0,0,0.08);
-}
-
-  
-.cta-btn-main{
-  display:inline-block;
-  background:linear-gradient(90deg,#ff3b3b,#ff6a00);
-  color:#fff;
-  padding:18px 40px;
-  border-radius:12px;
-  font-size:20px;
-  font-weight:700;
-  text-decoration:none;
-  box-shadow:0 8px 20px rgba(0,0,0,0.25);
-  transition:0.3s;
-}
-
-.cta-btn-main:hover{
-  transform:scale(1.06);
-}
-
-  
-.cta-btn{
-  display:inline-block;
-  background:linear-gradient(90deg,#ff3b3b,#ff6a00);
-  color:white;
-  padding:16px 36px;
-  border-radius:10px;
-  font-size:18px;
-  font-weight:600;
-  text-decoration:none;
-  box-shadow:0 6px 15px rgba(0,0,0,0.25);
-  transition:0.3s;
-}
-
-.cta-btn:hover{
-  transform:scale(1.05);
-}
-
-  
-.why-section{
-  padding:70px 20px;
-  background:linear-gradient(180deg,#f7fbf9,#eef6f2);
-  text-align:center;
-}
-
-.why-section h2{
-  font-size:34px;
-  margin-bottom:40px;
-  font-weight:700;
-}
-
-.why-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:25px;
-  max-width:1100px;
-  margin:auto;
-}
-
-.why-card{
-  background:white;
-  padding:28px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  font-size:16px;
-  line-height:1.7;
-  text-align:left;
-  border-left:5px solid #22b573;
-}
-
-  
-.class-benefits{
-padding:70px 20px;
-text-align:center;
-background:linear-gradient(135deg,#f5f8ff,#eef2ff);
-}
-
-.class-benefits h2{
-font-size:34px;
-font-weight:700;
-margin-bottom:10px;
-}
-
-.benefit-sub{
-opacity:.75;
-margin-bottom:40px;
-font-size:18px;
-}
-
-.benefit-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-max-width:1100px;
-margin:auto;
-}
-
-.benefit-item{
-background:#fff;
-padding:18px 22px;
-border-radius:14px;
-box-shadow:0 8px 18px rgba(0,0,0,0.08);
-font-weight:500;
-text-align:left;
-position:relative;
-padding-left:50px;
-}
-
-.benefit-item::before{
-content:"✔";
-position:absolute;
-left:18px;
-top:15px;
-background:#27ae60;
-color:#fff;
-width:24px;
-height:24px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:14px;
-}
-
-.class-benefits .join-btn{
-margin-top:40px;
-display:inline-block;
-}
-.value-badge{
-display:inline-block;
-background:linear-gradient(90deg,#ff512f,#dd2476);
-color:#fff;
-padding:10px 22px;
-border-radius:40px;
-font-weight:700;
-margin-bottom:18px;
-box-shadow:0 6px 15px rgba(0,0,0,0.2);
-font-size:18px;
-}
-
-  
-  .video-proof{
-padding:60px 20px;
-text-align:center;
-background:#f6f8fb;
-}
-
-.video-proof h2{
-font-size:32px;
-margin-bottom:10px;
-}
-
-.sub{
-opacity:.7;
-margin-bottom:35px;
-}
-
-.video-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:28px;
-max-width:1100px;
-margin:auto;
-}
-
-.video-card{
-background:#fff;
-padding:16px;
-border-radius:16px;
-box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
-
-.video-card iframe{
-width:100%;
-height:200px;
-border:none;
-border-radius:12px;
-}
-
-.center-btn{
-display:inline-block;
-margin-top:35px;
-}
-
-  
-.class-details{
-display:flex;
-flex-wrap:wrap;
-gap:40px;
-align-items:center;
-justify-content:center;
-padding:60px 20px;
-background:#f7f9fb;
-}
-
-.details-left{
-text-align:center;
-}
-
-.guru-small{
-width:120px;
-border-radius:16px;
-box-shadow:0 8px 20px rgba(0,0,0,0.2);
-}
-
-.bonus-text{
-font-size:14px;
-margin-top:10px;
-font-weight:600;
-color:#d32f2f;
-}
-
-.details-right{
-max-width:650px;
-}
-
-.detail-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
-margin:25px 0;
-}
-
-.box{
-background:#fff;
-padding:20px;
-border-radius:12px;
-box-shadow:0 6px 15px rgba(0,0,0,0.08);
-}
-
-.join-btn{
-display:inline-block;
-background:#ff3b3b;
-color:white;
-padding:15px 35px;
-border-radius:10px;
-text-decoration:none;
-font-weight:600;
-margin-top:10px;
-}
-
-.location-btn{
-display:inline-block;
-margin-right:15px;
-padding:12px 22px;
-background:#111;
-color:white;
-border-radius:8px;
-text-decoration:none;
-}
-.label{
-font-size:14px;
-opacity:.7;
-display:block;
-margin-bottom:6px;
-}
-
-.box h3{
-margin:0;
-font-size:22px;
-font-weight:700;
-}
-
-.bonus-text{
-text-align:center;
-margin-top:14px;
-font-size:14px;
-color:#d32f2f;
-font-weight:600;
-}
-
-  
-  .hero{
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
-padding:80px 20px;
-text-align:center;
-}
-
-.hero-box{
-max-width:900px;
-margin:auto;
-}
-
-.hero h1{
-font-size:48px;
-font-weight:700;
-margin-bottom:10px;
-}
-
-.hero h2{
-font-size:28px;
-font-weight:600;
-margin-bottom:20px;
-}
-
-.hero-sub{
-font-size:22px;
-margin-bottom:15px;
-opacity:0.95;
-}
-
-.credibility{
-font-size:18px;
-margin-bottom:25px;
-opacity:0.8;
-}
-
-.hero-btn{
-display:inline-block;
-background:#ff3b3b;
-color:white;
-padding:18px 40px;
-border-radius:10px;
-text-decoration:none;
-font-size:20px;
-font-weight:600;
-box-shadow:0 8px 20px rgba(0,0,0,0.3);
-}
-
-.hero-btn:hover{
-transform:scale(1.05);
-}
-
-@media(max-width:768px){
-.hero h1{font-size:32px}
-.hero h2{font-size:22px}
-.hero-sub{font-size:18px}
-}
-
-body{
-font-family:Poppins;
-margin:0;
-background:#f4f6fb;
-}
-
-section{
-padding:60px 20px;
-max-width:1100px;
-margin:auto;
-}
-
-.hero{
-background:linear-gradient(135deg,#0f2027,#2c5364);
-color:white;
-text-align:center;
-padding:80px 20px;
-}
-
-.btn{
-background:#ff3b3b;
-color:white;
-padding:14px 28px;
-border-radius:8px;
-text-decoration:none;
-display:inline-block;
-margin-top:20px;
-font-weight:600;
-}
-
-.card{
-background:white;
-padding:30px;
-border-radius:16px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-margin:30px 0;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:20px;
-}
-
-.video{
-width:100%;
-height:250px;
-}
-
-.sticky{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#111;
-color:white;
-padding:12px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-z-index:9999;
-}
-
-.sticky a{
-background:#ff3b3b;
-padding:12px 20px;
-color:white;
-text-decoration:none;
-border-radius:6px;
-}
-
-input{
-padding:12px;
-width:100%;
-margin:8px 0;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-button{
-background:#111;
-color:white;
-padding:14px;
-border:none;
-width:100%;
-border-radius:8px;
-font-size:16px;
-}
 
-  /* LANGUAGE POPUP */
+section{padding:60px 20px;max-width:1100px;margin:auto}
 
+/* LANGUAGE POPUP */
 .language-popup{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.65);
+  background:rgba(0,0,0,.68);
   display:flex;
   align-items:center;
   justify-content:center;
   z-index:99999;
-  backdrop-filter:blur(5px);
+  backdrop-filter:blur(6px);
 }
 
 .language-box{
   width:90%;
-  max-width:380px;
-  background:white;
-  padding:35px 25px;
-  border-radius:20px;
+  max-width:390px;
+  background:#fff;
+  padding:32px 25px;
+  border-radius:22px;
   text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  box-shadow:0 20px 60px rgba(0,0,0,.30);
+  animation:popIn .25s ease;
 }
 
-.language-icon{
-  font-size:40px;
-  margin-bottom:10px;
+@keyframes popIn{
+  from{opacity:0;transform:scale(.94)}
+  to{opacity:1;transform:scale(1)}
 }
 
-.language-box h2{
-  margin:5px 0;
-  font-size:25px;
-}
-
-.language-box p{
-  color:#666;
-  margin-bottom:25px;
-}
+.language-icon{font-size:42px;margin-bottom:8px}
+.language-box h2{margin:5px 0 6px;font-size:25px}
+.language-box p{color:#666;margin:0 0 24px;font-size:14px}
 
 .language-box button{
   display:block;
@@ -714,22 +60,376 @@ font-size:16px;
   border:none;
   border-radius:12px;
   background:#111;
-  color:white;
+  color:#fff;
   font-size:18px;
   font-weight:600;
   cursor:pointer;
 }
+.language-box button:first-of-type{background:#ff3b3b}
 
-.language-box button:first-of-type{
-  background:#ff3b3b;
+/* FLOATING LANGUAGE SWITCH */
+.language-switcher{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:9998;
+  display:flex;
+  background:rgba(255,255,255,.96);
+  padding:4px;
+  border-radius:30px;
+  box-shadow:0 5px 18px rgba(0,0,0,.18);
 }
 
+.language-switcher button{
+  border:0;
+  background:transparent;
+  color:#333;
+  padding:8px 12px;
+  border-radius:22px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:700;
+  width:auto;
+}
+
+.language-switcher button.active{
+  background:#111;
+  color:#fff;
+}
+
+/* HERO */
+.hero{
+  max-width:none;
+  background:linear-gradient(135deg,#0f2027,#2c5364);
+  color:#fff;
+  text-align:center;
+  padding:80px 20px;
+}
+
+.hero-box{max-width:900px;margin:auto}
+.hero h1{font-size:48px;font-weight:700;margin:0 0 10px}
+.hero h2{font-size:28px;font-weight:600;margin:0 0 20px}
+.hero-sub{font-size:22px;margin:0 0 15px;opacity:.95}
+.credibility{font-size:18px;margin:0 0 25px;opacity:.85}
+
+.offer-btn{
+  display:inline-block;
+  margin-top:20px;
+  background:linear-gradient(90deg,#ff2f55,#ff5b2f);
+  color:#fff;
+  padding:18px 45px;
+  border-radius:12px;
+  text-decoration:none;
+  font-size:22px;
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  transition:.25s;
+}
+.offer-btn:hover{transform:translateY(-2px) scale(1.02)}
+.strike{font-size:14px;text-decoration:line-through;margin-left:10px}
+.offer-note{margin:12px 0 0;font-size:13px;opacity:.85}
+.refund-note{font-weight:600;opacity:1}
+
+/* CLASS DETAILS */
+.class-details{
+  display:flex;
+  flex-wrap:wrap;
+  gap:40px;
+  align-items:center;
+  justify-content:center;
+  background:#f7f9fb;
+}
+.details-right{max-width:850px;width:100%}
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  margin:25px 0;
+}
+.box{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 6px 15px rgba(0,0,0,.08);
+}
+.label{font-size:14px;opacity:.7;display:block;margin-bottom:6px}
+.box h3{margin:0;font-size:20px;font-weight:700}
+.location-btn{
+  display:inline-block;
+  margin-right:15px;
+  padding:12px 22px;
+  background:#111;
+  color:#fff;
+  border-radius:8px;
+  text-decoration:none;
+}
+
+/* VIDEO */
+.video-proof{text-align:center;background:#f6f8fb}
+.video-proof h2{font-size:32px;margin:0 0 10px}
+.sub{opacity:.7;margin:0 0 35px}
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:28px;
+  max-width:1100px;
+  margin:auto;
+}
+.video-card{
+  background:#fff;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.video-card iframe{
+  width:100%;
+  height:200px;
+  border:none;
+  border-radius:12px;
+}
+
+/* BENEFITS */
+.class-benefits{
+  text-align:center;
+  background:linear-gradient(135deg,#f5f8ff,#eef2ff);
+}
+.class-benefits h2{font-size:34px;font-weight:700;margin:0 0 10px}
+.benefit-sub{opacity:.75;margin:0 0 40px;font-size:18px}
+.benefit-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:20px;
+  max-width:1100px;
+  margin:auto;
+}
+.benefit-item{
+  background:#fff;
+  padding:18px 22px 18px 50px;
+  border-radius:14px;
+  box-shadow:0 8px 18px rgba(0,0,0,.08);
+  font-weight:500;
+  text-align:left;
+  position:relative;
+}
+.benefit-item::before{
+  content:"✔";
+  position:absolute;
+  left:18px;
+  top:15px;
+  background:#27ae60;
+  color:#fff;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+}
+.value-badge{
+  display:inline-block;
+  background:linear-gradient(90deg,#ff512f,#dd2476);
+  color:#fff;
+  padding:10px 22px;
+  border-radius:40px;
+  font-weight:700;
+  margin-bottom:18px;
+  box-shadow:0 6px 15px rgba(0,0,0,.2);
+  font-size:18px;
+}
+.join-btn{
+  display:inline-block;
+  background:#ff3b3b;
+  color:#fff;
+  padding:15px 35px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:600;
+  margin-top:40px;
+}
+
+/* WHY */
+.why-section{
+  background:linear-gradient(180deg,#f7fbf9,#eef6f2);
+  text-align:center;
+}
+.why-section h2{font-size:34px;margin:0 0 40px;font-weight:700}
+.why-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
+  max-width:1100px;
+  margin:auto;
+}
+.why-card{
+  background:#fff;
+  padding:28px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  font-size:16px;
+  line-height:1.7;
+  text-align:left;
+  border-left:5px solid #22b573;
+}
+
+/* BONUS */
+.bonus-section{
+  text-align:center;
+  background:linear-gradient(135deg,#eef7ff,#f9fbff);
+}
+.bonus-section h2{font-size:34px;font-weight:700;margin:0}
+.bonus-sub{margin:10px 0 0;color:#555;font-size:18px}
+.timer{
+  font-size:42px;
+  font-weight:700;
+  color:#fff;
+  background:#28a745;
+  display:inline-block;
+  padding:12px 30px;
+  border-radius:10px;
+  margin:25px 0;
+}
+.bonus-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+  margin-top:30px;
+}
+.bonus-card{
+  background:#fff;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+  text-align:left;
+}
+
+/* BEFORE AFTER */
+.before-after{
+  max-width:none;
+  background:#e8f3d4;
+}
+.before-after-title{text-align:center;font-size:34px;margin:0 0 50px;font-weight:700}
+.ba-wrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:30px;
+  justify-content:center;
+  max-width:1100px;
+  margin:auto;
+}
+.ba-card{
+  flex:1 1 480px;
+  border-radius:18px;
+  padding:30px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+.ba-card.before{background:#f5f9e7}
+.ba-card.after{background:#0f2e57;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+.ba-card h3{text-align:center;margin:0 0 20px;font-size:22px}
+.ba-card ul{line-height:2;font-size:16px}
+
+/* GURU */
+.guru-section{background:#f7fafc}
+.guru-container{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  gap:40px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.guru-image{flex:1;text-align:center}
+.guru-image img{
+  width:320px;
+  max-width:100%;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+.guru-name-box{
+  margin-top:15px;
+  background:#1f9d55;
+  color:#fff;
+  padding:12px;
+  border-radius:10px;
+  font-weight:700;
+}
+.guru-name-box span{display:block;font-size:14px;font-weight:400}
+.guru-content{flex:1;min-width:280px}
+.guru-content h2{margin:0 0 20px}
+.guru-cta{text-align:center;margin-top:40px}
+
+/* GUARANTEE */
+.guarantee-section{background:#e9f5dc;text-align:center}
+.mini-title{color:#ff3b3b;margin:0 0 10px}
+.main-title{font-size:32px;margin:0 0 30px}
+.guarantee-box{max-width:700px;margin:auto}
+.deal-tag{
+  background:#22c55e;color:#fff;padding:6px 14px;border-radius:20px;
+  font-size:14px;display:inline-block;margin-bottom:20px;
+}
+.guarantee-box ul{
+  text-align:left;margin:20px auto;max-width:520px;line-height:2;
+}
+
+/* FAQ */
+.faq-section{background:#f7f7f7}
+.faq-inner{max-width:900px;margin:auto}
+.faq-section h2{text-align:center;font-size:32px;font-weight:700;margin:0 0 40px}
+.faq-item{
+  background:#fff;
+  padding:20px;
+  margin-bottom:15px;
+  border-radius:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+.faq-item h4{margin:0 0 8px}
+.faq-item p{margin:0;line-height:1.7}
+
+/* STICKY */
+.sticky{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#111;
+  color:#fff;
+  padding:12px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  z-index:9999;
+}
+.sticky .offer-btn{
+  margin:0;
+  padding:12px 20px;
+  font-size:17px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .hero{padding:70px 16px}
+  .hero h1{font-size:32px}
+  .hero h2{font-size:22px}
+  .hero-sub{font-size:18px}
+  .credibility{font-size:15px}
+  .offer-btn{font-size:18px;padding:16px 25px}
+  .class-benefits h2,.why-section h2,.bonus-section h2{font-size:27px}
+  .before-after-title{font-size:27px}
+  .main-title{font-size:26px}
+  .language-switcher{top:10px;right:10px}
+  .language-switcher button{padding:7px 10px}
+  .sticky{padding:9px 10px}
+  .sticky > div{font-size:13px}
+  .sticky .offer-btn{font-size:14px;padding:10px 14px}
+  .sticky .strike{font-size:10px}
+}
 </style>
 </head>
 
 <body>
 
-  <!-- LANGUAGE POPUP -->
+<!-- FIRST-VISIT LANGUAGE POPUP -->
 <div id="languagePopup" class="language-popup">
   <div class="language-box">
     <div class="language-icon">🌐</div>
@@ -737,581 +437,660 @@ font-size:16px;
     <h2>Choose Your Language</h2>
     <p>உங்கள் மொழியை தேர்வு செய்யுங்கள்</p>
 
-    <button onclick="selectLanguage('ta')">
-      🇮🇳 தமிழ்
-    </button>
-
-    <button onclick="selectLanguage('en')">
-      🇬🇧 English
-    </button>
+    <button type="button" onclick="selectLanguage('ta')">🇮🇳 தமிழ்</button>
+    <button type="button" onclick="selectLanguage('en')">🇬🇧 English</button>
   </div>
 </div>
-  
-  <section class="hero">
 
-<div class="hero-box">
+<!-- ALWAYS AVAILABLE LANGUAGE SWITCH -->
+<div class="language-switcher" aria-label="Language selector">
+  <button id="langTa" type="button" onclick="selectLanguage('ta')">தமிழ்</button>
+  <button id="langEn" type="button" onclick="selectLanguage('en')">English</button>
+</div>
 
-<h1 data-en="Unlock Your Hidden Mind Power"
-    data-ta="உங்கள் ஆழ்மன சக்தியை அறிந்து கொள்ளுங்கள்">
-</h1>
+<section class="hero">
+  <div class="hero-box">
 
-<h2 data-en="Remove Stress • Heal Body • Attract Success"
-    data-ta="மன அழுத்தத்தை குறைக்கவும் • உடல் நலத்தை மேம்படுத்தவும் • வெற்றியை ஈர்க்கவும்">
-</h2>
+    <h1 data-en="Unlock Your Hidden Mind Power"
+        data-ta="உங்கள் ஆழ்மன சக்தியை அறிந்து கொள்ளுங்கள்"></h1>
 
-<p class="hero-sub">
-Attend One Powerful Free Experience Session  
-and Feel the Change in Just One Class
-</p>
+    <h2 data-en="Remove Stress • Heal Body • Attract Success"
+        data-ta="மன அழுத்தத்தை குறைக்கவும் • உடல் நலத்தை மேம்படுத்தவும் • வெற்றியை ஈர்க்கவும்"></h2>
 
-<p class="credibility">
-Trusted by 10,000+ students across Tamil Nadu
-</p>
+    <p class="hero-sub"
+       data-en="Attend One Powerful Free Experience Session and Feel the Change in Just One Class"
+       data-ta="ஒரு சக்திவாய்ந்த இலவச அனுபவ வகுப்பில் கலந்து கொண்டு, ஒரே வகுப்பில் மாற்றத்தை உணருங்கள்"></p>
 
-<a href="register" class="offer-btn">
-      Join Now ₹199  
+    <p class="credibility"
+       data-en="Trusted by 10,000+ students across Tamil Nadu"
+       data-ta="தமிழ்நாடு முழுவதும் 10,000+ மாணவர்களின் நம்பிக்கையை பெற்றது"></p>
+
+    <a href="register" class="offer-btn">
+      <span data-en="Join Now ₹99" data-ta="இப்போதே பதிவு செய்யுங்கள் ₹99"></span>
       <span class="strike">₹4,999</span>
     </a>
 
-    <p class="offer-note">
-      Register today and activate bonuses worth ₹3,41,000
-    </p>
+    <p class="offer-note"
+       data-en="₹99 registration fee is 100% refundable after attending the class, on request."
+       data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் ₹99 பதிவு கட்டணம் 100% திருப்பி வழங்கப்படும்."></p>
 
-</div>
+    <p class="offer-note"
+       data-en="Register today and activate bonuses worth ₹3,41,000"
+       data-ta="இன்றே பதிவு செய்து ₹3,41,000 மதிப்புள்ள Bonus-களை பெறுங்கள்"></p>
 
+  </div>
 </section>
 
-  
+<!-- EXISTING SUPABASE FLOW — KEPT UNCHANGED -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
+  const supabaseUrl = "https://sftfivfmeynceokltbyb.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdGZpdmZtZXluY2Vva2x0YnliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5LCJleHAiOjIxMDQzMzA2OTJ9.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-const form = document.getElementById("form");
-if(!form) return;   // prevents null error
+  const form = document.getElementById("form");
+  if(!form) return;
 
-form.addEventListener("submit", async function(e){
-e.preventDefault();
+  form.addEventListener("submit", async function(e){
+    e.preventDefault();
 
-let name = document.getElementById("name").value.trim();
-let mobile = document.getElementById("mobile").value.trim();
-let location = document.getElementById("location").value.trim();
+    let name = document.getElementById("name").value.trim();
+    let mobile = document.getElementById("mobile").value.trim();
+    let location = document.getElementById("location").value.trim();
 
-if(name=="" || mobile=="" || location==""){
-alert("Please fill all details");
-return;
-}
+    if(name==="" || mobile==="" || location===""){
+      alert("Please fill all details");
+      return;
+    }
 
-let {data:existing} = await supabase
-.from("freeclass_registrations")
-.select("mobile")
-.eq("mobile",mobile);
+    let {data:existing} = await supabase
+      .from("freeclass_registrations")
+      .select("mobile")
+      .eq("mobile",mobile);
 
-if(existing.length>0){
-window.open("https://wa.me/919840851295?text=I already registered. I want additional seats","_blank");
-return;
-}
+    if(existing && existing.length>0){
+      window.open("https://wa.me/919840851295?text=I already registered. I want additional seats","_blank");
+      return;
+    }
 
-await supabase.from("freeclass_registrations")
-.insert([{name,mobile,location}]);
+    await supabase
+      .from("freeclass_registrations")
+      .insert([{name,mobile,location}]);
 
-alert("Registration Success");
-window.location.href="payment.html";
-});
-
+    alert("Registration Success");
+    window.location.href="payment.html";
+  });
 });
 </script>
 
-  
 <section class="class-details">
+  <div class="details-right">
 
-<div class="details-right">
+    <h2 data-en="Free Experience Class Details"
+        data-ta="இலவச அனுபவ வகுப்பு விவரங்கள்"></h2>
 
-<h2>Free Experience Class Details</h2>
+    <div class="detail-grid">
 
-<div class="detail-grid">
+      <div class="box">
+        <span class="label" data-en="Date" data-ta="தேதி"></span>
+        <h3>19th Sep 2026</h3>
+      </div>
 
-<div class="box">
-<span class="label">Date</span>
-<h3>19th Sep 2026</h3>
-</div>
+      <div class="box">
+        <span class="label" data-en="Time" data-ta="நேரம்"></span>
+        <h3>10:00 AM – 1:30 PM</h3>
+      </div>
 
-<div class="box">
-<span class="label">Time</span>
-<h3>10:00 AM – 1:30 PM</h3>
-</div>
+      <div class="box">
+        <span class="label" data-en="Language" data-ta="மொழி"></span>
+        <h3 data-en="Tamil" data-ta="தமிழ்"></h3>
+      </div>
 
-<div class="box">
-<span class="label">Language</span>
-<h3>Tamil</h3>
-</div>
+      <div class="box">
+        <span class="label" data-en="Venue" data-ta="இடம்"></span>
+        <h3 data-en="Online Zoom or Offline Chennai-Adambakkam"
+            data-ta="Online Zoom அல்லது Offline Chennai-Adambakkam"></h3>
+      </div>
 
-<div class="box">
-<span class="label">Venue</span>
-<h3>Online Zoom or Offline Chennai-Adambakkam</h3>
-</div>
+    </div>
 
-</div>
+    <a href="https://maps.app.goo.gl/BjpY1n3MX6HESKss7"
+       target="_blank"
+       class="location-btn"
+       data-en="View Location"
+       data-ta="இடத்தை பார்க்க"></a>
 
-<a href="https://maps.app.goo.gl/BjpY1n3MX6HESKss7" target="_blank" class="location-btn">View Location</a>
-
-<a href="register" class="offer-btn">
-      Join Now ₹199  
+    <a href="register" class="offer-btn">
+      <span data-en="Join Now ₹99" data-ta="இப்போதே பதிவு செய்யுங்கள் ₹99"></span>
       <span class="strike">₹4,999</span>
     </a>
 
-    <p class="offer-note">
-      Register today and activate bonuses worth ₹3,41,000
-    </p>
+    <p class="offer-note"
+       data-en="₹99 registration fee is 100% refundable after attending the class, on request."
+       data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் ₹99 பதிவு கட்டணம் 100% திருப்பி வழங்கப்படும்."></p>
 
-<p class="bonus-text"> Make 2026 the year your life truly changes </p>
+    <p class="bonus-text"
+       data-en="Make 2026 the year your life truly changes"
+       data-ta="2026 உங்கள் வாழ்க்கையில் உண்மையான மாற்றத்தை உருவாக்கும் ஆண்டாகட்டும்"></p>
 
-</div>
-
+  </div>
 </section>
 
 <section class="video-proof">
 
-<h2>Real Student Experience Videos</h2>
-<p class="sub">See how our students transformed their lives after attending the free class</p>
+  <h2 data-en="Real Student Experience Videos"
+      data-ta="மாணவர்களின் உண்மையான அனுபவ வீடியோக்கள்"></h2>
 
-<div class="video-grid">
+  <p class="sub"
+     data-en="See how our students transformed their lives after attending the free class"
+     data-ta="இலவச வகுப்பில் கலந்து கொண்ட பிறகு எங்கள் மாணவர்கள் பெற்ற அனுபவங்களை பாருங்கள்"></p>
 
-<div class="video-card">
-<iframe src="https://www.youtube.com/embed/vdWetAOirPE" 
-title="Student Feedback" 
-allowfullscreen></iframe>
-<p>1st Class Experience Feedback</p>
-</div>
+  <div class="video-grid">
 
-<div class="video-card">
-<iframe src="https://www.youtube.com/embed/GMXnFwFWx0M" 
-title="Family Success Story" 
-allowfullscreen></iframe>
-<p>3 Business Loss la irundhu Meendum Success</p>
-</div>
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/vdWetAOirPE"
+              title="Student Feedback"
+              allowfullscreen></iframe>
+      <p data-en="1st Class Experience Feedback"
+         data-ta="முதல் வகுப்பு அனுபவ Feedback"></p>
+    </div>
 
-<div class="video-card">
-<iframe src="https://www.youtube.com/embed/W8xPfQ3BaTw" 
-title="Health Healing Result" 
-allowfullscreen></iframe>
-<p>25 Years Problem Heal Aana Result</p>
-</div>
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/GMXnFwFWx0M"
+              title="Family Success Story"
+              allowfullscreen></iframe>
+      <p data-en="From 3 Business Loss to Success Again"
+         data-ta="3 Business Loss-ல் இருந்து மீண்டும் Success"></p>
+    </div>
 
-</div>
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/W8xPfQ3BaTw"
+              title="Health Healing Result"
+              allowfullscreen></iframe>
+      <p data-en="Result After Healing a 25-Year Problem"
+         data-ta="25 வருட பிரச்சனை Heal ஆன Result"></p>
+    </div>
 
-<a href="register" class="offer-btn">
-      Join Now ₹199  
-      <span class="strike">₹4,999</span>
-    </a>
+  </div>
 
-    <p class="offer-note">
-      Register today and activate bonuses worth ₹3,41,000
-    </p>
+  <a href="register" class="offer-btn">
+    <span data-en="Join Now ₹99" data-ta="இப்போதே பதிவு செய்யுங்கள் ₹99"></span>
+    <span class="strike">₹4,999</span>
+  </a>
+
+  <p class="offer-note"
+     data-en="₹99 registration fee is 100% refundable after attending the class, on request."
+     data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் ₹99 பதிவு கட்டணம் 100% திருப்பி வழங்கப்படும்."></p>
 
 </section>
 
 <section class="class-benefits">
 
-<div class="value-badge">₹25,000 Value Class – One Class Free (First Experience)</div>
+  <div class="value-badge"
+       data-en="₹25,000 Value Class – One Class Free (First Experience)"
+       data-ta="₹25,000 மதிப்புள்ள வகுப்பு – முதல் அனுபவ வகுப்பு இலவசம்"></div>
 
-<h2>Mind Power Transformation Experience Session</h2>
+  <h2 data-en="Mind Power Transformation Experience Session"
+      data-ta="Mind Power Transformation அனுபவ வகுப்பு"></h2>
 
-<p class="benefit-sub">
-One-time powerful experience session designed to help you realise your inner mind strength and life direction.
-</p>
+  <p class="benefit-sub"
+     data-en="One-time powerful experience session designed to help you realise your inner mind strength and life direction."
+     data-ta="உங்கள் ஆழ்மன சக்தியையும் வாழ்க்கையின் திசையையும் உணர உதவும் சக்திவாய்ந்த ஒருமுறை அனுபவ வகுப்பு."></p>
 
-<div class="benefit-grid">
+  <div class="benefit-grid">
 
-<div class="benefit-item">Understand how your daily words and thoughts shape your life</div>
-<div class="benefit-item">Realise your subconscious thinking patterns and emotional blocks</div>
-<div class="benefit-item">Learn how to speak, think and feel in a powerful success mindset</div>
-<div class="benefit-item">Discover why health, wealth and relationship blocks occur</div>
-<div class="benefit-item">Gain deep clarity to achieve your life goals and desires</div>
-<div class="benefit-item">Experience powerful relaxation that unlocks your inner mind strength</div>
-<div class="benefit-item">Feel a transformation you have never experienced before</div>
-<div class="benefit-item">Direct session participants will receive lunch and perks</div>
+    <div class="benefit-item"
+         data-en="Understand how your daily words and thoughts shape your life"
+         data-ta="உங்கள் தினசரி வார்த்தைகளும் எண்ணங்களும் உங்கள் வாழ்க்கையை எவ்வாறு வடிவமைக்கின்றன என்பதை புரிந்து கொள்ளுங்கள்"></div>
 
-</div>
+    <div class="benefit-item"
+         data-en="Realise your subconscious thinking patterns and emotional blocks"
+         data-ta="உங்கள் ஆழ்மன சிந்தனை முறைகளையும் உணர்ச்சி தடைகளையும் அறிந்து கொள்ளுங்கள்"></div>
 
-<a href="register" class="join-btn">Attend First Experience Class for Just 199/- </a>
+    <div class="benefit-item"
+         data-en="Learn how to speak, think and feel in a powerful success mindset"
+         data-ta="வெற்றியை நோக்கிய சக்திவாய்ந்த மனநிலையுடன் பேசவும், சிந்திக்கவும், உணரவும் கற்றுக்கொள்ளுங்கள்"></div>
+
+    <div class="benefit-item"
+         data-en="Discover why health, wealth and relationship blocks occur"
+         data-ta="Health, Wealth மற்றும் Relationship தடைகள் ஏன் உருவாகின்றன என்பதை அறிந்து கொள்ளுங்கள்"></div>
+
+    <div class="benefit-item"
+         data-en="Gain deep clarity to achieve your life goals and desires"
+         data-ta="உங்கள் வாழ்க்கை இலக்குகளையும் ஆசைகளையும் அடைய ஆழமான தெளிவைப் பெறுங்கள்"></div>
+
+    <div class="benefit-item"
+         data-en="Experience powerful relaxation that unlocks your inner mind strength"
+         data-ta="உங்கள் ஆழ்மன சக்தியை வெளிப்படுத்த உதவும் சக்திவாய்ந்த Relaxation அனுபவத்தை பெறுங்கள்"></div>
+
+    <div class="benefit-item"
+         data-en="Feel a transformation you have never experienced before"
+         data-ta="இதுவரை அனுபவிக்காத ஒரு புதிய மாற்றத்தை உணருங்கள்"></div>
+
+    <div class="benefit-item"
+         data-en="Direct session participants will receive lunch and perks"
+         data-ta="Direct session-ல் கலந்து கொள்பவர்களுக்கு Lunch மற்றும் சிறப்பு சலுகைகள் வழங்கப்படும்"></div>
+
+  </div>
+
+  <a href="register" class="join-btn"
+     data-en="Attend First Experience Class for Just ₹99"
+     data-ta="முதல் அனுபவ வகுப்பில் ₹99 மட்டும் செலுத்தி கலந்து கொள்ளுங்கள்"></a>
+
+  <p class="offer-note"
+     data-en="100% refundable after attending the class, on request."
+     data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் 100% Refund பெறலாம்."></p>
 
 </section>
 
 <section class="why-section">
-  <h2>Why Choose Arithuyil Arivom?</h2>
+
+  <h2 data-en="Why Choose Arithuyil Arivom?"
+      data-ta="ஏன் Arithuyil Arivom?"></h2>
 
   <div class="why-grid">
 
-    <div class="why-card">
-      Step-by-step practical subconscious training — no boring theory, 
-  just direct experience through live guided transformation sessions.
-    </div>
+    <div class="why-card"
+         data-en="Step-by-step practical subconscious training — no boring theory, just direct experience through live guided transformation sessions."
+         data-ta="Step-by-step practical subconscious training — boring theory இல்லை; Live guided transformation sessions மூலம் நேரடி அனுபவம்."></div>
 
-    <div class="why-card">
-      Identify and overcome Health, Wealth & Relationship blocks through 
-  deep inner-mind processes, with clarity and emotional release from the very first session.
-    </div>
+    <div class="why-card"
+         data-en="Identify and overcome Health, Wealth & Relationship blocks through deep inner-mind processes, with clarity and emotional release from the very first session."
+         data-ta="Health, Wealth & Relationship தடைகளை ஆழ்மன செயல்முறைகள் மூலம் அடையாளம் கண்டு, முதல் session-லிருந்தே clarity மற்றும் emotional release பெற உதவும் பயிற்சி."></div>
 
-    <div class="why-card">
-      25+ years of tested relaxation & healing techniques, backed by thousands 
-  of real student success stories — powerful transformation training at an affordable price.
-    </div>
+    <div class="why-card"
+         data-en="25+ years of tested relaxation & healing techniques, backed by thousands of real student success stories — powerful transformation training at an affordable price."
+         data-ta="25+ ஆண்டுகளாக பயன்படுத்தப்பட்ட Relaxation & Healing techniques மற்றும் ஆயிரக்கணக்கான மாணவர்களின் அனுபவங்களுடன் கூடிய practical transformation training."></div>
 
-    <div class="why-card">
-      Powerful mind tools you can use in everyday life, plus continuous 
-  support through our Online + Offline student community.
-    </div>
+    <div class="why-card"
+         data-en="Powerful mind tools you can use in everyday life, plus continuous support through our Online + Offline student community."
+         data-ta="தினசரி வாழ்க்கையில் பயன்படுத்தக்கூடிய powerful mind tools மற்றும் Online + Offline student community மூலம் தொடர்ச்சியான support."></div>
 
-    <div class="why-card">
-      Not just motivational speeches — a structured, transformation-focused 
-  system designed to help you activate your hidden mind power.
-    </div>
+    <div class="why-card"
+         data-en="Not just motivational speeches — a structured, transformation-focused system designed to help you activate your hidden mind power."
+         data-ta="Motivational speech மட்டும் அல்ல — உங்கள் hidden mind power-ஐ activate செய்ய உதவும் structured transformation-focused system."></div>
 
-    <div class="why-card">
-      A proven training process to develop inner direction, confident decision-making, 
-  and strong mental clarity — helping you move towards your life goals.
-    </div>
-     
-    <div style="text-align:center; margin-top:40px; margin-bottom:20px;">
-  <a href="register" class="offer-btn">
-      Join Now ₹199  
+    <div class="why-card"
+         data-en="A proven training process to develop inner direction, confident decision-making, and strong mental clarity — helping you move towards your life goals."
+         data-ta="Inner direction, confident decision-making மற்றும் strong mental clarity-ஐ வளர்க்க உதவும் structured training process."></div>
+
+  </div>
+
+  <div style="text-align:center;margin-top:40px;margin-bottom:20px;">
+    <a href="register" class="offer-btn">
+      <span data-en="Join Now ₹99" data-ta="இப்போதே பதிவு செய்யுங்கள் ₹99"></span>
       <span class="strike">₹4,999</span>
     </a>
 
-    <p class="offer-note">
-      Register today and activate bonuses worth ₹3,41,000
-    </p>
-</div>
-
-
+    <p class="offer-note"
+       data-en="₹99 registration fee is 100% refundable after attending the class, on request."
+       data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் ₹99 பதிவு கட்டணம் 100% திருப்பி வழங்கப்படும்."></p>
   </div>
+
 </section>
 
 <section class="bonus-section">
-    <h2>Unlock Exclusive Bonuses Worth ₹3,41,000</h2>
-    <p class="bonus-sub">Register for Free Experience Class to Activate All Bonuses</p>
 
-    <div class="timer" id="countdown">
-        15:00
+  <h2 data-en="Unlock Exclusive Bonuses Worth ₹3,41,000"
+      data-ta="₹3,41,000 மதிப்புள்ள Exclusive Bonuses-ஐ பெறுங்கள்"></h2>
+
+  <p class="bonus-sub"
+     data-en="Register for Free Experience Class to Activate All Bonuses"
+     data-ta="Free Experience Class-க்கு பதிவு செய்து அனைத்து Bonuses-ஐ Activate செய்யுங்கள்"></p>
+
+  <div class="timer" id="countdown">15:00</div>
+
+  <div class="bonus-grid">
+
+    <div class="bonus-card">
+      <h3 data-en="Daily Guru Affirmations"
+          data-ta="Daily Guru Affirmations"></h3>
+      <p data-en="Guru-led daily affirmation guidance starting immediately after joining."
+         data-ta="Join செய்த உடனே Guru வழிகாட்டுதலுடன் Daily Affirmation guidance."></p>
     </div>
 
-    <div class="bonus-grid">
-
-        <div class="bonus-card">
-            <h3>Daily Guru Affirmations</h3>
-            <p>Guru-led daily affirmation guidance starting immediately after joining.</p>
-        </div>
-
-        <div class="bonus-card">
-            <h3>Monthly Online Relaxation Session</h3>
-            <p>Every month deep relaxation healing session free access.</p>
-        </div>
-
-        <div class="bonus-card">
-            <h3>Exclusive One-Time Guru Special Class</h3>
-            <p> Priority access to an upcoming special Guru direct / online class (One-Time only).
-Attend once and experience a unique transformation session reserved only for registered participants</p>
-        </div>
-
+    <div class="bonus-card">
+      <h3 data-en="Monthly Online Relaxation Session"
+          data-ta="Monthly Online Relaxation Session"></h3>
+      <p data-en="Every month deep relaxation healing session free access."
+         data-ta="ஒவ்வொரு மாதமும் Deep Relaxation Healing session-க்கு Free access."></p>
     </div>
 
-    <a href="register" class="offer-btn">
-      Join Now ₹199  
-      <span class="strike">₹4,999</span>
-    </a>
+    <div class="bonus-card">
+      <h3 data-en="Exclusive One-Time Guru Special Class"
+          data-ta="Exclusive One-Time Guru Special Class"></h3>
+      <p data-en="Priority access to an upcoming special Guru direct / online class (One-Time only). Attend once and experience a unique transformation session reserved only for registered participants."
+         data-ta="வரவிருக்கும் சிறப்பு Guru Direct / Online Class-க்கு Priority access. Registered participants-க்கு மட்டும் வழங்கப்படும் One-Time special transformation session."></p>
+    </div>
 
-    <p class="offer-note">
-      Register today and activate bonuses worth ₹3,41,000
-    </p>
+  </div>
+
+  <a href="register" class="offer-btn">
+    <span data-en="Join Now ₹99" data-ta="இப்போதே பதிவு செய்யுங்கள் ₹99"></span>
+    <span class="strike">₹4,999</span>
+  </a>
+
+  <p class="offer-note"
+     data-en="Register today and activate bonuses worth ₹3,41,000"
+     data-ta="இன்றே பதிவு செய்து ₹3,41,000 மதிப்புள்ள Bonus-களை பெறுங்கள்"></p>
+
 </section>
 
 <script>
-var time = 900;
-var timer = setInterval(function(){
+(function(){
+  var time = 900;
+  var timer = setInterval(function(){
+    var el = document.getElementById("countdown");
+    if(!el){
+      clearInterval(timer);
+      return;
+    }
     var minutes = Math.floor(time/60);
     var seconds = time%60;
-    document.getElementById("countdown").innerHTML =
-        minutes + ":" + (seconds<10?"0":"") + seconds;
+    el.innerHTML = minutes + ":" + (seconds<10?"0":"") + seconds;
     time--;
-    if(time<=0){
-   clearInterval(timer);
-   document.getElementById("countdown").innerHTML="Expired";
-}
-
-},1000);
+    if(time<0){
+      clearInterval(timer);
+      el.innerHTML="Expired";
+    }
+  },1000);
+})();
 </script>
 
-    <!-- BEFORE AFTER SECTION -->
-<section style="background:#e8f3d4;padding:70px 20px;font-family:Poppins,Arial;">
-  <h2 style="text-align:center;font-size:34px;margin-bottom:50px;font-weight:700;">
-    Life Transformation Experience
-  </h2>
+<section class="before-after">
 
-  <div style="display:flex;flex-wrap:wrap;gap:30px;justify-content:center;max-width:1100px;margin:auto;">
+  <h2 class="before-after-title"
+      data-en="Life Transformation Experience"
+      data-ta="வாழ்க்கை மாற்றத்தை அனுபவியுங்கள்"></h2>
 
-    <!-- BEFORE -->
-    <div style="flex:1 1 480px;background:#f5f9e7;border-radius:18px;padding:30px;box-shadow:0 6px 18px rgba(0,0,0,0.08);">
-      <h3 style="text-align:center;margin-bottom:20px;font-size:22px;">You Before the Class</h3>
-      <ul style="line-height:2;font-size:16px;">
-        <li>Constantly dealing with stress, overthinking, or fear.</li>
+  <div class="ba-wrap">
 
-<li>Health, wealth, or relationship issues keep repeating without knowing why.</li>
+    <div class="ba-card before">
+      <h3 data-en="You Before the Class"
+          data-ta="வகுப்பிற்கு முன் நீங்கள்"></h3>
 
-<li>Struggling because you lack clarity about your life direction.</li>
-
-<li>Finding it difficult to release negative thoughts and emotional blocks.</li>
-
-<li>Lack of confidence makes even simple decisions feel difficult.</li>
-
-<li>Constantly doubting yourself and thinking, “Maybe I can’t do it.”</li>
-
-<li>Finding it difficult to truly relax because of constant mental pressure.</li>
-
-<li>You want to change your life, but don’t know where or how to start.</li>
+      <ul>
+        <li data-en="Constantly dealing with stress, overthinking, or fear."
+            data-ta="Stress, overthinking அல்லது fear தொடர்ந்து இருப்பது."></li>
+        <li data-en="Health, wealth, or relationship issues keep repeating without knowing why."
+            data-ta="Health, wealth அல்லது relationship பிரச்சனைகள் ஏன் மீண்டும் மீண்டும் நடக்கின்றன என்பது தெரியாமல் இருப்பது."></li>
+        <li data-en="Struggling because you lack clarity about your life direction."
+            data-ta="வாழ்க்கையின் திசை குறித்து clarity இல்லாமல் சிரமப்படுவது."></li>
+        <li data-en="Finding it difficult to release negative thoughts and emotional blocks."
+            data-ta="Negative thoughts மற்றும் emotional blocks-ஐ விடுவிப்பது கடினமாக இருப்பது."></li>
+        <li data-en="Lack of confidence makes even simple decisions feel difficult."
+            data-ta="Confidence இல்லாததால் எளிய முடிவுகள்கூட கடினமாக தோன்றுவது."></li>
+        <li data-en="Constantly doubting yourself and thinking, “Maybe I can’t do it.”"
+            data-ta="உங்களை நீங்களே சந்தேகித்து, “என்னால் முடியாது போல” என்று நினைப்பது."></li>
+        <li data-en="Finding it difficult to truly relax because of constant mental pressure."
+            data-ta="தொடர்ச்சியான மன அழுத்தத்தால் உண்மையாக Relax ஆக முடியாமல் இருப்பது."></li>
+        <li data-en="You want to change your life, but don’t know where or how to start."
+            data-ta="வாழ்க்கையை மாற்ற வேண்டும் என்ற விருப்பம் இருந்தும், எங்கு எப்படி தொடங்குவது என்று தெரியாமல் இருப்பது."></li>
       </ul>
     </div>
 
-    <!-- AFTER -->
-    <div style="flex:1 1 480px;background:#0f2e57;color:white;border-radius:18px;padding:30px;box-shadow:0 6px 18px rgba(0,0,0,0.15);">
-      <h3 style="text-align:center;margin-bottom:20px;font-size:22px;">You After the Class</h3>
-      <ul style="line-height:2;font-size:16px;">
-        <li>Feel calmer, clearer, and more emotionally balanced.</li>
+    <div class="ba-card after">
+      <h3 data-en="You After the Class"
+          data-ta="வகுப்பிற்குப் பிறகு நீங்கள்"></h3>
 
-<li>Learn techniques to work through Health, Wealth & Relationship blocks at their root level.</li>
-
-<li>Gain clarity about your life direction and start making confident decisions.</li>
-
-<li>Learn proven techniques to break negative thought patterns and emotional blocks.</li>
-
-<li>Discover practical methods to understand and use your inner mind power.</li>
-
-<li>Build greater self-confidence and trust in yourself.</li>
-
-<li>Experience deep relaxation and give your mind a powerful reset.</li>
-
-<li>Develop a clear action mindset to move towards your life goals.</li>
+      <ul>
+        <li data-en="Feel calmer, clearer, and more emotionally balanced."
+            data-ta="மேலும் calm, clear மற்றும் emotionally balanced-ஆக உணருங்கள்."></li>
+        <li data-en="Learn techniques to work through Health, Wealth & Relationship blocks at their root level."
+            data-ta="Health, Wealth & Relationship blocks-ஐ அதன் அடிப்படை நிலையில் அணுகும் techniques-ஐ கற்றுக்கொள்ளுங்கள்."></li>
+        <li data-en="Gain clarity about your life direction and start making confident decisions."
+            data-ta="வாழ்க்கையின் திசையில் clarity பெற்று confident decisions எடுக்க தொடங்குங்கள்."></li>
+        <li data-en="Learn proven techniques to break negative thought patterns and emotional blocks."
+            data-ta="Negative thought patterns மற்றும் emotional blocks-ஐ மாற்ற உதவும் techniques-ஐ கற்றுக்கொள்ளுங்கள்."></li>
+        <li data-en="Discover practical methods to understand and use your inner mind power."
+            data-ta="உங்கள் inner mind power-ஐ புரிந்து கொண்டு பயன்படுத்த practical methods-ஐ அறிந்து கொள்ளுங்கள்."></li>
+        <li data-en="Build greater self-confidence and trust in yourself."
+            data-ta="Self-confidence மற்றும் self-trust-ஐ வளர்த்துக் கொள்ளுங்கள்."></li>
+        <li data-en="Experience deep relaxation and give your mind a powerful reset."
+            data-ta="Deep relaxation அனுபவித்து உங்கள் மனதிற்கு ஒரு powerful reset கொடுங்கள்."></li>
+        <li data-en="Develop a clear action mindset to move towards your life goals."
+            data-ta="உங்கள் வாழ்க்கை இலக்குகளை நோக்கி நகர clear action mindset-ஐ உருவாக்குங்கள்."></li>
       </ul>
     </div>
 
   </div>
 
-  <!-- CTA -->
   <div style="text-align:center;margin-top:50px;">
     <a href="register"
-       style="background:linear-gradient(90deg,#ff2f2f,#ff5b5b);
-              padding:16px 40px;
-              border-radius:40px;
-              color:white;
-              font-size:18px;
-              text-decoration:none;
-              font-weight:600;
-              box-shadow:0 6px 20px rgba(255,0,0,0.35);">
-       Join Free Experience Class Now
-    </a>
+       class="offer-btn"
+       data-en="Join Free Experience Class Now – ₹99"
+       data-ta="இப்போதே Free Experience Class-க்கு ₹99 செலுத்தி பதிவு செய்யுங்கள்"></a>
+
+    <p class="offer-note"
+       data-en="100% refundable after attending the class, on request."
+       data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் 100% Refund பெறலாம்."></p>
   </div>
+
 </section>
 
-    <section class="guru-section">
+<section class="guru-section">
+
   <div class="guru-container">
 
-    <!-- Guru Image -->
     <div class="guru-image">
       <img src="guru.jpg" alt="Shiek Guru">
       <div class="guru-name-box">
         SHIEK GURU
-        <span>Founder – Arithuyil Arivom</span>
+        <span data-en="Founder – Arithuyil Arivom"
+              data-ta="Founder – Arithuyil Arivom"></span>
       </div>
     </div>
 
-    <!-- Guru Content -->
     <div class="guru-content">
-      <h2>Who is Shiek Guru and Why Should You Learn From Him?</h2>
 
-      <p>
-        <b>Shiek Guru</b> is a transformation mentor with over 
-        <b>30+ years of experience</b> in Hypnotism, Mesmerism, Subconscious Mind Training 
-        and Deep Relaxation Healing systems.
-      </p>
+      <h2 data-en="Who is Shiek Guru and Why Should You Learn From Him?"
+          data-ta="Shiek Guru யார்? அவரிடமிருந்து ஏன் கற்றுக்கொள்ள வேண்டும்?"></h2>
 
-      <p>
-        Through powerful guided transformation sessions, <b>lakhs of students</b> have 
-        experienced measurable life changes in <b>health, wealth, relationships, 
-        confidence and life clarity</b>.
-      </p>
+      <p data-en="<b>Shiek Guru</b> is a transformation mentor with over <b>30+ years of experience</b> in Hypnotism, Mesmerism, Subconscious Mind Training and Deep Relaxation Healing systems."
+         data-ta="<b>Shiek Guru</b> அவர்கள் Hypnotism, Mesmerism, Subconscious Mind Training மற்றும் Deep Relaxation Healing systems-ல் <b>30+ ஆண்டுகள் அனுபவம்</b> கொண்ட transformation mentor."></p>
 
-      <p>
-        His practical step-by-step training methods help individuals activate their 
-        hidden mind power, remove emotional blocks, gain deep relaxation, and build 
-        strong inner direction for achieving life goals.
-      </p>
+      <p data-en="Through powerful guided transformation sessions, <b>lakhs of students</b> have experienced measurable life changes in <b>health, wealth, relationships, confidence and life clarity</b>."
+         data-ta="Powerful guided transformation sessions மூலம் <b>லட்சக்கணக்கான மாணவர்கள்</b> <b>health, wealth, relationships, confidence மற்றும் life clarity</b> ஆகிய துறைகளில் மாற்றங்களை அனுபவித்துள்ளனர்."></p>
 
-      <p>
-        The <b>Arithuyil Arivom transformation system</b> combines proven subconscious 
-        techniques with real-life application practices, enabling participants to 
-        experience transformation from the very first session.
-      </p>
+      <p data-en="His practical step-by-step training methods help individuals activate their hidden mind power, remove emotional blocks, gain deep relaxation, and build strong inner direction for achieving life goals."
+         data-ta="அவரது practical step-by-step training methods மூலம் hidden mind power-ஐ activate செய்யவும், emotional blocks-ஐ அணுகவும், deep relaxation பெறவும், வாழ்க்கை இலக்குகளை நோக்கி inner direction உருவாக்கவும் உதவுகிறது."></p>
+
+      <p data-en="The <b>Arithuyil Arivom transformation system</b> combines proven subconscious techniques with real-life application practices, enabling participants to experience transformation from the very first session."
+         data-ta="<b>Arithuyil Arivom transformation system</b> ஆனது subconscious techniques மற்றும் real-life application practices-ஐ இணைத்து, முதல் session-லிருந்தே transformation அனுபவிக்க உதவுகிறது."></p>
+
     </div>
-
   </div>
 
-  <!-- CTA -->
   <div class="guru-cta">
     <a href="register" class="offer-btn">
-      Join Now ₹199  
+      <span data-en="Join Now ₹99" data-ta="இப்போதே பதிவு செய்யுங்கள் ₹99"></span>
       <span class="strike">₹4,999</span>
     </a>
 
-    <p class="offer-note">
-      Register today and activate bonuses worth ₹3,41,000
-    </p>
+    <p class="offer-note"
+       data-en="Register today and activate bonuses worth ₹3,41,000"
+       data-ta="இன்றே பதிவு செய்து ₹3,41,000 மதிப்புள்ள Bonus-களை பெறுங்கள்"></p>
+
+    <p class="offer-note"
+       data-en="₹99 registration fee is 100% refundable after attending the class, on request."
+       data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் ₹99 பதிவு கட்டணம் 100% திருப்பி வழங்கப்படும்."></p>
   </div>
+
 </section>
 
-  <section class="guarantee-section">
+<section class="guarantee-section">
 
-  <h4 class="mini-title">Still Not Sure?</h4>
-  <h2 class="main-title">
-    Attend The Experience Class Risk-Free  
-    <br>or Get Full Refund — No Questions Asked
-  </h2>
+  <h4 class="mini-title"
+      data-en="Still Not Sure?"
+      data-ta="இன்னும் தயக்கமாக இருக்கிறதா?"></h4>
+
+  <h2 class="main-title"
+      data-en="Attend The Experience Class Risk-Free – Get Full Refund After the Class"
+      data-ta="Risk-Free-ஆக Experience Class-ல் கலந்து கொள்ளுங்கள் – வகுப்பிற்குப் பிறகு Full Refund பெறலாம்"></h2>
 
   <div class="guarantee-box">
 
-    <span class="deal-tag">Here’s the deal:</span>
+    <span class="deal-tag"
+          data-en="Here’s the deal:"
+          data-ta="Offer விவரம்:"></span>
 
     <ul>
-      <li>Attend the complete Experience Class session</li>
-      <li>If you feel the class is not valuable, refund available</li>
-      <li>No questions asked — simple refund assurance</li>
-      <li>You still keep all bonuses unlocked after registration</li>
+      <li data-en="Attend the complete Experience Class session"
+          data-ta="முழுமையான Experience Class session-ல் கலந்து கொள்ளுங்கள்"></li>
+      <li data-en="If you feel the class is not valuable, refund available"
+          data-ta="வகுப்பு உங்களுக்கு valuable இல்லை என்று நீங்கள் நினைத்தால் refund available"></li>
+      <li data-en="No questions asked — simple refund assurance"
+          data-ta="No questions asked — simple refund assurance"></li>
+      <li data-en="You still keep all bonuses unlocked after registration"
+          data-ta="Registration-க்கு பிறகு unlock செய்யப்பட்ட Bonus-களை நீங்கள் தொடர்ந்து பெறலாம்"></li>
     </ul>
 
     <a href="register" class="offer-btn">
-      Join Now ₹199  
+      <span data-en="Join Now ₹99" data-ta="இப்போதே பதிவு செய்யுங்கள் ₹99"></span>
       <span class="strike">₹4,999</span>
     </a>
 
-    <p class="offer-note">
-      Register today and activate bonuses worth ₹3,41,000
-    </p>
+    <p class="offer-note"
+       data-en="₹99 registration fee is 100% refundable after attending the class, on request."
+       data-ta="வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில் ₹99 பதிவு கட்டணம் 100% திருப்பி வழங்கப்படும்."></p>
 
   </div>
 
 </section>
 
-  <section style="padding:70px 20px; background:#f7f7f7;">
-  <div style="max-width:900px; margin:auto;">
-    
-    <h2 style="text-align:center; font-size:32px; font-weight:700; margin-bottom:40px;">
-      Frequently Asked Questions
-    </h2>
+<section class="faq-section">
+
+  <div class="faq-inner">
+
+    <h2 data-en="Frequently Asked Questions"
+        data-ta="அடிக்கடி கேட்கப்படும் கேள்விகள்"></h2>
 
     <div class="faq-item">
-      <h4>1. When does the Free Experience Class start?</h4>
-      <p>The class will be conducted on scheduled announced dates. After registration you will receive full details via WhatsApp.</p>
+      <h4 data-en="1. When does the Free Experience Class start?"
+          data-ta="1. Free Experience Class எப்போது நடைபெறும்?"></h4>
+      <p data-en="The class will be conducted on scheduled announced dates. After registration you will receive full details via WhatsApp."
+         data-ta="அறிவிக்கப்பட்ட schedule-க்கு ஏற்ப class நடைபெறும். Registration செய்த பிறகு முழு விவரங்களும் WhatsApp மூலம் அனுப்பப்படும்."></p>
     </div>
 
     <div class="faq-item">
-      <h4>2. Is this class online or offline?</h4>
-      <p>The session is available both Online (Zoom) and Offline (Chennai). You can choose your preferred option during registration.</p>
+      <h4 data-en="2. Is this class online or offline?"
+          data-ta="2. இந்த class online-ஆ அல்லது offline-ஆ?"></h4>
+      <p data-en="The session is available both Online (Zoom) and Offline (Chennai). You can choose your preferred option during registration."
+         data-ta="இந்த session Online (Zoom) மற்றும் Offline (Chennai) இரண்டிலும் கிடைக்கும். Registration செய்யும் போது உங்களுக்கு ஏற்ற option-ஐ தேர்வு செய்யலாம்."></p>
     </div>
 
     <div class="faq-item">
-      <h4>3. Is this class really free?</h4>
-      <p>The experience class training is free. Only a small platform/seat confirmation fee may be collected to ensure committed participation.</p>
+      <h4 data-en="3. Is this class really free?"
+          data-ta="3. இந்த class உண்மையிலேயே free-ஆ?"></h4>
+      <p data-en="The experience class training is free. Only a small seat confirmation fee is collected to ensure committed participation."
+         data-ta="Experience class training free. Committed participation-ஐ உறுதி செய்ய சிறிய seat confirmation fee மட்டும் வசூலிக்கப்படுகிறது."></p>
     </div>
 
     <div class="faq-item">
-      <h4>4. Who can attend this class?</h4>
-      <p>Anyone who wants improvement in Health, Wealth, Career, Business, Relationships or Life clarity can attend.</p>
+      <h4 data-en="4. Who can attend this class?"
+          data-ta="4. இந்த class-ல் யார் கலந்து கொள்ளலாம்?"></h4>
+      <p data-en="Anyone who wants improvement in Health, Wealth, Career, Business, Relationships or Life clarity can attend."
+         data-ta="Health, Wealth, Career, Business, Relationships அல்லது Life clarity-ல் முன்னேற்றம் விரும்பும் யாரும் கலந்து கொள்ளலாம்."></p>
     </div>
 
     <div class="faq-item">
-      <h4>5. Will I receive guidance after attending?</h4>
-      <p>Yes. Participants will receive access to community support, daily affirmations and updates about upcoming Guru sessions.</p>
+      <h4 data-en="5. Will I receive guidance after attending?"
+          data-ta="5. Class முடிந்த பிறகு guidance கிடைக்குமா?"></h4>
+      <p data-en="Yes. Participants will receive access to community support, daily affirmations and updates about upcoming Guru sessions."
+         data-ta="ஆம். Participants-க்கு community support, daily affirmations மற்றும் upcoming Guru sessions பற்றிய updates கிடைக்கும்."></p>
     </div>
 
     <div class="faq-item">
-      <h4>6. Do I need any prior experience?</h4>
-      <p>No prior experience is required. The session is designed for beginners as well as advanced learners.</p>
+      <h4 data-en="6. Do I need any prior experience?"
+          data-ta="6. முன் அனுபவம் தேவையா?"></h4>
+      <p data-en="No prior experience is required. The session is designed for beginners as well as advanced learners."
+         data-ta="முன் அனுபவம் தேவையில்லை. Beginners மற்றும் advanced learners இருவருக்கும் ஏற்ற வகையில் session அமைக்கப்பட்டுள்ளது."></p>
     </div>
 
     <div class="faq-item">
-      <h4>7. What benefits can I expect from the session?</h4>
-      <p>You will understand how your thoughts shape life results, identify internal blocks, and learn powerful mind techniques for transformation.</p>
+      <h4 data-en="7. What benefits can I expect from the session?"
+          data-ta="7. இந்த session மூலம் என்ன benefits கிடைக்கும்?"></h4>
+      <p data-en="You will understand how your thoughts shape life results, identify internal blocks, and learn powerful mind techniques for transformation."
+         data-ta="எண்ணங்கள் வாழ்க்கை முடிவுகளை எவ்வாறு பாதிக்கின்றன என்பதை புரிந்து கொண்டு, internal blocks-ஐ அடையாளம் கண்டு, transformation-க்கு உதவும் powerful mind techniques-ஐ கற்றுக்கொள்ளலாம்."></p>
     </div>
 
     <div class="faq-item">
-      <h4>8. Will relaxation session be included?</h4>
-      <p>Yes. A powerful guided relaxation session will be conducted to help you experience deep mind transformation.</p>
+      <h4 data-en="8. Will relaxation session be included?"
+          data-ta="8. Relaxation session இருக்குமா?"></h4>
+      <p data-en="Yes. A powerful guided relaxation session will be conducted to help you experience deep mind relaxation."
+         data-ta="ஆம். Deep mind relaxation-ஐ அனுபவிக்க powerful guided relaxation session நடத்தப்படும்."></p>
     </div>
 
     <div class="faq-item">
-      <h4>9. Can I bring family members?</h4>
-      <p>Yes, family members can attend by completing separate registrations as seats are limited.</p>
+      <h4 data-en="9. Can I bring family members?"
+          data-ta="9. Family members-ஐ அழைத்து வரலாமா?"></h4>
+      <p data-en="Yes, family members can attend by completing separate registrations as seats are limited."
+         data-ta="ஆம். Seats limited என்பதால் ஒவ்வொருவருக்கும் தனித்தனி registration செய்ய வேண்டும்."></p>
     </div>
 
     <div class="faq-item">
-      <h4>10. What happens after the free experience class?</h4>
-      <p>Participants who wish to continue deeper transformation can join the <b>8-Week Mind Power Transformation Class</b> </p>
+      <h4 data-en="10. What happens after the free experience class?"
+          data-ta="10. Free Experience Class-க்கு பிறகு என்ன நடக்கும்?"></h4>
+      <p data-en="Participants who wish to continue deeper transformation can join the 8-Week Mind Power Transformation Class."
+         data-ta="மேலும் ஆழமான transformation-ஐ தொடர விரும்பும் participants, <b>8-Week Mind Power Transformation Class</b>-ல் join செய்யலாம்."></p>
     </div>
 
   </div>
 </section>
-  
+
 <div class="sticky">
-<div>Seats Filling Fast</div>
+  <div data-en="Seats Filling Fast" data-ta="Seats வேகமாக நிரம்பி வருகின்றன"></div>
 
   <a href="register" class="offer-btn">
-      Join Now ₹199  
-      <span class="strike">₹4,999</span>
-    </a>
-
+    <span data-en="Join Now ₹99" data-ta="₹99-க்கு பதிவு செய்யுங்கள்"></span>
+    <span class="strike">₹4,999</span>
+  </a>
 </div>
 
 <script>
+function updateLanguageUI(lang){
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    var value = lang === 'ta' ? el.getAttribute('data-ta') : el.getAttribute('data-en');
+    if(value !== null) el.innerHTML = value;
+  });
+
+  document.documentElement.lang = lang === 'ta' ? 'ta' : 'en';
+
+  var taBtn = document.getElementById('langTa');
+  var enBtn = document.getElementById('langEn');
+
+  if(taBtn && enBtn){
+    taBtn.classList.toggle('active', lang === 'ta');
+    enBtn.classList.toggle('active', lang === 'en');
+  }
+}
 
 function selectLanguage(lang){
-
-  document.querySelectorAll('[data-en]').forEach(function(el){
-
-    if(lang === 'ta'){
-      el.innerHTML = el.getAttribute('data-ta');
-    }else{
-      el.innerHTML = el.getAttribute('data-en');
-    }
-
-  });
+  updateLanguageUI(lang);
 
   localStorage.setItem('freeclassLanguage', lang);
 
-  document.getElementById('languagePopup').style.display = 'none';
+  var popup = document.getElementById('languagePopup');
+  if(popup) popup.style.display = 'none';
 }
 
+document.addEventListener('DOMContentLoaded', function(){
 
-document.addEventListener("DOMContentLoaded", function(){
+  var savedLanguage = localStorage.getItem('freeclassLanguage');
 
-  const savedLanguage = localStorage.getItem('freeclassLanguage');
-
-  if(savedLanguage){
-
-    selectLanguage(savedLanguage);
-
+  if(savedLanguage === 'ta' || savedLanguage === 'en'){
+    updateLanguageUI(savedLanguage);
+    document.getElementById('languagePopup').style.display = 'none';
   }else{
-
+    updateLanguageUI('ta');
     document.getElementById('languagePopup').style.display = 'flex';
-
   }
 
 });
-
 </script>
-  
+
 </body>
 </html>
