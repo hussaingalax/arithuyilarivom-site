@@ -1,1412 +1,487 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arithuyil Arivom</title>
-
-<link rel="icon"
-      type="image/png"
-      href="favicon.png">
-
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<meta
-name="description"
-content="Arithuyil Arivom - Practical Mind Power and Subconscious Training with Shiek Guru."
->
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-
-/* =========================================================
-   RESET
-========================================================= */
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    margin:0;
-    font-family:'Poppins',sans-serif;
-    background:#f7f8fb;
-    color:#222;
-    overflow-x:hidden;
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.site-header{
-    width:100%;
-    background:#111;
-    position:relative;
-    z-index:1000;
-    box-shadow:0 3px 12px rgba(0,0,0,.22);
-}
-
-.navbar{
-    width:100%;
-    min-height:68px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:0 22px;
-}
-
-.nav-menu{
-    width:100%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    gap:22px;
-
-    overflow-x:auto;
-    overflow-y:hidden;
-
-    scrollbar-width:none;
-}
-
-.nav-menu::-webkit-scrollbar{
-    display:none;
-}
-
-.nav-menu a{
-    color:#fff;
-    text-decoration:none;
-
-    font-size:14px;
-    font-weight:500;
-
-    white-space:nowrap;
-
-    padding:10px 0;
-
-    transition:.25s;
-}
-
-.nav-menu a:hover{
-    opacity:.7;
-}
-
-
-/* =========================================================
-   JOIN FREE CLASS
-   IMPORTANT - KEEP THIS LINK
-========================================================= */
-
-.nav-menu .free-class{
-    background:#fff;
-    color:#111;
-
-    padding:11px 19px;
-
-    border-radius:7px;
-
-    font-weight:700;
-
-    box-shadow:0 4px 12px rgba(255,255,255,.12);
-}
-
-.nav-menu .free-class:hover{
-    opacity:1;
-    background:#f1f1f1;
-}
-
-
-/* =========================================================
-   HERO SLIDER
-========================================================= */
-
-.hero-slider{
-    width:100%;
-
-    position:relative;
-
-    overflow:hidden;
-
-    background:#000;
-}
-
-
-/* =========================================================
-   SLIDER TRACK
-========================================================= */
-
-.slider-track{
-    width:100%;
-
-    display:flex;
-
-    transition:
-        transform .7s cubic-bezier(.77,0,.18,1);
-
-    touch-action:pan-y;
-}
-
-
-/* =========================================================
-   EACH SLIDE
-========================================================= */
-
-.slide{
-    position:relative;
-
-    min-width:100%;
-
-    /*
-       Banner original ratio:
-       1983 x 793
-    */
-
-    aspect-ratio:1983 / 793;
-
-    overflow:hidden;
-
-    flex-shrink:0;
-
-    background:#111;
-}
-
-
-/* =========================================================
-   BANNER IMAGE
-========================================================= */
-
-.banner-image{
-    position:absolute;
-
-    left:0;
-    top:0;
-
-    width:100%;
-    height:100%;
-
-    display:block;
-
-    /*
-       IMPORTANT:
-       NO COVER CROP
-    */
-
-    object-fit:cover;
-
-    object-position:center center;
-}
-
-
-/* =========================================================
-   TEXT READABILITY OVERLAY
-========================================================= */
-
-.slide-overlay{
-    position:absolute;
-
-    left:0;
-    top:0;
-
-    width:100%;
-    height:100%;
-
-    z-index:2;
-
-    pointer-events:none;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.58) 0%,
-            rgba(0,0,0,.35) 35%,
-            rgba(0,0,0,.08) 65%,
-            rgba(0,0,0,0) 100%
-        );
-}
-
-
-/* =========================================================
-   SLIDE CONTENT
-========================================================= */
-
-.slide-content{
-    position:absolute;
-
-    z-index:5;
-
-    left:7%;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    width:43%;
-
-    max-width:680px;
-
-    color:#fff;
-}
-
-
-/* =========================================================
-   SMALL LABEL
-========================================================= */
-
-.slide-label{
-    font-size:13px;
-
-    font-weight:700;
-
-    letter-spacing:3px;
-
-    text-transform:uppercase;
-
-    margin-bottom:15px;
-
-    text-shadow:
-        0 2px 8px rgba(0,0,0,.5);
-}
-
-
-/* =========================================================
-   MAIN TITLE
-========================================================= */
-
-.slide-title{
-    font-size:clamp(32px,4vw,62px);
-
-    line-height:1.08;
-
-    font-weight:800;
-
-    letter-spacing:-1px;
-
-    margin:0 0 18px 0;
-
-    text-shadow:
-        0 3px 15px rgba(0,0,0,.55);
-}
-
-.slide-title span{
-    display:block;
-}
-
-
-/* =========================================================
-   DESCRIPTION
-========================================================= */
-
-.slide-description{
-    font-size:clamp(13px,1.25vw,17px);
-
-    line-height:1.6;
-
-    max-width:560px;
-
-    color:#fff;
-
-    margin-bottom:24px;
-
-    text-shadow:
-        0 2px 8px rgba(0,0,0,.5);
-}
-
-
-/* =========================================================
-   CTA BUTTON
-========================================================= */
-
-.slide-button{
-    display:inline-block;
-
-    background:#fff;
-
-    color:#111;
-
-    text-decoration:none;
-
-    padding:12px 23px;
-
-    border-radius:7px;
-
-    font-size:14px;
-
-    font-weight:700;
-
-    box-shadow:
-        0 6px 18px rgba(0,0,0,.28);
-
-    transition:.25s;
-}
-
-.slide-button:hover{
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 10px 24px rgba(0,0,0,.35);
-}
-
-
-/* =========================================================
-   SLIDE 2
-   CONTENT POSITION
-========================================================= */
-
-/*
-   Banner B has important visual content on the left.
-   So text is positioned more towards the right.
-*/
-
-.slide-b .slide-content{
-    left:7%;
-    right:auto;
-    width:45%;
-    max-width:620px;
-    text-align:left;
-}
-
-
-/* =========================================================
-   SLIDER ARROWS
-========================================================= */
-
-.slider-arrow{
-    position:absolute;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    z-index:20;
-
-    width:46px;
-    height:46px;
-
-    border-radius:50%;
-
-    border:
-        1px solid rgba(255,255,255,.5);
-
-    background:
-        rgba(0,0,0,.30);
-
-    color:#fff;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:28px;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-    user-select:none;
-}
-
-.slider-arrow:hover{
-    background:#fff;
-    color:#111;
-}
-
-.slider-prev{
-    left:18px;
-}
-
-.slider-next{
-    right:18px;
-}
-
-
-/* =========================================================
-   DOTS
-========================================================= */
-
-.slider-dots{
-    position:absolute;
-
-    left:50%;
-    bottom:16px;
-
-    transform:translateX(-50%);
-
-    z-index:20;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-}
-
-.slider-dot{
-    width:9px;
-    height:9px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,255,255,.5);
-
-    cursor:pointer;
-
-    transition:.3s;
-}
-
-.slider-dot.active{
-    width:27px;
-
-    border-radius:10px;
-
-    background:#fff;
-}
-
-
-/* =========================================================
-   CONTENT BELOW BANNER
-========================================================= */
-
-.home-intro{
-    width:100%;
-
-    padding:75px 25px;
-
-    text-align:center;
-
-    background:#f7f8fb;
-}
-
-.home-intro-inner{
-    max-width:900px;
-
-    margin:auto;
-}
-
-.home-intro h2{
-    font-size:36px;
-
-    line-height:1.2;
-
-    margin-bottom:18px;
-
-    font-weight:700;
-}
-
-.home-intro p{
-    font-size:15px;
-
-    line-height:1.8;
-
-    color:#666;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#f6f8fc;color:#20232a;overflow-x:hidden}
+a{text-decoration:none}
+
+.site-header{position:sticky;top:0;z-index:1000;background:#111;box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.navbar{min-height:66px;padding:0 18px;display:flex;align-items:center;justify-content:center}
+.nav-menu{display:flex;align-items:center;justify-content:center;gap:20px;width:100%;overflow-x:auto;scrollbar-width:none}
+.nav-menu::-webkit-scrollbar{display:none}
+.nav-menu a{color:#fff;font-size:13px;font-weight:500;white-space:nowrap;padding:10px 0}
+.nav-menu a:hover{opacity:.75}
+.nav-menu .free-class{background:#fff;color:#111;padding:11px 18px;border-radius:7px;font-weight:700}
+
+/* HERO */
+.hero-slider{position:relative;width:100%;overflow:hidden;background:#000}
+.slider-track{display:flex;width:100%;transition:transform .7s cubic-bezier(.77,0,.18,1);touch-action:pan-y}
+.slide{position:relative;min-width:100%;aspect-ratio:1983/793;overflow:hidden;flex-shrink:0}
+.banner-image{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+.slide-overlay{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.60),rgba(0,0,0,.30) 43%,rgba(0,0,0,.04) 75%,transparent)}
+.slide-content{position:absolute;z-index:5;left:7%;top:50%;transform:translateY(-50%);width:43%;max-width:680px;color:#fff}
+.slide-b .slide-content,.slide-c .slide-content{left:7%;right:auto;width:43%}
+.slide-label{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;text-shadow:0 2px 8px #000}
+.slide-title{font-size:clamp(30px,4vw,60px);line-height:1.08;font-weight:800;letter-spacing:-1px;margin-bottom:17px;text-shadow:0 3px 15px #000}
+.slide-title span{display:block}
+.slide-description{font-size:clamp(13px,1.2vw,17px);line-height:1.6;margin-bottom:23px;text-shadow:0 2px 8px #000}
+.slide-button{display:inline-block;background:#fff;color:#111;padding:12px 22px;border-radius:7px;font-size:14px;font-weight:700;box-shadow:0 7px 20px rgba(0,0,0,.28)}
+.slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:44px;height:44px;border:1px solid rgba(255,255,255,.55);border-radius:50%;background:rgba(0,0,0,.30);color:#fff;font-size:28px;cursor:pointer}
+.slider-arrow:hover{background:#fff;color:#111}
+.slider-prev{left:18px}.slider-next{right:18px}
+.slider-dots{position:absolute;left:50%;bottom:15px;transform:translateX(-50%);z-index:20;display:flex;gap:7px}
+.slider-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55);cursor:pointer}
+.slider-dot.active{width:26px;border-radius:10px;background:#fff}
+
+/* COMMON */
+.section{max-width:1120px;margin:auto;padding:72px 22px}
+.section.alt{max-width:none;background:#eef3fb}
+.section-inner{max-width:1120px;margin:auto}
+.section-head{text-align:center;max-width:800px;margin:0 auto 35px}
+.section-head h2{font-size:clamp(27px,3vw,42px);line-height:1.18;margin-bottom:13px}
+.section-head p{color:#687080;line-height:1.8;font-size:15px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 10px 28px rgba(24,40,72,.09);border:1px solid #edf0f5}
+.card h3{font-size:20px;margin-bottom:12px}
+.card p,.card li{font-size:14px;line-height:1.8;color:#626a78}
+.card ul{padding-left:20px}
+.pill{display:inline-block;font-size:11px;letter-spacing:1.5px;font-weight:700;color:#315ea8;background:#edf4ff;padding:7px 11px;border-radius:20px;margin-bottom:13px}
+.action{text-align:center;margin-top:28px}
+.btn{display:inline-block;background:#111;color:#fff;padding:12px 22px;border-radius:8px;font-size:14px;font-weight:700}
+.btn.light{background:#fff;color:#111;border:1px solid #ddd}
+
+/* INTRO */
+.intro-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:stretch}
+.motive{background:linear-gradient(135deg,#111827,#263b67);color:#fff;border-radius:20px;padding:38px}
+.motive h2{font-size:32px;margin-bottom:16px}
+.motive p{line-height:1.9;color:#e9eef8;font-size:14px}
+.feature-list{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.feature{background:#fff;padding:22px;border-radius:14px;box-shadow:0 8px 22px rgba(0,0,0,.06)}
+.feature h4{margin-bottom:7px}
+.feature p{font-size:13px;color:#6b7280;line-height:1.6}
+
+/* PROGRAM */
+.program-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.program-card{background:#fff;border-radius:18px;padding:30px;box-shadow:0 10px 28px rgba(24,40,72,.08)}
+.program-card h3{font-size:24px;margin-bottom:10px}
+.program-card p{font-size:14px;line-height:1.8;color:#616977}
+.program-card ul{margin:16px 0 0 20px}
+.program-card li{font-size:14px;line-height:1.8;color:#616977}
+
+/* YOUTUBE */
+.video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:25px}
+.video-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.08)}
+.video-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#101828,#314e82);display:flex;align-items:center;justify-content:center;color:#fff;font-size:48px}
+.video-card .video-body{padding:22px}
+.video-body h3{font-size:18px;margin-bottom:8px}
+.video-body p{font-size:13px;color:#697180;line-height:1.7;margin-bottom:15px}
+
+/* DETAILS */
+.details{background:#fff;border-radius:20px;padding:35px;box-shadow:0 10px 28px rgba(0,0,0,.07)}
+.details h3{font-size:25px;margin-bottom:14px}
+.details p{font-size:14px;line-height:1.9;color:#606978;margin-bottom:15px}
+
+/* FOOTER */
+footer{background:#101b35;color:#fff;padding:48px 22px}
+.footer-grid{max-width:1120px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:35px}
+footer h3{font-size:17px;margin-bottom:14px}
+footer p,footer li{font-size:13px;line-height:1.8;color:#b8c3d8}
+footer ul{list-style:none}
+.copyright{text-align:center;margin-top:35px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);font-size:12px;color:#8f9bb2}
+
+/* LANGUAGE */
+.lang-switch{position:fixed;right:15px;bottom:18px;z-index:1200;background:#111;color:#fff;border-radius:30px;padding:5px;display:flex;gap:3px;box-shadow:0 8px 25px rgba(0,0,0,.25)}
+.lang-switch button{border:0;background:transparent;color:#fff;padding:7px 10px;border-radius:20px;font:600 11px Poppins;cursor:pointer}
+.lang-switch button.active{background:#fff;color:#111}
+
+/* MOBILE */
 @media(max-width:768px){
-
-    /* -------------------------
-       HEADER
-    ------------------------- */
-
-    .navbar{
-        min-height:58px;
-
-        padding:
-            0 10px;
-    }
-
-    .nav-menu{
-        justify-content:flex-start;
-
-        gap:17px;
-    }
-
-    .nav-menu a{
-        font-size:12px;
-    }
-
-    .nav-menu .free-class{
-        padding:
-            9px 14px;
-    }
-
-
-    /* -------------------------
-       BANNER
-    ------------------------- */
-
-    .slide{
-
-        /*
-           KEEP ORIGINAL IMAGE RATIO
-        */
-
-        aspect-ratio:1983 / 793;
-
-        height:auto;
-
-        min-height:0;
-    }
-
-
-    .banner-image{
-
-        width:100%;
-        height:100%;
-
-        object-fit:cover;
-
-        object-position:center center;
-    }
-
-
-    /* -------------------------
-       MOBILE OVERLAY
-    ------------------------- */
-
-    .slide-overlay{
-
-        background:
-            linear-gradient(
-                90deg,
-                rgba(0,0,0,.62) 0%,
-                rgba(0,0,0,.30) 55%,
-                rgba(0,0,0,.04) 100%
-            );
-    }
-
-
-    /* -------------------------
-       MOBILE CONTENT
-    ------------------------- */
-
-    .slide-content{
-
-        left:5%;
-
-        top:50%;
-
-        transform:
-            translateY(-50%);
-
-        width:50%;
-
-        max-width:none;
-    }
-
-
-    .slide-b .slide-content{
-    left:5%;
-    right:auto;
-    width:50%;
+ .navbar{min-height:58px;padding:0 9px}
+ .nav-menu{justify-content:flex-start;gap:16px}
+ .nav-menu a{font-size:11px}
+ .nav-menu .free-class{padding:9px 13px}
+ .slide{aspect-ratio:1983/793}
+ .slide-overlay{background:linear-gradient(90deg,rgba(0,0,0,.64),rgba(0,0,0,.28) 60%,rgba(0,0,0,.03))}
+ .slide-content,.slide-b .slide-content,.slide-c .slide-content{left:6%;right:auto;width:51%;top:50%;transform:translateY(-50%)}
+ .slide-label{font-size:7px;letter-spacing:1.5px;margin-bottom:5px}
+ .slide-title{font-size:clamp(19px,5.5vw,31px);line-height:1.08;letter-spacing:-.3px;margin-bottom:7px}
+ .slide-description{font-size:clamp(9px,2.4vw,12px);line-height:1.35;margin-bottom:9px}
+ .slide-button{padding:7px 11px;font-size:9px;border-radius:5px}
+ .slider-arrow{width:33px;height:33px;font-size:21px}
+ .slider-prev{left:7px}.slider-next{right:7px}
+ .slider-dots{bottom:8px}
+ .slider-dot{width:7px;height:7px}.slider-dot.active{width:21px}
+ .section{padding:50px 18px}
+ .intro-grid,.program-grid,.cards,.video-grid,.footer-grid{grid-template-columns:1fr}
+ .feature-list{grid-template-columns:1fr}
+ .motive{padding:27px}
+ .motive h2{font-size:27px}
+ .details{padding:25px}
 }
 
-
-    /* -------------------------
-       MOBILE TEXT
-    ------------------------- */
-
-    .slide-label{
-
-        font-size:8px;
-
-        letter-spacing:1.5px;
-
-        margin-bottom:7px;
-    }
-
-
-    .slide-title{
-
-        font-size:
-            clamp(19px,5.5vw,32px);
-
-        line-height:1.08;
-
-        letter-spacing:-.3px;
-
-        margin-bottom:8px;
-    }
-
-
-    .slide-description{
-
-        font-size:
-            clamp(9px,2.5vw,13px);
-
-        line-height:1.4;
-
-        margin-bottom:11px;
-
-        max-width:100%;
-    }
-
-
-    .slide-button{
-
-        padding:
-            8px 13px;
-
-        font-size:10px;
-
-        border-radius:5px;
-    }
-
-
-    /* -------------------------
-       MOBILE ARROWS
-    ------------------------- */
-
-    .slider-arrow{
-
-        width:34px;
-        height:34px;
-
-        font-size:21px;
-    }
-
-    .slider-prev{
-        left:8px;
-    }
-
-    .slider-next{
-        right:8px;
-    }
-
-
-    /* -------------------------
-       MOBILE DOTS
-    ------------------------- */
-
-    .slider-dots{
-        bottom:9px;
-
-        gap:6px;
-    }
-
-    .slider-dot{
-
-        width:7px;
-        height:7px;
-    }
-
-    .slider-dot.active{
-
-        width:21px;
-    }
-
-
-    /* -------------------------
-       INTRO
-    ------------------------- */
-
-    .home-intro{
-
-        padding:
-            55px 20px;
-    }
-
-    .home-intro h2{
-
-        font-size:27px;
-    }
-
-    .home-intro p{
-
-        font-size:13px;
-
-        line-height:1.7;
-    }
-
-}
-
-
-/* =========================================================
-   VERY SMALL MOBILE
-========================================================= */
-
-@media(max-width:420px){
-
-    .nav-menu{
-        gap:14px;
-    }
-
-    .nav-menu a{
-        font-size:11px;
-    }
-
-    .nav-menu .free-class{
-        padding:
-            8px 12px;
-    }
-
-
-    .slide-content{
-
-        left:6%;
-
-        width:51%;
-    }
-
-    .slide-b .slide-content{
-
-        right:6%;
-
-        width:51%;
-    }
-
-
-    .slide-label{
-        font-size:7px;
-
-        margin-bottom:5px;
-    }
-
-
-    .slide-title{
-
-        font-size:21px;
-
-        margin-bottom:6px;
-    }
-
-
-    .slide-description{
-
-        font-size:9px;
-
-        line-height:1.35;
-
-        margin-bottom:8px;
-    }
-
-
-    .slide-button{
-
-        font-size:9px;
-
-        padding:
-            7px 11px;
-    }
-
-}
-
+/* TAMIL */
+body.tamil{font-family:'Poppins','Noto Sans Tamil',sans-serif}
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================================================
-     HEADER
-========================================================= -->
-
 <header class="site-header">
+ <div class="navbar">
+  <nav class="nav-menu">
+   <a href="index.html" data-en="Home" data-ta="முகப்பு">Home</a>
+   <a href="programs.html" data-en="Programs" data-ta="நிகழ்ச்சிகள்">Programs</a>
+   <a href="results.html" data-en="Results" data-ta="முடிவுகள்">Results</a>
+   <a href="8week.html" data-en="8 Week Class" data-ta="8 வார வகுப்பு">8 Week Class</a>
 
-    <div class="navbar">
+   <!-- DO NOT CHANGE THIS LINK -->
+   <a href="freeclass.html" class="free-class" data-en="Join Free Class" data-ta="இலவச வகுப்பில் இணையுங்கள்">Join Free Class</a>
 
-        <nav class="nav-menu">
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="programs.html">
-                Programs
-            </a>
-
-            <a href="results.html">
-                Results
-            </a>
-
-            <a href="8week.html">
-                8 Week Class
-            </a>
-
-
-            <!-- =================================================
-                 IMPORTANT:
-                 DO NOT CHANGE THIS LINK
-            ================================================== -->
-
-            <a
-                href="freeclass.html"
-                class="free-class"
-            >
-                Join Free Class
-            </a>
-
-
-            <a href="join.html">
-                Join Class
-            </a>
-
-            <a href="problem.html">
-                Problems
-            </a>
-
-            <a href="amavasai.html">
-                Amavasai
-            </a>
-
-            <a href="deekshai.html">
-                Deekshai
-            </a>
-
-            <a href="about.html">
-                About
-            </a>
-
-        </nav>
-
-    </div>
-
+   <a href="join.html" data-en="Join Class" data-ta="வகுப்பில் இணையுங்கள்">Join Class</a>
+   <a href="problem.html" data-en="Problems" data-ta="பிரச்சனைகள்">Problems</a>
+   <a href="amavasai.html" data-en="Amavasai" data-ta="அமாவாசை">Amavasai</a>
+   <a href="deekshai.html" data-en="Deekshai" data-ta="தீக்ஷை">Deekshai</a>
+   <a href="about.html" data-en="About" data-ta="எங்களைப் பற்றி">About</a>
+  </nav>
+ </div>
 </header>
 
-
-
-<!-- =========================================================
-     HERO SLIDER
-========================================================= -->
-
+<!-- HERO: 3 BANNERS -->
 <section class="hero-slider">
-
-
-    <div
-        class="slider-track"
-        id="sliderTrack"
-    >
-
-
-        <!-- =================================================
-             BANNER A
-        ================================================== -->
-
-        <div class="slide">
-
-
-            <img
-                src="banner A.png"
-                class="banner-image"
-                alt="Arithuyil Arivom"
-            >
-
-
-            <div class="slide-overlay"></div>
-
-
-            <div class="slide-content">
-
-
-                <div class="slide-label">
-                    ARITHUYIL ARIVOM
-                </div>
-
-
-                <h1 class="slide-title">
-
-                    If Others Can Do It,
-                    <span>
-                        Why Can't You?
-                    </span>
-
-                </h1>
-
-
-                <p class="slide-description">
-
-                    Your possibilities begin when
-                    you believe that change is possible.
-
-                </p>
-
-
-                <!-- IMPORTANT:
-                     Existing Free Class Landing Page
-                -->
-
-                <a
-                    href="freeclass.html"
-                    class="slide-button"
-                >
-                    Join Free Class →
-                </a>
-
-
-            </div>
-
-        </div>
-
-
-
-        <!-- =================================================
-             BANNER B
-        ================================================== -->
-
-        <div class="slide slide-b">
-
-
-            <img
-                src="banner B.png"
-                class="banner-image"
-                alt="Arithuyil Arivom"
-            >
-
-
-            <div class="slide-overlay"></div>
-
-
-            <div class="slide-content">
-
-
-                <div class="slide-label">
-                    TRANSFORM FROM WITHIN
-                </div>
-
-
-                <h1 class="slide-title">
-
-                    If You Know How To
-                    <span>
-                        Change Your Mindset,
-                    </span>
-
-                </h1>
-
-
-                <p class="slide-description">
-
-                    You can shape your life to suit
-                    the future you truly desire.
-
-                </p>
-
-
-                <!-- IMPORTANT:
-                     Existing Free Class Landing Page
-                -->
-
-                <a
-                    href="freeclass.html"
-                    class="slide-button"
-                >
-                    Join Free Class →
-                </a>
-
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- =================================================
-         PREVIOUS
-    ================================================== -->
-
-    <button
-        class="slider-arrow slider-prev"
-        id="prevBtn"
-        aria-label="Previous banner"
-    >
-        ‹
-    </button>
-
-
-
-    <!-- =================================================
-         NEXT
-    ================================================== -->
-
-    <button
-        class="slider-arrow slider-next"
-        id="nextBtn"
-        aria-label="Next banner"
-    >
-        ›
-    </button>
-
-
-
-    <!-- =================================================
-         DOTS
-    ================================================== -->
-
-    <div class="slider-dots">
-
-        <span
-            class="slider-dot active"
-            data-slide="0"
-        ></span>
-
-        <span
-            class="slider-dot"
-            data-slide="1"
-        ></span>
-
-    </div>
-
-
+ <div class="slider-track" id="sliderTrack">
+
+  <div class="slide">
+   <img src="banner A.png" class="banner-image" alt="Arithuyil Arivom">
+   <div class="slide-overlay"></div>
+   <div class="slide-content">
+    <div class="slide-label" data-en="ARITHUYIL ARIVOM" data-ta="அறிதுயில் அறிவோம்">ARITHUYIL ARIVOM</div>
+    <h1 class="slide-title" data-en="If Others Can Do It,|Why Can't You?" data-ta="மற்றவர்களால் முடிகிறதே,|உங்களால் ஏன் முடியாது?">If Others Can Do It,<span>Why Can't You?</span></h1>
+    <p class="slide-description" data-en="Your possibilities begin when you believe that change is possible." data-ta="மாற்றம் சாத்தியம் என்று நீங்கள் நம்பும் இடத்திலிருந்து உங்கள் புதிய வாய்ப்புகள் தொடங்குகின்றன.">Your possibilities begin when you believe that change is possible.</p>
+    <a href="freeclass.html" class="slide-button" data-en="Join Free Class →" data-ta="இலவச வகுப்பில் இணையுங்கள் →">Join Free Class →</a>
+   </div>
+  </div>
+
+  <div class="slide slide-b">
+   <img src="banner B.png" class="banner-image" alt="Arithuyil Arivom">
+   <div class="slide-overlay"></div>
+   <div class="slide-content">
+    <div class="slide-label" data-en="TRANSFORM FROM WITHIN" data-ta="உள்ளிருந்து மாற்றத்தை உருவாக்குங்கள்">TRANSFORM FROM WITHIN</div>
+    <h1 class="slide-title" data-en="If You Know How To|Change Your Mindset," data-ta="உங்கள் மனநிலையை மாற்றுவது எப்படி என்று|நீங்கள் அறிந்தால்,">If You Know How To<span>Change Your Mindset,</span></h1>
+    <p class="slide-description" data-en="You can shape your life to suit the future you truly desire." data-ta="நீங்கள் உண்மையாக விரும்பும் எதிர்காலத்திற்கு ஏற்றவாறு உங்கள் வாழ்க்கையை வடிவமைக்க முடியும்.">You can shape your life to suit the future you truly desire.</p>
+    <a href="freeclass.html" class="slide-button" data-en="Join Free Class →" data-ta="இலவச வகுப்பில் இணையுங்கள் →">Join Free Class →</a>
+   </div>
+  </div>
+
+  <div class="slide slide-c">
+   <img src="banner C.png" class="banner-image" alt="Arithuyil Arivom TrueSelf Mind Gym">
+   <div class="slide-overlay"></div>
+   <div class="slide-content">
+    <div class="slide-label" data-en="ARITHUYIL ARIVOM" data-ta="அறிதுயில் அறிவோம்">ARITHUYIL ARIVOM</div>
+    <h1 class="slide-title" data-en="How To Attain Liberation From Karma,|Rather Than Just Trying To Escape It." data-ta="கர்மாவிலிருந்து தப்பிப்பது அல்ல,|அதிலிருந்து விடுதலை பெறுவது எப்படி?">How To Attain Liberation From Karma,<span>Rather Than Just Trying To Escape It.</span></h1>
+    <p class="slide-description" data-en="Understand your patterns, transform from within, and move towards inner freedom." data-ta="உங்களுக்குள் இருக்கும் வடிவங்களைப் புரிந்து, உள்ளிருந்து மாற்றத்தை உருவாக்கி, உள் சுதந்திரத்தை நோக்கி நகருங்கள்.">Understand your patterns, transform from within, and move towards inner freedom.</p>
+    <a href="freeclass.html" class="slide-button" data-en="Join Free Class →" data-ta="இலவச வகுப்பில் இணையுங்கள் →">Join Free Class →</a>
+   </div>
+  </div>
+
+ </div>
+
+ <button class="slider-arrow slider-prev" id="prevBtn" aria-label="Previous">‹</button>
+ <button class="slider-arrow slider-next" id="nextBtn" aria-label="Next">›</button>
+
+ <div class="slider-dots">
+  <span class="slider-dot active" data-slide="0"></span>
+  <span class="slider-dot" data-slide="1"></span>
+  <span class="slider-dot" data-slide="2"></span>
+ </div>
 </section>
 
+<!-- 1. ARITHUYIL ARIVOM INTRO -->
+<section class="section">
+ <div class="section-head">
+  <span class="pill" data-en="TRUESELF MIND GYM" data-ta="ட்ரூசெல்ஃப் மைண்ட் ஜிம்">TRUESELF MIND GYM</span>
+  <h2 data-en="What is Arithuyil Arivom?" data-ta="அறிதுயில் அறிவோம் என்றால் என்ன?">What is Arithuyil Arivom?</h2>
+  <p data-en="Arithuyil Arivom is a practical mind-power and inner-transformation learning platform focused on understanding the mind, developing awareness and practising positive inner change."
+     data-ta="அறிதுயில் அறிவோம் என்பது மனத்தின் சக்தியைப் புரிந்துகொள்வது, விழிப்புணர்வை வளர்த்துக்கொள்வது மற்றும் உள்ளார்ந்த நேர்மறை மாற்றத்தைப் பயிற்சி செய்வதை மையமாகக் கொண்ட நடைமுறை பயிற்சி தளமாகும்.">
+   Arithuyil Arivom is a practical mind-power and inner-transformation learning platform focused on understanding the mind, developing awareness and practising positive inner change.
+  </p>
+ </div>
 
+ <div class="intro-grid">
+  <div class="motive">
+   <h2 data-en="Our Motive" data-ta="எங்கள் நோக்கம்">Our Motive</h2>
+   <p data-en="To help people understand their own mind, identify limiting patterns, build inner clarity and confidence, and practise techniques that support a more peaceful and purposeful life."
+      data-ta="ஒவ்வொருவரும் தங்கள் மனதைப் புரிந்துகொண்டு, அவர்களைத் தடுத்து நிறுத்தும் பழக்கங்களையும் எண்ண வடிவங்களையும் அடையாளம் கண்டு, தெளிவு மற்றும் நம்பிக்கையை வளர்த்து, அமைதியான மற்றும் நோக்கமுள்ள வாழ்க்கைக்கான நடைமுறை பயிற்சிகளை மேற்கொள்ள உதவுவது எங்கள் நோக்கம்.">
+    To help people understand their own mind, identify limiting patterns, build inner clarity and confidence, and practise techniques that support a more peaceful and purposeful life.
+   </p>
+  </div>
 
-<!-- =========================================================
-     HOME INTRO
-========================================================= -->
-
-<section class="home-intro">
-
-    <div class="home-intro-inner">
-
-        <h2>
-            Understand Your Mind.<br>
-            Transform Your Life.
-        </h2>
-
-        <p>
-            Arithuyil Arivom is a practical mind power
-            and inner transformation training platform
-            guided by Shiek Guru. Explore the power of
-            your mind, develop greater awareness and
-            discover new possibilities within yourself.
-        </p>
-
-    </div>
-
+  <div class="feature-list">
+   <div class="feature"><h4 data-en="Mind Awareness" data-ta="மன விழிப்புணர்வு">Mind Awareness</h4><p data-en="Understand thoughts, beliefs and recurring patterns." data-ta="எண்ணங்கள், நம்பிக்கைகள் மற்றும் மீண்டும் மீண்டும் தோன்றும் மன வடிவங்களைப் புரிந்துகொள்ளுதல்.">Understand thoughts, beliefs and recurring patterns.</p></div>
+   <div class="feature"><h4 data-en="Inner Transformation" data-ta="உள்ளார்ந்த மாற்றம்">Inner Transformation</h4><p data-en="Develop practical habits for positive inner change." data-ta="நேர்மறையான உள்ளார்ந்த மாற்றத்திற்கான நடைமுறை பழக்கங்களை வளர்த்தல்.">Develop practical habits for positive inner change.</p></div>
+   <div class="feature"><h4 data-en="Self Practice" data-ta="சுயப் பயிற்சி">Self Practice</h4><p data-en="Learn techniques that can be practised consistently." data-ta="தொடர்ந்து பயிற்சி செய்யக்கூடிய முறைகளை கற்றுக்கொள்ளுதல்.">Learn techniques that can be practised consistently.</p></div>
+   <div class="feature"><h4 data-en="Peace & Clarity" data-ta="அமைதி & தெளிவு">Peace & Clarity</h4><p data-en="Work towards a calmer and clearer state of mind." data-ta="மேலும் அமைதியான மற்றும் தெளிவான மனநிலையை நோக்கி செயல்படுதல்.">Work towards a calmer and clearer state of mind.</p></div>
+  </div>
+ </div>
 </section>
 
+<!-- 2. 8 WEEK + FREE CLASS -->
+<section class="section alt">
+ <div class="section-inner">
+  <div class="section-head">
+   <span class="pill" data-en="8 WEEK PROGRAM" data-ta="8 வார பயிற்சி">8 WEEK PROGRAM</span>
+   <h2 data-en="8 Week Class & Free Introduction" data-ta="8 வார வகுப்பு & இலவச அறிமுகம்">8 Week Class & Free Introduction</h2>
+   <p data-en="Start with the free introduction to understand the approach, then explore the structured 8-week learning journey."
+      data-ta="முதலில் இலவச அறிமுக வகுப்பின் மூலம் பயிற்சி முறையைப் புரிந்துகொண்டு, பின்னர் திட்டமிட்ட 8 வார பயிற்சி பயணத்தை அறிந்துகொள்ளலாம்.">
+    Start with the free introduction to understand the approach, then explore the structured 8-week learning journey.
+   </p>
+  </div>
 
+  <div class="program-grid">
+   <div class="program-card">
+    <h3 data-en="8 Week Class" data-ta="8 வார வகுப்பு">8 Week Class</h3>
+    <p data-en="A structured learning journey designed to help participants understand mind power, subconscious patterns, self-practice and inner transformation step by step."
+       data-ta="மன சக்தி, ஆழ்மன வடிவங்கள், சுயப் பயிற்சி மற்றும் உள்ளார்ந்த மாற்றத்தை படிப்படியாகப் புரிந்துகொள்ள உதவும் கட்டமைக்கப்பட்ட பயிற்சி பயணம்.">
+     A structured learning journey designed to help participants understand mind power, subconscious patterns, self-practice and inner transformation step by step.
+    </p>
+    <ul>
+     <li data-en="Step-by-step learning" data-ta="படிப்படியான கற்றல்">Step-by-step learning</li>
+     <li data-en="Practical exercises" data-ta="நடைமுறை பயிற்சிகள்">Practical exercises</li>
+     <li data-en="Mind & subconscious awareness" data-ta="மனம் & ஆழ்மன விழிப்புணர்வு">Mind & subconscious awareness</li>
+    </ul>
+    <div class="action"><a class="btn" href="8week.html" data-en="Know More →" data-ta="மேலும் அறிய →">Know More →</a></div>
+   </div>
 
-<!-- =========================================================
-     SLIDER JAVASCRIPT
-========================================================= -->
+   <div class="program-card">
+    <h3 data-en="Free Class Introduction" data-ta="இலவச அறிமுக வகுப்பு">Free Class Introduction</h3>
+    <p data-en="A simple starting point for people who want to understand what Arithuyil Arivom is, what is taught and how the learning process works."
+       data-ta="அறிதுயில் அறிவோம் என்றால் என்ன, என்ன கற்றுக்கொடுக்கப்படுகிறது, பயிற்சி முறை எப்படி இருக்கும் என்பதைப் புரிந்துகொள்ள விரும்புபவர்களுக்கான தொடக்க வகுப்பு.">
+     A simple starting point for people who want to understand what Arithuyil Arivom is, what is taught and how the learning process works.
+    </p>
+    <div class="action">
+     <!-- DO NOT CHANGE THIS LINK -->
+     <a class="btn" href="freeclass.html" data-en="Full Details →" data-ta="முழு விவரங்கள் →">Full Details →</a>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 3. MAHASHAKTHI -->
+<section class="section">
+ <div class="section-head">
+  <span class="pill" data-en="MAHASHAKTHI PROGRAM" data-ta="மஹாசக்தி பயிற்சி">MAHASHAKTHI PROGRAM</span>
+  <h2 data-en="Explore the Mahashakthi Program" data-ta="மஹாசக்தி பயிற்சியை அறிந்துகொள்ளுங்கள்">Explore the Mahashakthi Program</h2>
+  <p data-en="An inner-practice program presented around energy awareness, meditation, forgiveness and personal transformation."
+     data-ta="ஆற்றல் விழிப்புணர்வு, தியானம், மன்னிப்பு மற்றும் தனிப்பட்ட மாற்றத்தை மையமாகக் கொண்ட உள்ளார்ந்த பயிற்சி திட்டம்.">
+   An inner-practice program presented around energy awareness, meditation, forgiveness and personal transformation.
+  </p>
+ </div>
+
+ <div class="cards">
+  <div class="card"><h3 data-en="7 Chakra Activation" data-ta="7 சக்ரா செயல்படுத்தல்">7 Chakra Activation</h3><p data-en="A guided practice focused on awareness of the seven chakra centres." data-ta="ஏழு சக்ரா மையங்களைப் பற்றிய விழிப்புணர்வை வளர்க்கும் வழிகாட்டப்பட்ட பயிற்சி.">A guided practice focused on awareness of the seven chakra centres.</p></div>
+  <div class="card"><h3 data-en="Subconscious Activation" data-ta="ஆழ்மன செயல்படுத்தல்">Subconscious Activation</h3><p data-en="Explore practices intended to develop deeper awareness of subconscious patterns." data-ta="ஆழ்மனத்தில் உள்ள எண்ண வடிவங்களைப் பற்றிய ஆழமான விழிப்புணர்வை வளர்க்கும் பயிற்சிகள்.">Explore practices intended to develop deeper awareness of subconscious patterns.</p></div>
+  <div class="card"><h3 data-en="Forgiveness Practice" data-ta="மன்னிப்பு பயிற்சி">Forgiveness Practice</h3><p data-en="Practise asking for forgiveness and offering forgiveness as part of an inner-reflection process." data-ta="உள்ளார்ந்த சிந்தனைப் பயிற்சியின் ஒரு பகுதியாக மன்னிப்பு கேட்பதும் மன்னிப்பதும் பற்றிய பயிற்சி.">Practise asking for forgiveness and offering forgiveness as part of an inner-reflection process.</p></div>
+  <div class="card"><h3 data-en="Inner Child Healing" data-ta="உள் குழந்தை குணப்படுத்தல்">Inner Child Healing</h3><p data-en="A reflective practice focused on unresolved emotional experiences from earlier stages of life." data-ta="வாழ்க்கையின் முந்தைய கட்டங்களில் தீராத உணர்வுகளைப் பற்றி சிந்தித்து செயல்படும் பயிற்சி.">A reflective practice focused on unresolved emotional experiences from earlier stages of life.</p></div>
+  <div class="card"><h3 data-en="Past-Life Negative Clearance" data-ta="முந்தைய பிறவி எதிர்மறை நீக்கம்">Past-Life Negative Clearance</h3><p data-en="A spiritual practice presented by the program for working with perceived negative patterns associated with past-life beliefs." data-ta="முந்தைய பிறவி நம்பிக்கைகளுடன் தொடர்புபடுத்தப்படும் எதிர்மறை வடிவங்களைப் பற்றி செயல்படும் ஆன்மீகப் பயிற்சி.">A spiritual practice presented by the program for working with perceived negative patterns associated with past-life beliefs.</p></div>
+  <div class="card"><h3 data-en="Mahashakthi Trigger Practice" data-ta="மஹாசக்தி ட்ரிகர் பயிற்சி">Mahashakthi Trigger Practice</h3><p data-en="After the activation practice, participants are taught how to recall the practice using a designated trigger point, according to the program method." data-ta="செயல்படுத்தும் பயிற்சிக்குப் பிறகு, திட்டத்தில் கற்பிக்கப்படும் முறையின்படி குறிப்பிட்ட ட்ரிகர் பாயிண்ட் மூலம் பயிற்சியை நினைவுகூரும் முறை கற்றுக்கொடுக்கப்படுகிறது.">After the activation practice, participants are taught how to recall the practice using a designated trigger point, according to the program method.</p></div>
+ </div>
+
+ <div class="action"><a class="btn" href="deekshai.html" data-en="Know More About Mahashakthi →" data-ta="மஹாசக்தி பற்றி மேலும் அறிய →">Know More About Mahashakthi →</a></div>
+</section>
+
+<!-- 4. MONEY CLASS -->
+<section class="section alt">
+ <div class="section-inner">
+  <div class="section-head">
+   <span class="pill" data-en="MONEY CLASS" data-ta="மணி கிளாஸ்">MONEY CLASS</span>
+   <h2 data-en="Money Mindset & Energy Practice" data-ta="பண மனநிலை & ஆற்றல் பயிற்சி">Money Mindset & Energy Practice</h2>
+   <p data-en="A focused one-day direct class followed by 21 days of online guided practice."
+      data-ta="ஒரு நாள் நேரடி வகுப்பிற்குப் பிறகு 21 நாட்கள் ஆன்லைன் வழிகாட்டுதலுடன் கூடிய பயிற்சி.">
+    A focused one-day direct class followed by 21 days of online guided practice.
+   </p>
+  </div>
+
+  <div class="cards">
+   <div class="card"><h3 data-en="Clear Negative Patterns" data-ta="எதிர்மறை வடிவங்களை தெளிவுபடுத்துதல்">Clear Negative Patterns</h3><p data-en="The class introduces practices for identifying and working with limiting money-related thoughts and negative patterns." data-ta="பணத்துடன் தொடர்புடைய கட்டுப்படுத்தும் எண்ணங்கள் மற்றும் எதிர்மறை வடிவங்களை அடையாளம் கண்டு செயல்படும் பயிற்சிகள் அறிமுகப்படுத்தப்படுகின்றன.">The class introduces practices for identifying and working with limiting money-related thoughts and negative patterns.</p></div>
+   <div class="card"><h3 data-en="Build Positive Energy" data-ta="நேர்மறை ஆற்றலை வளர்த்தல்">Build Positive Energy</h3><p data-en="Develop a more constructive mindset around goals, action and financial growth." data-ta="இலக்குகள், செயல்பாடு மற்றும் நிதி வளர்ச்சி குறித்து மேலும் பயனுள்ள மனநிலையை வளர்த்தல்.">Develop a more constructive mindset around goals, action and financial growth.</p></div>
+   <div class="card"><h3 data-en="1 Day + 21 Days Guidance" data-ta="1 நாள் + 21 நாட்கள் வழிகாட்டுதல்">1 Day + 21 Days Guidance</h3><p data-en="Attend the direct class for the core practice, then continue with 21 days of online practice and guidance." data-ta="முக்கிய பயிற்சிக்காக நேரடி வகுப்பில் கலந்து கொண்டு, பின்னர் 21 நாட்கள் ஆன்லைன் பயிற்சி மற்றும் வழிகாட்டுதலைத் தொடரலாம்.">Attend the direct class for the core practice, then continue with 21 days of online practice and guidance.</p></div>
+ </div>
+
+ <div class="action"><a class="btn" href="moneyclass.html" data-en="Know More →" data-ta="மேலும் அறிய →">Know More →</a></div>
+ </div>
+</section>
+
+<!-- 5. YOUTUBE -->
+<section class="section">
+ <div class="section-head">
+  <span class="pill" data-en="WATCH & LEARN" data-ta="பார்த்து கற்றுக்கொள்ளுங்கள்">WATCH & LEARN</span>
+  <h2 data-en="Learn from Shiek Guru" data-ta="Shiek Guru அவர்களின் விளக்கங்களை கேளுங்கள்">Learn from Shiek Guru</h2>
+  <p data-en="Two important videos can be highlighted here so visitors can learn more before exploring the programs."
+     data-ta="நிகழ்ச்சிகளைப் பற்றி மேலும் அறிந்துகொள்ளும் முன் பார்வையாளர்கள் பார்க்கக்கூடிய இரண்டு முக்கிய வீடியோக்களை இங்கே வைக்கலாம்.">
+   Two important videos can be highlighted here so visitors can learn more before exploring the programs.
+  </p>
+ </div>
+
+ <div class="video-grid">
+  <div class="video-card">
+   <div class="video-thumb">▶</div>
+   <div class="video-body">
+    <h3 data-en="Mind Power & Subconscious Mind" data-ta="மன சக்தி & ஆழ்மனம்">Mind Power & Subconscious Mind</h3>
+    <p data-en="Replace this button URL with the exact YouTube video URL you want to feature." data-ta="நீங்கள் காட்ட விரும்பும் சரியான YouTube வீடியோ URL-ஐ இந்த பொத்தானில் சேர்க்கவும்.">Replace this button URL with the exact YouTube video URL you want to feature.</p>
+    <a class="btn" href="https://www.youtube.com/" target="_blank" data-en="Watch on YouTube →" data-ta="YouTube-ல் பார்க்க →">Watch on YouTube →</a>
+   </div>
+  </div>
+
+  <div class="video-card">
+   <div class="video-thumb">▶</div>
+   <div class="video-body">
+    <h3 data-en="Inner Transformation" data-ta="உள்ளார்ந்த மாற்றம்">Inner Transformation</h3>
+    <p data-en="Replace this button URL with the second exact YouTube video URL." data-ta="இரண்டாவது முக்கிய YouTube வீடியோ URL-ஐ இந்த பொத்தானில் சேர்க்கவும்.">Replace this button URL with the second exact YouTube video URL.</p>
+    <a class="btn" href="https://www.youtube.com/" target="_blank" data-en="Watch on YouTube →" data-ta="YouTube-ல் பார்க்க →">Watch on YouTube →</a>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 6. DETAILS -->
+<section class="section alt">
+ <div class="section-inner">
+  <div class="section-head">
+   <span class="pill" data-en="ABOUT ARITHUYIL ARIVOM" data-ta="அறிதுயில் அறிவோம் பற்றி">ABOUT ARITHUYIL ARIVOM</span>
+   <h2 data-en="Arithuyil Arivom Details" data-ta="அறிதுயில் அறிவோம் முழு விவரங்கள்">Arithuyil Arivom Details</h2>
+ </div>
+
+ <div class="details">
+  <h3 data-en="Understand Your Mind. Transform Your Life." data-ta="உங்கள் மனதைப் புரிந்துகொள்ளுங்கள். உங்கள் வாழ்க்கையை மாற்றுங்கள்.">Understand Your Mind. Transform Your Life.</h3>
+  <p data-en="Arithuyil Arivom, also presented as TrueSelf Mind Gym, brings together practical learning around mind awareness, subconscious patterns, self-practice, meditation, healing-oriented practices and inner transformation."
+     data-ta="அறிதுயில் அறிவோம், ட்ரூசெல்ஃப் மைண்ட் ஜிம் என்ற பெயரிலும் வழங்கப்படுகிறது. மன விழிப்புணர்வு, ஆழ்மன வடிவங்கள், சுயப் பயிற்சி, தியானம், ஹீலிங் சார்ந்த பயிற்சிகள் மற்றும் உள்ளார்ந்த மாற்றம் ஆகியவற்றை மையமாகக் கொண்ட நடைமுறை கற்றலை இது ஒருங்கிணைக்கிறது.">
+   Arithuyil Arivom, also presented as TrueSelf Mind Gym, brings together practical learning around mind awareness, subconscious patterns, self-practice, meditation, healing-oriented practices and inner transformation.
+  </p>
+  <p data-en="The learning journey can begin with the free introduction class. Visitors can then explore the 8-week class, Mahashakthi program, Money Class and other offerings according to their interests."
+     data-ta="கற்றல் பயணத்தை இலவச அறிமுக வகுப்பிலிருந்து தொடங்கலாம். அதன் பின்னர் 8 வார வகுப்பு, மஹாசக்தி பயிற்சி, மணி கிளாஸ் மற்றும் பிற நிகழ்ச்சிகளை அவர்களின் விருப்பத்திற்கு ஏற்ப அறிந்துகொள்ளலாம்.">
+   The learning journey can begin with the free introduction class. Visitors can then explore the 8-week class, Mahashakthi program, Money Class and other offerings according to their interests.
+  </p>
+  <div class="action"><a class="btn" href="about.html" data-en="Know More About Us →" data-ta="எங்களைப் பற்றி மேலும் அறிய →">Know More About Us →</a></div>
+ </div>
+ </div>
+</section>
+
+<footer>
+ <div class="footer-grid">
+  <div>
+   <h3 data-en="Arithuyil Arivom" data-ta="அறிதுயில் அறிவோம்">Arithuyil Arivom</h3>
+   <p data-en="TrueSelf Mind Gym — practical learning for mind awareness and inner transformation."
+      data-ta="ட்ரூசெல்ஃப் மைண்ட் ஜிம் — மன விழிப்புணர்வு மற்றும் உள்ளார்ந்த மாற்றத்திற்கான நடைமுறை கற்றல்.">
+    TrueSelf Mind Gym — practical learning for mind awareness and inner transformation.
+   </p>
+  </div>
+  <div>
+   <h3 data-en="Contact" data-ta="தொடர்பு">Contact</h3>
+   <p>98408 51295</p>
+   <p>Adambakkam, Chennai</p>
+  </div>
+  <div>
+   <h3 data-en="Quick Links" data-ta="விரைவு இணைப்புகள்">Quick Links</h3>
+   <ul>
+    <li><a href="freeclass.html" style="color:#b8c3d8" data-en="Join Free Class" data-ta="இலவச வகுப்பில் இணையுங்கள்">Join Free Class</a></li>
+    <li><a href="8week.html" style="color:#b8c3d8" data-en="8 Week Class" data-ta="8 வார வகுப்பு">8 Week Class</a></li>
+    <li><a href="deekshai.html" style="color:#b8c3d8" data-en="Mahashakthi / Deekshai" data-ta="மஹாசக்தி / தீக்ஷை">Mahashakthi / Deekshai</a></li>
+   </ul>
+  </div>
+ </div>
+ <div class="copyright">© 2026 Arithuyil Arivom. All rights reserved.</div>
+</footer>
+
+<!-- LANGUAGE SWITCH -->
+<div class="lang-switch">
+ <button id="enBtn" class="active">EN</button>
+ <button id="taBtn">தமிழ்</button>
+</div>
 
 <script>
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const sliderTrack =
-    document.getElementById("sliderTrack");
-
-const slides =
-    document.querySelectorAll(".slide");
-
-const dots =
-    document.querySelectorAll(".slider-dot");
-
-const nextBtn =
-    document.getElementById("nextBtn");
-
-const prevBtn =
-    document.getElementById("prevBtn");
-
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-let currentSlide = 0;
-
-let autoSlideTimer = null;
-
-
-
-/* =========================================================
-   SHOW SLIDE
-========================================================= */
+/* =========================
+   SLIDER
+========================= */
+const track=document.getElementById('sliderTrack');
+const slides=document.querySelectorAll('.slide');
+const dots=document.querySelectorAll('.slider-dot');
+const nextBtn=document.getElementById('nextBtn');
+const prevBtn=document.getElementById('prevBtn');
+const hero=document.querySelector('.hero-slider');
+let currentSlide=0;
+let timer=null;
 
 function showSlide(index){
-
-    if(index < 0){
-
-        index =
-            slides.length - 1;
-    }
-
-
-    if(index >= slides.length){
-
-        index = 0;
-    }
-
-
-    currentSlide = index;
-
-
-    sliderTrack.style.transform =
-        "translateX(-" +
-        (currentSlide * 100) +
-        "%)";
-
-
-    dots.forEach(
-        function(dot,index){
-
-            dot.classList.toggle(
-                "active",
-                index === currentSlide
-            );
-
-        }
-    );
-
+  if(index<0) index=slides.length-1;
+  if(index>=slides.length) index=0;
+  currentSlide=index;
+  track.style.transform=`translateX(-${index*100}%)`;
+  dots.forEach((d,i)=>d.classList.toggle('active',i===index));
 }
-
-
-
-/* =========================================================
-   NEXT
-========================================================= */
-
-function nextSlide(){
-
-    showSlide(
-        currentSlide + 1
-    );
-
-}
-
-
-
-/* =========================================================
-   PREVIOUS
-========================================================= */
-
-function previousSlide(){
-
-    showSlide(
-        currentSlide - 1
-    );
-
-}
-
-
-
-/* =========================================================
-   BUTTON EVENTS
-========================================================= */
-
-nextBtn.addEventListener(
-    "click",
-    function(){
-
-        nextSlide();
-
-        restartAutoSlide();
-
-    }
-);
-
-
-prevBtn.addEventListener(
-    "click",
-    function(){
-
-        previousSlide();
-
-        restartAutoSlide();
-
-    }
-);
-
-
-
-/* =========================================================
-   DOT EVENTS
-========================================================= */
-
-dots.forEach(
-    function(dot,index){
-
-        dot.addEventListener(
-            "click",
-            function(){
-
-                showSlide(index);
-
-                restartAutoSlide();
-
-            }
-        );
-
-    }
-);
-
-
-
-/* =========================================================
-   AUTO ROTATION
-========================================================= */
-
-function startAutoSlide(){
-
-    stopAutoSlide();
-
-
-    autoSlideTimer =
-        setInterval(
-            function(){
-
-                nextSlide();
-
-            },
-            5000
-        );
-
-}
-
-
-function stopAutoSlide(){
-
-    if(autoSlideTimer){
-
-        clearInterval(
-            autoSlideTimer
-        );
-
-        autoSlideTimer = null;
-    }
-
-}
-
-
-function restartAutoSlide(){
-
-    stopAutoSlide();
-
-    startAutoSlide();
-
-}
-
-
-
-/* =========================================================
-   DESKTOP HOVER PAUSE
-========================================================= */
-
-const hero =
-    document.querySelector(".hero-slider");
-
-
-hero.addEventListener(
-    "mouseenter",
-    stopAutoSlide
-);
-
-
-hero.addEventListener(
-    "mouseleave",
-    startAutoSlide
-);
-
-
-
-/* =========================================================
-   MOBILE SWIPE
-========================================================= */
-
-let touchStartX = 0;
-
-let touchEndX = 0;
-
-
-hero.addEventListener(
-    "touchstart",
-    function(event){
-
-        touchStartX =
-            event.changedTouches[0].screenX;
-
-        stopAutoSlide();
-
-    },
-    {
-        passive:true
-    }
-);
-
-
-hero.addEventListener(
-    "touchend",
-    function(event){
-
-        touchEndX =
-            event.changedTouches[0].screenX;
-
-
-        const distance =
-            touchEndX - touchStartX;
-
-
-        if(Math.abs(distance) > 45){
-
-            if(distance < 0){
-
-                nextSlide();
-
-            }
-            else{
-
-                previousSlide();
-
-            }
-
-        }
-
-
-        startAutoSlide();
-
-    },
-    {
-        passive:true
-    }
-);
-
-
-
-/* =========================================================
-   INITIAL
-========================================================= */
+function nextSlide(){showSlide(currentSlide+1)}
+function prevSlide(){showSlide(currentSlide-1)}
+function startAuto(){stopAuto();timer=setInterval(nextSlide,5000)}
+function stopAuto(){if(timer){clearInterval(timer);timer=null}}
+nextBtn.addEventListener('click',()=>{nextSlide();startAuto()});
+prevBtn.addEventListener('click',()=>{prevSlide();startAuto()});
+dots.forEach(d=>d.addEventListener('click',()=>{showSlide(Number(d.dataset.slide));startAuto()}));
+hero.addEventListener('mouseenter',stopAuto);
+hero.addEventListener('mouseleave',startAuto);
+
+let touchStartX=0;
+hero.addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0].screenX;stopAuto()},{passive:true});
+hero.addEventListener('touchend',e=>{
+  const distance=e.changedTouches[0].screenX-touchStartX;
+  if(Math.abs(distance)>45){distance<0?nextSlide():prevSlide()}
+  startAuto();
+},{passive:true});
 
 showSlide(0);
+startAuto();
 
-startAutoSlide();
+/* =========================
+   LANGUAGE
+========================= */
+const enBtn=document.getElementById('enBtn');
+const taBtn=document.getElementById('taBtn');
 
+function applyLanguage(lang){
+  document.documentElement.lang=lang==='ta'?'ta':'en';
+  document.body.classList.toggle('tamil',lang==='ta');
 
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    const value=el.getAttribute(lang==='ta'?'data-ta':'data-en');
+    if(!value)return;
+
+    if(el.classList.contains('slide-title')){
+      const parts=value.split('|');
+      el.innerHTML=parts.map((p,i)=>i===0?p:`<span>${p}</span>`).join('');
+    }else{
+      el.textContent=value;
+    }
+  });
+
+  enBtn.classList.toggle('active',lang==='en');
+  taBtn.classList.toggle('active',lang==='ta');
+
+  try{localStorage.setItem('arithuyilLanguage',lang)}catch(e){}
+}
+
+enBtn.addEventListener('click',()=>applyLanguage('en'));
+taBtn.addEventListener('click',()=>applyLanguage('ta'));
+
+let saved='en';
+try{saved=localStorage.getItem('arithuyilLanguage')||'en'}catch(e){}
+applyLanguage(saved);
 </script>
 
-
 </body>
-
 </html>
