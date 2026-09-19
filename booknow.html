@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ta">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>இருக்கையை உறுதிப்படுத்துங்கள் – Arithuyil Arivom</title>
+
+<link rel="icon"
+      type="image/png"
+      href="favicon.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Poppins,Arial,sans-serif;
+    background:linear-gradient(180deg,#f5f7fb,#eef2f7);
+    color:#111827;
+}
+
+/* HEADER */
+
+.header{
+    background:#111;
+    color:#fff;
+    text-align:center;
+    padding:20px 18px;
+}
+
+.header h2{
+    margin:0;
+    font-size:21px;
+}
+
+.header p{
+    margin:5px 0 0;
+    font-size:12px;
+    opacity:.75;
+}
+
+/* MAIN */
+
+.main{
+    width:100%;
+    max-width:560px;
+    margin:35px auto;
+    padding:0 18px 40px;
+}
+
+/* CARD */
+
+.card{
+    background:#fff;
+    border-radius:20px;
+    padding:30px 25px;
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
+}
+
+/* EVENT INFO */
+
+.event-box{
+    text-align:center;
+    background:#f8fafc;
+    border-radius:14px;
+    padding:18px 15px;
+    margin-bottom:25px;
+}
+
+.event-box .small-title{
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:4px;
+}
+
+.event-box h1{
+    margin:0;
+    font-size:24px;
+    line-height:1.35;
+}
+
+.event-date{
+    margin-top:10px;
+    font-size:14px;
+    font-weight:600;
+    color:#374151;
+}
+
+.event-price{
+    margin-top:12px;
+    font-size:18px;
+    font-weight:700;
+}
+
+.event-price span{
+    color:#16a34a;
+}
+
+/* TITLE */
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title h2{
+    margin:0 0 7px;
+    font-size:23px;
+}
+
+.title p{
+    margin:0;
+    color:#6b7280;
+    font-size:13px;
+}
+
+/* FORM */
+
+.form-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:600;
+    font-size:14px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:1px solid #d1d5db;
+    border-radius:11px;
+    font-size:16px;
+    font-family:inherit;
+    outline:none;
+    transition:.2s;
+}
+
+input:focus{
+    border-color:#111;
+    box-shadow:0 0 0 3px rgba(17,17,17,.08);
+}
+
+/* BUTTON */
+
+.continue-btn{
+    width:100%;
+    border:none;
+    background:#111;
+    color:#fff;
+    padding:17px;
+    border-radius:11px;
+    font-size:17px;
+    font-weight:700;
+    font-family:inherit;
+    cursor:pointer;
+    margin-top:6px;
+    transition:.2s;
+}
+
+.continue-btn:hover{
+    transform:translateY(-1px);
+}
+
+.continue-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
+/* REFUND */
+
+.refund-box{
+    margin-top:18px;
+    padding:13px;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    border-radius:10px;
+    text-align:center;
+    color:#166534;
+    font-size:12px;
+    line-height:1.6;
+}
+
+/* SECURITY */
+
+.security{
+    margin-top:15px;
+    text-align:center;
+    color:#64748b;
+    font-size:11px;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .header{
+        padding:17px 15px;
+    }
+
+    .main{
+        margin:20px auto;
+        padding:0 13px 30px;
+    }
+
+    .card{
+        padding:23px 18px;
+        border-radius:17px;
+    }
+
+    .event-box h1{
+        font-size:21px;
+    }
+
+    .title h2{
+        font-size:21px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h2>Arithuyil Arivom</h2>
+
+    <p>
+        உங்கள் ஆழ்மன சக்தியை அறிந்து கொள்ளுங்கள்
+    </p>
+
+</div>
+
+
+<div class="main">
+
+<div class="card">
+
+
+    <!-- EVENT INFORMATION -->
+
+    <div class="event-box">
+
+        <div class="small-title">
+            இலவச நேரடி அனுபவ வகுப்பு
+        </div>
+
+        <h1>
+            உங்கள் இருக்கையை<br>
+            உறுதிப்படுத்துங்கள்
+        </h1>
+
+        <div class="event-date">
+            19 செப்டம்பர் 2026 | சனிக்கிழமை<br>
+            காலை 10:00 மணி – மதியம் 2:00 மணி
+        </div>
+
+        <div class="event-price">
+            இருக்கை உறுதிப்படுத்தல்:
+            <span>₹99 மட்டும்</span>
+        </div>
+
+    </div>
+
+
+    <!-- FORM TITLE -->
+
+    <div class="title">
+
+        <h2>
+            உங்கள் விவரங்களை உள்ளிடுங்கள்
+        </h2>
+
+        <p>
+            தொடர்ந்து சென்று ₹99 செலுத்தி உங்கள் இருக்கையை உறுதிப்படுத்துங்கள்.
+        </p>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <form id="bookingForm">
+
+
+        <!-- NAME -->
+
+        <div class="form-group">
+
+            <label for="name">
+                பெயர்
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="உங்கள் பெயரை உள்ளிடுங்கள்"
+                autocomplete="name"
+                required>
+
+        </div>
+
+
+        <!-- MOBILE -->
+
+        <div class="form-group">
+
+            <label for="mobile">
+                WhatsApp கைபேசி எண்
+            </label>
+
+            <input
+                type="tel"
+                id="mobile"
+                placeholder="10 இலக்க கைபேசி எண்"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+                required>
+
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="form-group">
+
+            <label for="location">
+                நகரம் / மாவட்டம்
+            </label>
+
+            <input
+                type="text"
+                id="location"
+                placeholder="உங்கள் நகரம் அல்லது மாவட்டம்"
+                required>
+
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <button
+            type="submit"
+            id="continueBtn"
+            class="continue-btn">
+
+            தொடர்ந்து ₹99 செலுத்துங்கள் →
+
+        </button>
+
+
+    </form>
+
+
+    <!-- REFUND -->
+
+    <div class="refund-box">
+
+        🔒 <strong>₹99 பாதுகாப்பான இருக்கை உறுதிப்படுத்தல்</strong><br>
+
+        வகுப்பில் கலந்து கொண்ட பிறகு, உங்கள் கோரிக்கையின் பேரில்
+        ₹99 தொகை 100% திருப்பி வழங்கப்படும்.
+
+    </div>
+
+
+    <div class="security">
+
+        உங்கள் விவரங்கள் பாதுகாப்பாக பதிவு செய்யப்படும்.
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- RAZORPAY -->
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", function(){
+
+
+    /* =========================================
+       SUPABASE
+    ========================================= */
+
+    const supabaseUrl =
+        "https://sftfivfmeynceokltbyb.supabase.co";
+
+
+    const supabaseKey =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInN1cCI6InNmdGZpdmZtZXluY2Vva3RieWIiLCJpYXQiOjE3ODg3NTQ2OTIsImV4cCI6MjEwNDMzMDY5Mn0.arKZM1hLDJLjsF23x0l8yTBip0nLGggdG0EOjE3FcQ4";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            supabaseUrl,
+            supabaseKey
+        );
+
+
+    /* =========================================
+       FORM
+    ========================================= */
+
+    const form =
+        document.getElementById("bookingForm");
+
+
+    const continueBtn =
+        document.getElementById("continueBtn");
+
+
+    form.addEventListener("submit", async function(e){
+
+        e.preventDefault();
+
+
+        /* GET DETAILS */
+
+        const name =
+            document.getElementById("name")
+            .value
+            .trim();
+
+
+        const mobile =
+            document.getElementById("mobile")
+            .value
+            .trim();
+
+
+        const location =
+            document.getElementById("location")
+            .value
+            .trim();
+
+
+        /* VALIDATION */
+
+        if(!name || !mobile || !location){
+
+            alert(
+                "தயவுசெய்து அனைத்து விவரங்களையும் நிரப்புங்கள்."
+            );
+
+            return;
+        }
+
+
+        if(!/^[0-9]{10}$/.test(mobile)){
+
+            alert(
+                "சரியான 10 இலக்க கைபேசி எண்ணை உள்ளிடுங்கள்."
+            );
+
+            return;
+        }
+
+
+        /* BUTTON LOCK */
+
+        continueBtn.disabled = true;
+
+        continueBtn.innerText =
+            "செயலாக்கப்படுகிறது...";
+
+
+        try{
+
+
+            /* =====================================
+               STEP 1
+               CREATE REGISTRATION
+            ===================================== */
+
+            const registrationId =
+                crypto.randomUUID();
+
+
+            const {
+                error: registrationError
+            } = await supabaseClient
+
+                .from("registrations")
+
+                .insert([{
+
+                    id:
+                        registrationId,
+
+                    name:
+                        name,
+
+                    mobile:
+                        mobile,
+
+                    location:
+                        location,
+
+                    class_mode:
+                        "offline",
+
+                    status:
+                        "payment_pending"
+
+                }]);
+
+
+            if(registrationError){
+
+                console.error(
+                    "Registration error:",
+                    registrationError
+                );
+
+                throw new Error(
+                    registrationError.message ||
+                    "Unable to save registration."
+                );
+
+            }
+
+
+            /* =====================================
+               STEP 2
+               CREATE RAZORPAY ORDER
+            ===================================== */
+
+            const functionUrl =
+                "https://sftfivfmeynceokltbyb.supabase.co/functions/v1/create-razorpay-order";
+
+
+            const orderResponse =
+                await fetch(
+                    functionUrl,
+                    {
+
+                        method:"POST",
+
+                        headers:{
+
+                            "Content-Type":
+                                "application/json",
+
+                            "apikey":
+                                supabaseKey,
+
+                            "Authorization":
+                                "Bearer " +
+                                supabaseKey
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                registration_id:
+                                    registrationId
+
+                            })
+
+                    }
+                );
+
+
+            const orderData =
+                await orderResponse.json();
+
+
+            if(
+                !orderResponse.ok ||
+                !orderData.success
+            ){
+
+                console.error(
+                    "Order creation error:",
+                    orderData
+                );
+
+                throw new Error(
+                    orderData.error ||
+                    "Unable to create payment order."
+                );
+
+            }
+
+
+            /* =====================================
+               STEP 3
+               RAZORPAY
+            ===================================== */
+
+            const options = {
+
+                key:
+                    orderData.key_id,
+
+                amount:
+                    orderData.amount,
+
+                currency:
+                    orderData.currency,
+
+                name:
+                    "Arithuyil Arivom",
+
+                description:
+                    "இலவச அனுபவ வகுப்பு - ₹99",
+
+                order_id:
+                    orderData.order_id,
+
+
+                prefill:{
+
+                    name:
+                        name,
+
+                    contact:
+                        mobile
+
+                },
+
+
+                notes:{
+
+                    registration_id:
+                        registrationId,
+
+                    registration_no:
+                        orderData.registration_no,
+
+                    event:
+                        "Manifestation Free Experience Class"
+
+                },
+
+
+                theme:{
+
+                    color:
+                        "#111111"
+
+                },
+
+
+                /* =================================
+                   PAYMENT SUCCESS
+                ================================= */
+
+                handler:
+                    async function(response){
+
+                        try{
+
+
+                            const verifyUrl =
+                                "https://sftfivfmeynceokltbyb.supabase.co/functions/v1/verify-razorpay-payment";
+
+
+                            const verifyResponse =
+                                await fetch(
+                                    verifyUrl,
+                                    {
+
+                                        method:"POST",
+
+                                        headers:{
+
+                                            "Content-Type":
+                                                "application/json",
+
+                                            "apikey":
+                                                supabaseKey,
+
+                                            "Authorization":
+                                                "Bearer " +
+                                                supabaseKey
+
+                                        },
+
+
+                                        body:
+                                            JSON.stringify({
+
+                                                registration_id:
+                                                    registrationId,
+
+                                                razorpay_order_id:
+                                                    response.razorpay_order_id,
+
+                                                razorpay_payment_id:
+                                                    response.razorpay_payment_id,
+
+                                                razorpay_signature:
+                                                    response.razorpay_signature
+
+                                            })
+
+                                    }
+                                );
+
+
+                            const verifyData =
+                                await verifyResponse.json();
+
+
+                            if(
+                                !verifyResponse.ok ||
+                                !verifyData.success
+                            ){
+
+                                throw new Error(
+                                    verifyData.error ||
+                                    "Payment verification failed."
+                                );
+
+                            }
+
+
+                            /* =================================
+                               SAVE SESSION DATA
+                            ================================= */
+
+                            sessionStorage.setItem(
+                                "registration_id",
+                                registrationId
+                            );
+
+
+                            sessionStorage.setItem(
+                                "registration_no",
+                                orderData.registration_no
+                            );
+
+
+                            sessionStorage.setItem(
+                                "razorpay_payment_id",
+                                response.razorpay_payment_id
+                            );
+
+
+                            sessionStorage.setItem(
+                                "customer_name",
+                                name
+                            );
+
+
+                            sessionStorage.setItem(
+                                "customer_mobile",
+                                mobile
+                            );
+
+
+                            sessionStorage.setItem(
+                                "customer_location",
+                                location
+                            );
+
+
+                            sessionStorage.setItem(
+                                "customer_class_mode",
+                                "offline"
+                            );
+
+
+                            sessionStorage.setItem(
+                                "selected_language",
+                                "ta"
+                            );
+
+
+                            /* =================================
+                               THANK YOU
+                            ================================= */
+
+                            window.location.href =
+                                "/thankyou";
+
+
+                        }
+                        catch(error){
+
+                            console.error(
+                                "Payment verification error:",
+                                error
+                            );
+
+
+                            alert(
+                                "கட்டணம் பெறப்பட்டது. ஆனால் சரிபார்ப்பு நிறைவு பெறவில்லை. தயவுசெய்து ஆதரவு எண்ணைத் தொடர்புகொள்ளுங்கள்."
+                            );
+
+
+                            continueBtn.disabled =
+                                false;
+
+
+                            continueBtn.innerText =
+                                "தொடர்ந்து ₹99 செலுத்துங்கள் →";
+
+                        }
+
+                    },
+
+
+                /* =================================
+                   PAYMENT CLOSED
+                ================================= */
+
+                modal:{
+
+                    ondismiss:function(){
+
+                        continueBtn.disabled =
+                            false;
+
+                        continueBtn.innerText =
+                            "தொடர்ந்து ₹99 செலுத்துங்கள் →";
+
+                    }
+
+                }
+
+            };
+
+
+            const razorpay =
+                new Razorpay(options);
+
+
+            /* PAYMENT FAILED */
+
+            razorpay.on(
+                "payment.failed",
+                function(response){
+
+                    console.error(
+                        "Payment failed:",
+                        response.error
+                    );
+
+
+                    alert(
+                        "கட்டணம் தோல்வியடைந்தது. தயவுசெய்து மீண்டும் முயற்சிக்கவும்."
+                    );
+
+
+                    continueBtn.disabled =
+                        false;
+
+
+                    continueBtn.innerText =
+                        "தொடர்ந்து ₹99 செலுத்துங்கள் →";
+
+                }
+            );
+
+
+            /* OPEN PAYMENT */
+
+            razorpay.open();
+
+
+        }
+        catch(error){
+
+            console.error(
+                "Registration/payment error:",
+                error
+            );
+
+
+            alert(
+                error.message ||
+                "ஏதோ ஒரு சிக்கல் ஏற்பட்டுள்ளது. தயவுசெய்து மீண்டும் முயற்சிக்கவும்."
+            );
+
+
+            continueBtn.disabled =
+                false;
+
+
+            continueBtn.innerText =
+                "தொடர்ந்து ₹99 செலுத்துங்கள் →";
+
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>
