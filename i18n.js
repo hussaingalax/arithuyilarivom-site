@@ -52,6 +52,39 @@ const I18N = {
 
     regularPrice: 'Regular Price',
 
+whyText:
+  'Pournami is presented as a special time for inward attention and reflective practice. This guided session is structured to help participants slow down, settle the mind and create a dedicated space for meditation.',
+
+benefit1:
+  'Guided relaxation and meditation practice.',
+
+benefit2:
+  'A dedicated environment for calm and reflection.',
+
+benefit3:
+  'Focused breathing, awareness and inner stillness practices.',
+
+benefit4:
+  'Online participation through Zoom or direct participation at Adambakkam.',
+
+currentProgram:
+  'Current Program',
+
+currentProgramTitle:
+  'Arithuyil Arivom Pournami Dhyanam',
+
+currentProgramDate:
+  'Saturday, 26 September 2026 • 7:30 PM',
+
+currentProgramMode:
+  'Online via Zoom or Live at RS Plaza, Adambakkam.',
+
+testimonialSub:
+  'Three YouTube testimonial slots are managed from the Admin Panel.',
+
+posterAlt:
+  'Pournami meditation reference poster',
+    
     filled: 'slots filled',
 
     slots: 'slots',
@@ -458,6 +491,39 @@ cancel: 'ரத்து செய்க',
     experience:
       'உங்கள் அனுபவம்',
 
+whyText:
+  'பௌர்ணமி என்பது உள்ளார்ந்த கவனம் மற்றும் அமைதியான சிந்தனைக்கான சிறப்பு நேரமாக கருதப்படுகிறது. இந்த வழிகாட்டப்பட்ட தியானப் பயிற்சி மனதை மெதுவாக அமைதிப்படுத்தி, தியானத்திற்கான தனிப்பட்ட சூழலை உருவாக்க உதவுகிறது.',
+
+benefit1:
+  'வழிகாட்டப்பட்ட மனத் தளர்வு மற்றும் தியானப் பயிற்சி.',
+
+benefit2:
+  'அமைதி மற்றும் சிந்தனைக்கான சிறப்பான சூழல்.',
+
+benefit3:
+  'கவனமான சுவாசம், விழிப்புணர்வு மற்றும் உள்ளார்ந்த அமைதிக்கான பயிற்சிகள்.',
+
+benefit4:
+  'Zoom மூலம் ஆன்லைனில் அல்லது ஆதம்பாக்கத்தில் நேரடியாக கலந்து கொள்ளும் வசதி.',
+
+currentProgram:
+  'தற்போதைய நிகழ்ச்சி',
+
+currentProgramTitle:
+  'அறிதுயில் அறிவோம் பௌர்ணமி தியானம்',
+
+currentProgramDate:
+  'சனிக்கிழமை, 26 செப்டம்பர் 2026 • மாலை 7:30 மணி',
+
+currentProgramMode:
+  'Zoom மூலம் ஆன்லைனில் அல்லது ஆதம்பாக்கம் RS Plaza-வில் நேரடியாக.',
+
+testimonialSub:
+  'மூன்று YouTube பங்கேற்பாளர் அனுபவ வீடியோக்களை நிர்வாகப் பகுதியில் நிர்வகிக்கலாம்.',
+
+posterAlt:
+  'பௌர்ணமி தியான நிகழ்ச்சி குறிப்பு போஸ்டர்',
+    
     map:
       'இருப்பிடத்தைப் பார்க்க',
 
