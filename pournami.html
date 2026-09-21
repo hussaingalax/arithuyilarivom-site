@@ -15,8 +15,203 @@ const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_
 function toast(msg,ok=true){const el=document.getElementById('toast');el.innerHTML=`<div class="status ${ok?'success':'error'}">${msg}</div>`;setTimeout(()=>el.innerHTML='',4000)}
 function safeEmbed(url){try{const u=new URL(url);if(u.hostname.includes('youtube.com')){let id=u.searchParams.get('v');return id?`https://www.youtube.com/embed/${id}`:url}if(u.hostname==='youtu.be'){return `https://www.youtube.com/embed/${u.pathname.slice(1)}`}return ''}catch{return ''}}
 function renderVideos(){const urls=Array.isArray(program?.testimonial_urls)?program.testimonial_urls:[];document.getElementById('videos').innerHTML=[0,1,2].map(i=>{const e=safeEmbed(urls[i]||'');return `<div class="card"><div class="video">${e?`<iframe src="${e}" title="Testimonial ${i+1}" loading="lazy" allowfullscreen></iframe>`:`<div class="video-placeholder">YouTube testimonial ${i+1}<br><span class="small">Admin can add the video link.</span></div>`}</div></div>`}).join('')}
-function renderOffers(){if(!program){document.getElementById('offersGrid').innerHTML='';return}const tiers=Array.isArray(program.offer_tiers)?program.offer_tiers:[];const cards=[];tiers.forEach((x,i)=>{if(!x || Number(x.slots)<=0)return;cards.push(`<div class="offer" data-tier="${i}"><span class="badge">${i===0?'EARLY LAUNCH':'NEXT OFFER'}</span><h3>Online</h3><div><span class="old">₹${program.online_regular_price}</span><span class="price">₹${x.price}</span></div><div class="slots" id="slot-${i}">Loading slots...</div><button class="cta full" onclick="startBooking('online',${i})" data-i18n="book">Book Now</button></div>`)});cards.push(`<div class="offer"><span class="badge">REGULAR</span><h3>Online</h3><div><span class="old">₹${program.online_regular_price}</span><span class="price">₹${program.online_regular_price}</span></div><div class="slots">After launch offers</div><button class="cta full" onclick="startBooking('online',null)" data-i18n="book">Book Now</button></div>`);cards.push(`<div class="offer"><span class="badge">LIVE</span><h3>Adambakkam Centre</h3><div><span class="old">₹${program.offline_regular_price}</span><span class="price">₹${program.offline_offer_price}</span></div><div class="slots">Live / Offline</div><button class="cta full" onclick="startBooking('offline',-1)" data-i18n="book">Book Now</button></div>`);document.getElementById('offersGrid').innerHTML=cards.join('');refreshSlots()}
 
+async function renderOffers() {
+
+  if (!program) {
+    document.getElementById('offersGrid').innerHTML = '';
+    return;
+  }
+
+  // Get current program offers from database
+  const {
+    data: offers,
+    error
+  } = await sb
+    .from('meditation_program_offers')
+    .select('*')
+    .eq('program_id', program.id)
+    .eq('active', true)
+    .order('mode', { ascending: true })
+    .order('display_order', { ascending: true });
+
+  if (error) {
+    console.error('Offer loading error:', error);
+    document.getElementById('offersGrid').innerHTML =
+      '<p class="muted">Unable to load offers.</p>';
+    return;
+  }
+
+  const onlineOffers = (offers || [])
+    .filter(o =>
+      o.mode === 'online' &&
+      Number(o.total_slots) > 0
+    )
+    .sort(
+      (a, b) =>
+        Number(a.display_order) -
+        Number(b.display_order)
+    );
+
+  const offlineOffer = (offers || [])
+    .find(o =>
+      o.mode === 'offline' &&
+      Number(o.total_slots) > 0
+    );
+
+  const cards = [];
+
+  // -------------------------------------------------------
+  // ONLINE OFFER CARDS
+  // -------------------------------------------------------
+
+  onlineOffers.forEach((offer, index) => {
+
+    const tierIndex =
+      Number(offer.display_order) - 1;
+
+    let badge = 'OFFER';
+
+    if (index === 0) {
+      badge = 'EARLY LAUNCH';
+    } else if (index === 1) {
+      badge = 'NEXT OFFER';
+    } else if (index === 2) {
+      badge = 'FINAL OFFER';
+    }
+
+    cards.push(`
+      <div class="offer" data-tier="${tierIndex}">
+
+        <span class="badge">
+          ${badge}
+        </span>
+
+        <h3>Online</h3>
+
+        <div>
+          <span class="old">
+            ₹${program.online_regular_price}
+          </span>
+
+          <span class="price">
+            ₹${Number(offer.price)}
+          </span>
+        </div>
+
+        <div
+          class="slots"
+          id="slot-${tierIndex}"
+        >
+          Loading slots...
+        </div>
+
+        <button
+          class="cta full"
+          onclick="startBooking('online',${tierIndex})"
+          data-i18n="book"
+        >
+          Book Now
+        </button>
+
+      </div>
+    `);
+  });
+
+  // -------------------------------------------------------
+  // REGULAR ONLINE PRICE
+  // -------------------------------------------------------
+
+  cards.push(`
+    <div class="offer">
+
+      <span class="badge">
+        REGULAR
+      </span>
+
+      <h3>Online</h3>
+
+      <div>
+        <span class="old">
+          ₹${program.online_regular_price}
+        </span>
+
+        <span class="price">
+          ₹${program.online_regular_price}
+        </span>
+      </div>
+
+      <div class="slots">
+        After launch offers
+      </div>
+
+      <button
+        class="cta full"
+        onclick="startBooking('online',null)"
+        data-i18n="book"
+      >
+        Book Now
+      </button>
+
+    </div>
+  `);
+
+  // -------------------------------------------------------
+  // OFFLINE OFFER
+  // -------------------------------------------------------
+
+  if (offlineOffer) {
+
+    cards.push(`
+      <div class="offer">
+
+        <span class="badge">
+          LIVE
+        </span>
+
+        <h3>Adambakkam Centre</h3>
+
+        <div>
+          <span class="old">
+            ₹${program.offline_regular_price}
+          </span>
+
+          <span class="price">
+            ₹${Number(offlineOffer.price)}
+          </span>
+        </div>
+
+        <div
+          class="slots"
+          id="slot-offline"
+        >
+          Loading slots...
+        </div>
+
+        <button
+          class="cta full"
+          onclick="startBooking('offline',-1)"
+          data-i18n="book"
+        >
+          Book Now
+        </button>
+
+      </div>
+    `);
+  }
+
+  document.getElementById('offersGrid').innerHTML =
+    cards.join('');
+
+  // Refresh actual used/available slots
+  refreshSlots();
+
+  // Refresh translated dynamic buttons
+  if (typeof setLang === 'function') {
+    setLang(currentLang);
+  }
+}
+  
 async function refreshSlots() {
   if (!program?.id) return;
 
