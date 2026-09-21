@@ -759,13 +759,22 @@ async function startBooking(mode, tierIndex) {
           font-size: 24px;
         }
 
-        .booking-input {
-          padding: 13px;
-        }
+      .booking-input {
+  padding: 13px;
+}
 
-      }
 
-    `;
+/* Prevent slot loading flicker */
+
+.slot-placeholder {
+  display: inline-block;
+  width: 100%;
+  min-height: 18px;
+  visibility: hidden;
+}
+
+}
+`;
 
     document.head.appendChild(style);
   }
