@@ -34,7 +34,117 @@ function editProgram(p){document.getElementById('programId').value=p.id;document
     : '🔴 Not Published';document.getElementById('map').value=p.map_url||'';document.getElementById('open').value=String(p.registration_open);const y=p.testimonial_urls||[];document.getElementById('yt1').value=y[0]||'';document.getElementById('yt2').value=y[1]||'';document.getElementById('yt3').value=y[2]||'';scrollTo({top:0,behavior:'smooth'})}
 document.getElementById('programForm').addEventListener('submit',async e=>{e.preventDefault();let tiers;try{tiers=JSON.parse(document.getElementById('tiers').value)}catch{alert('Invalid Offer Tiers JSON');return}const payload={program_type:document.getElementById('type').value,title_en:document.getElementById('titleEn').value,title_ta:document.getElementById('titleTa').value,program_date:document.getElementById('date').value,start_time:document.getElementById('time').value,online_regular_price:Number(document.getElementById('onlineRegular').value)||999,offline_regular_price:1499,offline_offer_price:Number(document.getElementById('offlineOffer').value)||499,offer_tiers:tiers,offer_timer_minutes:Number(document.getElementById('timer').value)||5,zoom_url:document.getElementById('zoom').value||null,map_url:document.getElementById('map').value||null,registration_open:document.getElementById('open').value==='true',status:document.getElementById('open').value==='true'?'published':'draft',testimonial_urls:[document.getElementById('yt1').value,document.getElementById('yt2').value,document.getElementById('yt3').value].filter(Boolean)};const id=document.getElementById('programId').value;const r=id?await sb.from('meditation_programs').update(payload).eq('id',id):await sb.from('meditation_programs').insert(payload);if(r.error)alert(r.error.message);else{alert('Saved');e.target.reset();document.getElementById('programId').value='';document.getElementById('map').value=MEDITATION_CONFIG.DEFAULT_MAP_URL;loadPrograms()}});
 async function loadBookings(){const {data}=await sb.from('meditation_bookings').select('*,meditation_programs(title_en)').order('created_at',{ascending:false}).limit(300);document.getElementById('bookings').innerHTML=(data||[]).map(b=>`<tr><td>${b.booking_no}</td><td>${b.meditation_programs?.title_en||''}</td><td>${b.name}<br>${b.mobile}</td><td>${b.mode}</td><td>₹${b.offer_price}</td><td>${b.payment_status}<br>${b.reservation_status}</td><td><select class="input" style="padding:7px" onchange="setAttendance('${b.id}',this.value)"><option ${b.attendance_status==='pending'?'selected':''}>pending</option><option ${b.attendance_status==='attended'?'selected':''}>attended</option><option ${b.attendance_status==='absent'?'selected':''}>absent</option></select></td></tr>`).join('')}
-async function setAttendance(id,status){await sb.from('meditation_bookings').update({attendance_status:status}).eq('id',id);loadBookings()}
+
+async function saveClassLink() {
+  const id = document.getElementById('programId').value;
+  const link = document.getElementById('zoom').value.trim();
+
+  if (!id) {
+    alert('Please select a program first.');
+    return;
+  }
+
+  if (!link) {
+    alert('Please enter the class link.');
+    return;
+  }
+
+  const { error } = await sb
+    .from('meditation_programs')
+    .update({
+      class_link: link,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert('Class link saved.');
+  loadPrograms();
+}
+
+async function publishClassLink() {
+  const id = document.getElementById('programId').value;
+  const link = document.getElementById('zoom').value.trim();
+
+  if (!id) {
+    alert('Please select a program first.');
+    return;
+  }
+
+  if (!link) {
+    alert('Please save a class link first.');
+    return;
+  }
+
+  if (!confirm(
+    'Publish the class link now?\n\nOnly eligible confirmed online members should receive access.'
+  )) {
+    return;
+  }
+
+  const { error } = await sb
+    .from('meditation_programs')
+    .update({
+      class_link: link,
+      class_link_published: true,
+      class_link_published_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  document.getElementById('classLinkStatus').innerHTML =
+    `🟢 Published<br><small>${new Date().toLocaleString()}</small>`;
+
+  alert('Class link published successfully.');
+  loadPrograms();
+}
+
+async function hideClassLink() {
+  const id = document.getElementById('programId').value;
+
+  if (!id) {
+    alert('Please select a program first.');
+    return;
+  }
+
+  if (!confirm('Hide the class link from members?')) {
+    return;
+  }
+
+  const { error } = await sb
+    .from('meditation_programs')
+    .update({
+      class_link_published: false,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  document.getElementById('classLinkStatus').innerHTML =
+    '🔴 Not Published';
+
+  alert('Class link hidden.');
+  loadPrograms();
+}
+
+document.getElementById('saveClassLink').onclick = saveClassLink;
+document.getElementById('publishClassLink').onclick = publishClassLink;
+document.getElementById('hideClassLink').onclick = hideClassLink;
+  
+  async function setAttendance(id,status){await sb.from('meditation_bookings').update({attendance_status:status}).eq('id',id);loadBookings()}
 async function loadLeads(){const {data}=await sb.from('meditation_leads').select('*').order('created_at',{ascending:false}).limit(300);document.getElementById('leads').innerHTML=(data||[]).map(x=>`<tr><td>${x.name}</td><td>${x.mobile}</td><td>${x.language}</td><td>${new Date(x.created_at).toLocaleString()}</td></tr>`).join('')}
 check();
 </script></body></html>
