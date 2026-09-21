@@ -46,6 +46,13 @@ posterAlt: 'Pournami meditation reference poster',
     offerTitle:
       'Choose Your Booking',
 
+    bookingTitle: 'Enter Your Details',
+bookingSubtitle: 'Enter your details to continue to the program information.',
+email: 'Email',
+location: 'Location',
+optional: 'Optional',
+continueBooking: 'Continue',
+
     offerSub:
       'Launch pricing is controlled by the Admin and may change for future programs.',
 
@@ -442,6 +449,13 @@ posterAlt: 'பௌர்ணமி தியான நிகழ்ச்சி �
 
     earlyLaunch:
       'தொடக்கச் சலுகை',
+
+    bookingTitle: 'மேலும் விவரங்களைப் பார்க்க',
+bookingSubtitle: 'நிகழ்ச்சி விவரங்களைத் தொடர்ந்து பார்க்க உங்கள் விவரங்களை உள்ளிடுங்கள்.',
+email: 'மின்னஞ்சல்',
+location: 'இருப்பிடம்',
+optional: 'விருப்பம்',
+continueBooking: 'தொடரவும்',
 
     nextOffer:
       'அடுத்த சலுகை',
