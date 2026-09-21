@@ -213,9 +213,13 @@ async function renderOffers() {
 }
   
 async function refreshSlots() {
+
   if (!program?.id) return;
 
-  const { data, error } = await sb.rpc(
+  const {
+    data,
+    error
+  } = await sb.rpc(
     'get_meditation_offer_slots',
     {
       p_program_id: program.id
@@ -230,22 +234,41 @@ async function refreshSlots() {
   const offers = data || [];
 
   offers.forEach((offer) => {
-    if (offer.mode !== 'online') return;
-
-    const tierIndex = Number(offer.display_order) - 1;
-    const el = document.getElementById(`slot-${tierIndex}`);
-
-    if (!el) return;
 
     const used =
       Number(offer.total_slots) -
       Number(offer.available_slots);
 
-    el.textContent =
-      `${used} / ${offer.total_slots} ${t('filled')}`;
+    // Online offers
+    if (offer.mode === 'online') {
+
+      const tierIndex =
+        Number(offer.display_order) - 1;
+
+      const el =
+        document.getElementById(
+          `slot-${tierIndex}`
+        );
+
+      if (!el) return;
+
+      el.textContent =
+        `${used} / ${offer.total_slots} ${t('filled')}`;
+    }
+
+    // Offline offer
+    if (offer.mode === 'offline') {
+
+      const el =
+        document.getElementById('slot-offline');
+
+      if (!el) return;
+
+      el.textContent =
+        `${used} / ${offer.total_slots} ${t('filled')}`;
+    }
   });
-}
-  
+}  
   async function loadProgram(){let q=sb.from('meditation_programs').select('*').eq('program_type','pournami').order('program_date',{ascending:false}).limit(1);const {data,error}=await q;program=data?.[0]||null;if(error||!program){document.getElementById('programStatus').className='status error';document.getElementById('programStatus').textContent=t('noAccess');document.getElementById('programStatus').classList.remove('hidden');return}renderVideos();renderOffers();if(!program.registration_open){const s=document.getElementById('programStatus');s.className='status';s.textContent=program.registration_open_at?`${t('comingSoon')}: ${new Date(program.registration_open_at).toLocaleString(currentLang==='ta'?'ta-IN':'en-IN')}`:t('noAccess');s.classList.remove('hidden')}}
 async function saveLead(){const name=document.getElementById('leadName').value.trim(),mobile=document.getElementById('leadMobile').value.trim();if(!name||!/^[0-9]{10}$/.test(mobile)){document.getElementById('leadMsg').innerHTML=`<div class="status error">${!name?t('required'):t('invalidMobile')}</div>`;return}const {error}=await sb.from('meditation_leads').insert({program_id:program?.id||null,name,mobile,language:currentLang,source:'landing_popup'});if(error){document.getElementById('leadMsg').innerHTML=`<div class="status error">${error.message}</div>`;return}document.getElementById('leadPopup').classList.remove('show');popupDone=true;toast(t('leadSaved'));}
 document.getElementById('leadForm').addEventListener('submit',e=>{e.preventDefault();saveLead()});
