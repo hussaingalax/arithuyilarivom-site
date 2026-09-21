@@ -30,7 +30,23 @@
     </button>
   </div>
 </div><div class="field"><label>Google Maps Link</label><input id="map" class="input" value="https://maps.app.goo.gl/8b64EUECDw9Kgw2H8"></div><div class="field"><label>Registration Open</label><select id="open" class="input"><option value="false">Closed</option><option value="true">Open</option></select></div><div class="field"><label>Testimonial 1 YouTube URL</label><input id="yt1" class="input"></div><div class="field"><label>Testimonial 2 YouTube URL</label><input id="yt2" class="input"></div><div class="field"><label>Testimonial 3 YouTube URL</label><input id="yt3" class="input"></div><button class="cta full">Save Program</button></form><div class="card"><h3>Programs</h3><div id="programs"></div></div></div><section class="section"><div class="section-title"><h2>Bookings</h2><p>Payment, offer, attendance and reservation status.</p></div><div class="table-wrap"><table class="table"><thead><tr><th>Booking</th><th>Program</th><th>Name</th><th>Mode</th><th>Amount</th><th>Payment</th><th>Attendance</th></tr></thead><tbody id="bookings"></tbody></table></div></section><section class="section"><div class="section-title"><h2>Leads</h2></div><div class="table-wrap"><table class="table"><thead><tr><th>Name</th><th>Mobile</th><th>Language</th><th>Created</th></tr></thead><tbody id="leads"></tbody></table></div></section></div></div></main><script>
-const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);async function check(){const {data:{user}}=await sb.auth.getUser();if(user&&user.email===MEDITATION_CONFIG.ADMIN_EMAIL){showApp();}else document.getElementById('login').classList.remove('hidden')}function showApp(){document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');loadAll()}document.getElementById('adminLogin').addEventListener('submit',async e=>{e.preventDefault();const {error}=await sb.auth.signInWithPassword({email:document.getElementById('email').value,password:document.getElementById('password').value});if(error)alert(error.message);else showApp()});document.getElementById('logout').onclick=async()=>{await sb.auth.signOut();location.reload()};async function loadAll(){loadPrograms();loadBookings();loadLeads()}
+const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);async function check(){const {data:{user}}=await sb.auth.getUser();if(user&&user.email===MEDITATION_CONFIG.ADMIN_EMAIL){showApp();}else document.getElementById('login').classList.remove('hidden')}function showApp(){document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');loadAll()}document.getElementById('adminLogin').addEventListener('submit',async e=>{e.preventDefault();const {error}=await sb.auth.signInWithPassword({email:document.getElementById('email').value,password:document.getElementById('password').value});if(error)alert(error.message);else showApp()});document.getElementById('logout').onclick=async()=>{await sb.auth.signOut();location.reload()};document.getElementById('forgotPassword').onclick = async () => {
+  const email = MEDITATION_CONFIG.ADMIN_EMAIL;
+
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/meditation-admin.html`
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert(
+    'Password reset email sent to the admin email address. ' +
+    'Please check the inbox and create a new password.'
+  );
+};async function loadAll(){loadPrograms();loadBookings();loadLeads()}
 async function loadPrograms(){const {data}=await sb.from('meditation_programs').select('*').order('program_date',{ascending:false});document.getElementById('programs').innerHTML=(data||[]).map(p=>`<div class="card" style="margin-bottom:10px"><strong>${p.title_en}</strong><br>${p.program_date} • ${p.start_time}<br><span class="pill">${p.registration_open?'OPEN':'CLOSED'}</span> <button class="cta secondary" onclick='editProgram(${JSON.stringify(p)})'>Edit</button></div>`).join('')}
 function editProgram(p){document.getElementById('programId').value=p.id;document.getElementById('type').value=p.program_type;document.getElementById('titleEn').value=p.title_en;document.getElementById('titleTa').value=p.title_ta;document.getElementById('date').value=p.program_date;document.getElementById('time').value=p.start_time.slice(0,5);document.getElementById('onlineRegular').value=p.online_regular_price;document.getElementById('offlineRegular').value=p.offline_regular_price;document.getElementById('offlineOffer').value=p.offline_offer_price||499;document.getElementById('tiers').value=JSON.stringify(p.offer_tiers);document.getElementById('timer').value=p.offer_timer_minutes;document.getElementById('zoom').value=p.zoom_url||'';document.getElementById('classLinkStatus').innerHTML =
   p.class_link_published
