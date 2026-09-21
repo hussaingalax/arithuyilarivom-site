@@ -1,6 +1,328 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Member Dashboard</title><link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="i18n.js"></script></head><body><header class="topbar"><div class="container topbar-inner"><div class="brand" data-i18n="brand">Arithuyil Arivom</div><div class="nav-actions"><button id="logout" class="cta secondary" data-i18n="logout">Logout</button><div class="lang"><button data-lang="en">EN</button><button data-lang="ta">தமிழ்</button></div></div></div></header><main class="dashboard"><div class="container"><div class="section-title"><h1 data-i18n="dashboard">Dashboard</h1><p id="welcome"></p></div><div id="content" class="grid grid-2"></div></div></main><script>
 const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);let member=null;
 async function init(){const {data:{user}}=await sb.auth.getUser();if(!user){location.href='member-login.html';return}const {data:m}=await sb.from('meditation_members').select('*').eq('auth_user_id',user.id).single();member=m;document.getElementById('welcome').textContent=m?`${m.name} • ${m.mobile}`:'';const {data:bookings}=await sb.from('meditation_bookings').select('*,meditation_programs(*)').eq('member_id',m.id).order('created_at',{ascending:false});render(bookings||[])}
-function render(bs){let current=bs.find(b=>b.reservation_status==='confirmed'&&b.payment_status==='paid');let upcoming=bs.find(b=>new Date(b.meditation_programs?.program_date)>=new Date(new Date().toISOString().slice(0,10))&&b.reservation_status==='confirmed');document.getElementById('content').innerHTML=`<div class="card"><h3>${t('current')}</h3>${current?`<p><strong>${current.meditation_programs.title_en}</strong></p><p class="muted">${current.meditation_programs.program_date} • ${current.meditation_programs.start_time}</p><p><span class="pill">${current.mode}</span> <span class="pill">₹${current.offer_price}</span></p>${current.mode==='online'&&current.meditation_programs.zoom_url?`<a class="cta full" target="_blank" href="${current.meditation_programs.zoom_url}">${t('zoom')}</a>`:''}${current.mode==='offline'?`<a class="pill" target="_blank" href="${current.meditation_programs.map_url||MEDITATION_CONFIG.DEFAULT_MAP_URL}">${t('map')}</a>`:''}`:'<p class="muted">No confirmed current booking.</p>'}</div><div class="card"><h3>${t('upcoming')}</h3><p class="muted">Next Amavasai / Pournami registration is controlled by the Admin. When opened, it will appear here.</p><a class="cta full" href="pournami.html">View Programs</a></div><div class="card"><h3>${t('feedback')}</h3>${current?`<form id="feedbackForm"><div class="field"><label>${t('rating')}</label><select id="rating" class="input"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select></div><div class="field"><label>${t('experience')}</label><textarea id="feedback" class="input" rows="4"></textarea></div><button class="cta full">${t('submit')}</button></form>`:'<p class="muted">Feedback becomes available after a confirmed program.</p>'}</div><div class="card"><h3>Booking History</h3>${bs.map(b=>`<div class="notice" style="margin-bottom:10px"><strong>${b.meditation_programs?.title_en||''}</strong><br>${b.mode} • ₹${b.offer_price} • ${b.payment_status} • ${b.attendance_status}</div>`).join('')}</div>`;const f=document.getElementById('feedbackForm');if(f)f.addEventListener('submit',async e=>{e.preventDefault();const {error}=await sb.from('meditation_feedback').upsert({booking_id:current.id,member_id:member.id,rating:Number(document.getElementById('rating').value),feedback:document.getElementById('feedback').value});alert(error?error.message:'Feedback submitted');})}
+
+ async function render(bs) {
+
+  let current = bs.find(
+    b =>
+      b.reservation_status === 'confirmed' &&
+      b.payment_status === 'paid'
+  );
+
+  let upcoming = bs.find(
+    b =>
+      b.reservation_status === 'confirmed' &&
+      b.meditation_programs?.program_date &&
+      new Date(b.meditation_programs.program_date) >=
+        new Date(new Date().toISOString().slice(0, 10))
+  );
+
+  let classAccess = {
+    eligible: false,
+    published: false,
+    class_link: null,
+    program: null
+  };
+
+  // -------------------------------------------------------
+  // Secure class-link check
+  // -------------------------------------------------------
+
+  if (current && current.mode === 'online') {
+
+    const {
+      data: { session }
+    } = await sb.auth.getSession();
+
+    if (session?.access_token) {
+
+      try {
+
+        const response = await fetch(
+          `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=class-link`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization:
+                `Bearer ${session.access_token}`
+            }
+          }
+        );
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          classAccess = result;
+        }
+
+      } catch (error) {
+        console.error(
+          'Class link check failed:',
+          error
+        );
+      }
+    }
+  }
+
+  // -------------------------------------------------------
+  // Class access UI
+  // -------------------------------------------------------
+
+  let classAccessHtml = '';
+
+  if (current?.mode === 'online') {
+
+    if (classAccess.eligible && classAccess.published && classAccess.class_link) {
+
+      classAccessHtml = `
+        <div class="notice" style="margin-top:15px">
+          <strong>🟢 Class is Ready</strong>
+          <p class="muted">
+            Your class link is now available.
+          </p>
+
+          <a
+            class="cta full"
+            target="_blank"
+            rel="noopener"
+            href="${classAccess.class_link}"
+          >
+            🎥 Join Class
+          </a>
+        </div>
+      `;
+
+    } else {
+
+      classAccessHtml = `
+        <div class="notice" style="margin-top:15px">
+          <strong>🔒 Class Link</strong>
+
+          <p class="muted">
+            The class link will be published
+            15 minutes before the program starts.
+          </p>
+
+          <p class="small">
+            Only eligible confirmed online members
+            can access the class link.
+          </p>
+        </div>
+      `;
+    }
+  }
+
+  // -------------------------------------------------------
+  // Current program card
+  // -------------------------------------------------------
+
+  const currentHtml = current
+    ? `
+      <p>
+        <strong>
+          ${current.meditation_programs?.title_en || ''}
+        </strong>
+      </p>
+
+      <p class="muted">
+        ${current.meditation_programs?.program_date || ''}
+        •
+        ${current.meditation_programs?.start_time || ''}
+      </p>
+
+      <p>
+        <span class="pill">${current.mode}</span>
+        <span class="pill">₹${current.offer_price}</span>
+      </p>
+
+      ${classAccessHtml}
+
+      ${
+        current.mode === 'offline'
+          ? `
+            <div style="margin-top:15px">
+              <p class="muted">
+                Offline Program
+              </p>
+
+              <a
+                class="pill"
+                target="_blank"
+                rel="noopener"
+                href="${
+                  current.meditation_programs?.map_url ||
+                  MEDITATION_CONFIG.DEFAULT_MAP_URL
+                }"
+              >
+                📍 ${t('map')}
+              </a>
+            </div>
+          `
+          : ''
+      }
+    `
+    : `
+      <p class="muted">
+        No confirmed current booking.
+      </p>
+    `;
+
+  // -------------------------------------------------------
+  // Dashboard HTML
+  // -------------------------------------------------------
+
+  document.getElementById('content').innerHTML = `
+
+    <div class="card">
+
+      <h3>${t('current')}</h3>
+
+      ${currentHtml}
+
+    </div>
+
+    <div class="card">
+
+      <h3>${t('upcoming')}</h3>
+
+      <p class="muted">
+        Next Amavasai / Pournami registration is
+        controlled by the Admin. When opened,
+        it will appear here.
+      </p>
+
+      <a
+        class="cta full"
+        href="pournami.html"
+      >
+        View Programs
+      </a>
+
+    </div>
+
+    <div class="card">
+
+      <h3>${t('feedback')}</h3>
+
+      ${
+        current
+          ? `
+            <form id="feedbackForm">
+
+              <div class="field">
+                <label>${t('rating')}</label>
+
+                <select
+                  id="rating"
+                  class="input"
+                >
+                  <option value="5">5</option>
+                  <option value="4">4</option>
+                  <option value="3">3</option>
+                  <option value="2">2</option>
+                  <option value="1">1</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>${t('experience')}</label>
+
+                <textarea
+                  id="feedback"
+                  class="input"
+                  rows="4"
+                ></textarea>
+              </div>
+
+              <button class="cta full">
+                ${t('submit')}
+              </button>
+
+            </form>
+          `
+          : `
+            <p class="muted">
+              Feedback becomes available after
+              a confirmed program.
+            </p>
+          `
+      }
+
+    </div>
+
+    <div class="card">
+
+      <h3>Booking History</h3>
+
+      ${
+        bs.length
+          ? bs.map(b => `
+              <div
+                class="notice"
+                style="margin-bottom:10px"
+              >
+                <strong>
+                  ${b.meditation_programs?.title_en || ''}
+                </strong>
+
+                <br>
+
+                ${b.mode}
+                • ₹${b.offer_price}
+                • ${b.payment_status}
+                • ${b.attendance_status}
+              </div>
+            `).join('')
+          : `
+            <p class="muted">
+              No booking history.
+            </p>
+          `
+      }
+
+    </div>
+  `;
+
+  // -------------------------------------------------------
+  // Feedback submit
+  // -------------------------------------------------------
+
+  const f =
+    document.getElementById('feedbackForm');
+
+  if (f) {
+
+    f.addEventListener(
+      'submit',
+      async e => {
+
+        e.preventDefault();
+
+        const {
+          error
+        } = await sb
+          .from('meditation_feedback')
+          .upsert({
+            booking_id: current.id,
+            member_id: member.id,
+            rating: Number(
+              document.getElementById('rating').value
+            ),
+            feedback:
+              document.getElementById('feedback').value
+          });
+
+        alert(
+          error
+            ? error.message
+            : 'Feedback submitted'
+        );
+      }
+    );
+  }
+} 
+
+</h3>${current?`<p><strong>${current.meditation_programs.title_en}</strong></p><p class="muted">${current.meditation_programs.program_date} • ${current.meditation_programs.start_time}</p><p><span class="pill">${current.mode}</span> <span class="pill">₹${current.offer_price}</span></p>${current.mode==='online'&&current.meditation_programs.zoom_url?`<a class="cta full" target="_blank" href="${current.meditation_programs.zoom_url}">${t('zoom')}</a>`:''}${current.mode==='offline'?`<a class="pill" target="_blank" href="${current.meditation_programs.map_url||MEDITATION_CONFIG.DEFAULT_MAP_URL}">${t('map')}</a>`:''}`:'<p class="muted">No confirmed current booking.</p>'}</div><div class="card"><h3>${t('upcoming')}</h3><p class="muted">Next Amavasai / Pournami registration is controlled by the Admin. When opened, it will appear here.</p><a class="cta full" href="pournami.html">View Programs</a></div><div class="card"><h3>${t('feedback')}</h3>${current?`<form id="feedbackForm"><div class="field"><label>${t('rating')}</label><select id="rating" class="input"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select></div><div class="field"><label>${t('experience')}</label><textarea id="feedback" class="input" rows="4"></textarea></div><button class="cta full">${t('submit')}</button></form>`:'<p class="muted">Feedback becomes available after a confirmed program.</p>'}</div><div class="card"><h3>Booking History</h3>${bs.map(b=>`<div class="notice" style="margin-bottom:10px"><strong>${b.meditation_programs?.title_en||''}</strong><br>${b.mode} • ₹${b.offer_price} • ${b.payment_status} • ${b.attendance_status}</div>`).join('')}</div>`;const f=document.getElementById('feedbackForm');if(f)f.addEventListener('submit',async e=>{e.preventDefault();const {error}=await sb.from('meditation_feedback').upsert({booking_id:current.id,member_id:member.id,rating:Number(document.getElementById('rating').value),feedback:document.getElementById('feedback').value});alert(error?error.message:'Feedback submitted');})}
 document.getElementById('logout').onclick=async()=>{await sb.auth.signOut();location.href='member-login.html'};setLang(currentLang);init();
 </script></body></html>
