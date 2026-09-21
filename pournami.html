@@ -5,7 +5,7 @@
 <section id="details" class="section"><div class="container"><div class="section-title"><h2 data-i18n="details">Program Details</h2><p data-i18n="detailsSub">Understand the program before you book.</p></div><div class="two-col"><div class="grid"><div class="card"><h3 data-i18n="why">Why Pournami Dhyanam?</h3><p class="muted">Pournami is presented as a special time for inward attention and reflective practice. This guided session is structured to help participants slow down, settle the mind and create a dedicated space for meditation.</p></div><div class="card"><h3 data-i18n="benefits">Program Benefits</h3><ul class="muted"><li>Guided relaxation and meditation practice.</li><li>A dedicated environment for calm and reflection.</li><li>Focused breathing, awareness and inner stillness practices.</li><li>Online participation through Zoom or direct participation at Adambakkam.</li></ul></div><div class="card"><h3>Current Program</h3><p><strong>Arithuyil Arivom Pournami Dhyanam</strong></p><p class="muted">Saturday, 26 September 2026 • 7:30 PM</p><p class="muted">Online via Zoom or Live at RS Plaza, Adambakkam.</p><a class="pill" target="_blank" rel="noopener" href="https://maps.app.goo.gl/8b64EUECDw9Kgw2H8" data-i18n="map">View Location</a></div></div><div class="card"><img class="poster" src="pournami-reference.jpg" alt="Pournami meditation reference poster"></div></div></div></section>
 
 <section class="section"><div class="container"><div class="section-title"><h2 data-i18n="testimonials">Participant Experiences</h2><p>Three YouTube testimonial slots are managed from the Admin Panel.</p></div><div id="videos" class="grid grid-3"></div></div></section>
-<section id="offers" class="section"><div class="container"><div class="section-title"><h2 data-i18n="offerTitle">Choose Your Booking</h2><p data-i18n="offerSub">Launch pricing is controlled by the Admin and may change for future programs.</p></div><div id="programStatus" class="status hidden"></div><div id="offersGrid" class="offers"></div></div></section>
+<section id="booking" class="section"><div class="container"><div class="section-title"><h2 data-i18n="offerTitle">Choose Your Booking</h2><p data-i18n="offerSub">Launch pricing is controlled by the Admin and may change for future programs.</p></div><div id="programStatus" class="status hidden"></div><div id="offersGrid" class="offers"></div></div></section>
 <section class="section"><div class="container"><div class="card contact"><div><strong data-i18n="contact">Contact</strong><br>Mr. Ayyappan<br><a href="tel:9840851295">98408 51295</a></div></div></div></section>
 </main><footer class="footer"><div class="container">© Arithuyil Arivom • Pournami / Amavasai Meditation</div></footer>
 <div id="leadPopup" class="popup-backdrop show"><div class="modal"><h2 data-i18n="see">See More Details</h2><p class="small">Enter your details to continue to the program information.</p><div id="leadMsg"></div><form id="leadForm"><div class="field"><label data-i18n="name">Name</label><input class="input" id="leadName" required></div><div class="field"><label data-i18n="mobile">Mobile Number</label><input class="input" id="leadMobile" inputmode="numeric" maxlength="10" required></div><button class="cta full" type="submit" data-i18n="save">Continue</button></form></div></div>
@@ -55,5 +55,17 @@ async function refreshSlots() {
 async function saveLead(){const name=document.getElementById('leadName').value.trim(),mobile=document.getElementById('leadMobile').value.trim();if(!name||!/^[0-9]{10}$/.test(mobile)){document.getElementById('leadMsg').innerHTML=`<div class="status error">${!name?t('required'):t('invalidMobile')}</div>`;return}const {error}=await sb.from('meditation_leads').insert({program_id:program?.id||null,name,mobile,language:currentLang,source:'landing_popup'});if(error){document.getElementById('leadMsg').innerHTML=`<div class="status error">${error.message}</div>`;return}document.getElementById('leadPopup').classList.remove('show');popupDone=true;toast(t('leadSaved'));}
 document.getElementById('leadForm').addEventListener('submit',e=>{e.preventDefault();saveLead()});
 async function startBooking(mode,tierIndex){if(!program||!program.registration_open){toast(t('noAccess'),false);return}const name=prompt(t('name'));if(!name)return;const mobile=prompt(t('mobile'));if(!mobile||!/^[0-9]{10}$/.test(mobile)){toast(t('invalidMobile'),false);return}const email=prompt('Email (optional)')||'';const customerLocation=prompt('Location (optional)')||'';const {data,error}=await sb.rpc('create_meditation_reservation',{p_program_id:program.id,p_name:name,p_mobile:mobile,p_email:email,p_location:customerLocation,p_mode:mode,p_offer_tier_index:tierIndex});if(error){toast(error.message,false);await refreshSlots();return}window.location.href=`meditation-checkout.html?booking=${data.booking_id}`;}
-setLang(currentLang);loadProgram();
+if (window.location.hash === '#booking') {
+  document.getElementById('leadPopup')?.classList.remove('show');
+
+  setTimeout(() => {
+    document.getElementById('booking')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }, 500);
+}
+
+setLang(currentLang);
+loadProgram();
 </script></body></html>
