@@ -119,6 +119,9 @@ posterAlt:
     liveOffline:
       'Live / Offline',
 
+    important: 'Important',
+holdMessage: 'Your selected offer is held temporarily. Payment must be completed before the reservation expires.',
+
     login: 'Member Login',
 
     dashboard: 'Dashboard',
@@ -489,6 +492,9 @@ continueBooking: 'தொடரவும்',
 
     contact:
       'தொடர்பு',
+
+    important: 'முக்கியமான தகவல்',
+holdMessage: 'நீங்கள் தேர்வு செய்த சலுகை தற்காலிகமாக உங்களுக்காக ஒதுக்கப்பட்டுள்ளது. முன்பதிவு நேரம் முடிவதற்குள் கட்டணத்தை செலுத்த வேண்டும்.',
 
     see:
       'மேலும் விவரங்களைப் பார்க்க',
