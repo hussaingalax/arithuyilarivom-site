@@ -76,6 +76,12 @@ const I18N = {
 
     mobile: 'Mobile Number',
 
+    bookingTitle: 'Complete Your Booking',
+emailOptional: 'Email Address (Optional)',
+locationOptional: 'Location (Optional)',
+continueBooking: 'Continue to Booking',
+cancel: 'Cancel',
+
     save: 'Continue',
 
     loginBtn: 'Login',
@@ -415,6 +421,12 @@ const I18N = {
 
     mobile:
       'மொபைல் எண்',
+
+    bookingTitle: 'உங்கள் பதிவைத் தொடருங்கள்',
+emailOptional: 'மின்னஞ்சல் முகவரி (விருப்பம்)',
+locationOptional: 'இருப்பிடம் (விருப்பம்)',
+continueBooking: 'பதிவைத் தொடரவும்',
+cancel: 'ரத்து செய்க',
 
     save:
       'தொடரவும்',
