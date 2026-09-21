@@ -209,7 +209,12 @@
 </section>
 
 </main><footer class="footer"><div class="container">© Arithuyil Arivom • Pournami / Amavasai Meditation</div></footer>
-<div id="leadPopup" class="popup-backdrop show"><div class="modal"><h2 data-i18n="see">See More Details</h2><p class="small">Enter your details to continue to the program information.</p><div id="leadMsg"></div><form id="leadForm"><div class="field"><label data-i18n="name">Name</label><input class="input" id="leadName" required></div><div class="field"><label data-i18n="mobile">Mobile Number</label><input class="input" id="leadMobile" inputmode="numeric" maxlength="10" required></div><button class="cta full" type="submit" data-i18n="save">Continue</button></form></div></div>
+<div id="leadPopup" class="popup-backdrop show"><div class="modal"><h2 data-i18n="see">See More Details</h2><p
+  class="booking-modal-subtitle"
+  data-i18n="bookingSubtitle"
+>
+  Enter your details to continue to the program information.
+</p><div id="leadMsg"></div><form id="leadForm"><div class="field"><label data-i18n="name">Name</label><input class="input" id="leadName" required></div><div class="field"><label data-i18n="mobile">Mobile Number</label><input class="input" id="leadMobile" inputmode="numeric" maxlength="10" required></div><button class="cta full" type="submit" data-i18n="save">Continue</button></form></div></div>
 <div id="toast" class="toast"></div>
 <script>
 const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);let program=null;let tiers=[];let popupDone=false;
