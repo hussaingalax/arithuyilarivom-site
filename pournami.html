@@ -198,15 +198,16 @@ async function renderOffers() {
   }
 
   document.getElementById('offersGrid').innerHTML =
-    cards.join('');
+  cards.join('');
 
-  // Refresh actual used/available slots
-  refreshSlots();
+document
+  .getElementById('offersGrid')
+  .querySelectorAll('[data-i18n]')
+  .forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
 
-  // Refresh translated dynamic buttons
-  if (typeof setLang === 'function') {
-    setLang(currentLang);
-  }
+refreshSlots();
 }
   
 async function refreshSlots() {
