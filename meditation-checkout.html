@@ -2,23 +2,42 @@
 const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);const bookingId=new URLSearchParams(location.search).get('booking');let booking=null,timer;
 async function init(){if(!bookingId){show('Invalid booking.',false);return}const {data,error}=await sb.rpc('get_meditation_booking',{p_booking_id:bookingId});if(error||!data){show('Booking not found.',false);return}booking=data;document.getElementById('summary').innerHTML=`<strong>${data.program.title_en}</strong><br>${data.mode==='online'?'Online • Zoom':'Live • Adambakkam Centre'}<br><span class="price">₹${data.offer_price}</span>`;startTimer(new Date(data.reservation_expires_at).getTime());document.getElementById('payBtn').onclick=createOrder}
 function show(msg,ok=true){document.getElementById('msg').innerHTML=`<div class="status ${ok?'success':'error'}">${msg}</div>`}
-function startTimer(end){clearInterval(timer);const tick=()=>{let s=Math.max(0,Math.floor((end-Date.now())/1000));document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;if (s <= 0) {
+
+function startTimer(end) {
   clearInterval(timer);
 
-  document.getElementById('payBtn').disabled = true;
+  const tick = () => {
+    const s = Math.max(
+      0,
+      Math.floor((end - Date.now()) / 1000)
+    );
 
-  show(
-    currentLang === 'ta'
-      ? 'இந்த சலுகைக்கான நேரம் முடிந்துவிட்டது. தற்போது கிடைக்கும் சலுகைகளைப் பார்க்க பதிவு பக்கத்திற்குச் செல்கிறோம்...'
-      : 'This offer has expired. Taking you to the available offers...',
-    false
-  );
+    document.getElementById('timer').textContent =
+      `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
-  setTimeout(() => {
-    window.location.href = 'pournami.html#booking';
-  }, 2500);
-}};tick();timer=setInterval(tick,500)}
-async function createOrder(){document.getElementById('payBtn').disabled=true;try{const url=`${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/create-meditation-order`;const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','apikey':MEDITATION_CONFIG.SUPABASE_ANON_KEY,'Authorization':`Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`},body:JSON.stringify({booking_id:booking.id})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.error||'Unable to create payment order');const options={key:d.key_id||MEDITATION_CONFIG.RAZORPAY_KEY_ID,amount:d.amount,currency:d.currency,name:'Arithuyil Arivom',description:booking.program.title_en,order_id:d.order_id,prefill:{name:booking.name,contact:booking.mobile,email:booking.email||undefined},theme:{color:'#d9ad48'},handler:async response=>{await verify(response)}};new Razorpay(options).open();document.getElementById('payBtn').disabled=false}catch(e){show(e.message,false);document.getElementById('payBtn').disabled=false}}
+    if (s <= 0) {
+      clearInterval(timer);
+
+      document.getElementById('payBtn').disabled = true;
+
+      show(
+        currentLang === 'ta'
+          ? 'இந்த சலுகைக்கான நேரம் முடிந்துவிட்டது. தற்போது கிடைக்கும் சலுகைகளைப் பார்க்க பதிவு பக்கத்திற்குச் செல்கிறோம்...'
+          : 'This offer has expired. Taking you to the available offers...',
+        false
+      );
+
+      setTimeout(() => {
+        window.location.href = 'pournami.html#booking';
+      }, 2500);
+    }
+  };
+
+  tick();
+  timer = setInterval(tick, 500);
+}
+  
+  async function createOrder(){document.getElementById('payBtn').disabled=true;try{const url=`${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/create-meditation-order`;const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','apikey':MEDITATION_CONFIG.SUPABASE_ANON_KEY,'Authorization':`Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`},body:JSON.stringify({booking_id:booking.id})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.error||'Unable to create payment order');const options={key:d.key_id||MEDITATION_CONFIG.RAZORPAY_KEY_ID,amount:d.amount,currency:d.currency,name:'Arithuyil Arivom',description:booking.program.title_en,order_id:d.order_id,prefill:{name:booking.name,contact:booking.mobile,email:booking.email||undefined},theme:{color:'#d9ad48'},handler:async response=>{await verify(response)}};new Razorpay(options).open();document.getElementById('payBtn').disabled=false}catch(e){show(e.message,false);document.getElementById('payBtn').disabled=false}}
 async function verify(response){try{const r=await fetch(`${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/verify-meditation-payment`,{method:'POST',headers:{'Content-Type':'application/json','apikey':MEDITATION_CONFIG.SUPABASE_ANON_KEY,'Authorization':`Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`},body:JSON.stringify({booking_id:booking.id,razorpay_order_id:response.razorpay_order_id,razorpay_payment_id:response.razorpay_payment_id,razorpay_signature:response.razorpay_signature})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.error||'Payment verification failed');const ar = await fetch(
   `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=create-member`,
   {
