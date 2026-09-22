@@ -35,13 +35,73 @@
   transition: .2s ease;
 }
 
-.member-login-link:hover,
-.location-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(240,199,88,.22);
+/* =====================================================
+   PREMIUM CONTACT CARD
+   ===================================================== */
+
+.contact {
+  position: relative;
+  overflow: hidden;
+
+  max-width: 850px;
+  margin: 0 auto;
+
+  padding: 42px 24px !important;
+
+  text-align: center;
+
+  border: 1px solid rgba(240,199,88,.45) !important;
+  border-radius: 26px !important;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(240,199,88,.14),
+      transparent 45%
+    ),
+    linear-gradient(
+      135deg,
+      #112943,
+      #071526
+    ) !important;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.35),
+    0 0 35px rgba(240,199,88,.08);
 }
 
+.contact > div {
+  position: relative;
+  z-index: 2;
+}
 
-<div>
-  <span class="price">₹${program.online_regular_price}</span>
-</div>
+.contact strong {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #f4cf68;
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.contact br + * {
+  color: #fff;
+}
+
+.contact a {
+  display: inline-flex;
+  margin-top: 8px;
+
+  color: #f4cf68 !important;
+
+  font-size: 19px;
+  font-weight: 700;
+
+  text-decoration: none !important;
+}
+
+.contact a:hover {
+  text-shadow: 0 0 15px rgba(240,199,88,.4);
+}
