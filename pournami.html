@@ -398,79 +398,43 @@ async function refreshSlots() {
 
 
   // =====================================================
-  // COMMON ONLINE CONFIRMED BOOKINGS
+  // GET COMMON COUNTS FROM DATABASE RPC
   // =====================================================
 
   const {
-    count: onlineConfirmed,
-    error: onlineConfirmedError
-  } = await sb
-    .from('meditation_bookings')
-    .select('*', {
-      count: 'exact',
-      head: true
-    })
-    .eq('program_id', program.id)
-    .eq('mode', 'online')
-    .eq('reservation_status', 'confirmed')
-    .eq('payment_status', 'paid');
+    data: countData,
+    error: countError
+  } = await sb.rpc(
+    'get_meditation_common_counts',
+    {
+      p_program_id: program.id
+    }
+  );
 
-
-  if (onlineConfirmedError) {
+  if (countError) {
     console.error(
-      'Online confirmed count error:',
-      onlineConfirmedError
+      'Common booking count error:',
+      countError
     );
     return;
   }
 
 
-  // =====================================================
-  // COMMON ONLINE ACTIVE PENDING BOOKINGS
-  // =====================================================
+  const onlineUsed =
+    Number(countData?.online_used || 0);
 
-  const {
-    count: onlinePending,
-    error: onlinePendingError
-  } = await sb
-    .from('meditation_bookings')
-    .select('*', {
-      count: 'exact',
-      head: true
-    })
-    .eq('program_id', program.id)
-    .eq('mode', 'online')
-    .eq('reservation_status', 'pending')
-    .gt(
-      'reservation_expires_at',
-      new Date().toISOString()
-    );
-
-
-  if (onlinePendingError) {
-    console.error(
-      'Online pending count error:',
-      onlinePendingError
-    );
-    return;
-  }
+  const liveUsed =
+    Number(countData?.live_used || 0);
 
 
   // =====================================================
-  // COMMON ONLINE COUNT
-  // =====================================================
-
-  const commonOnlineUsed =
-    Number(onlineConfirmed || 0) +
-    Number(onlinePending || 0);
-
-
-  // =====================================================
-  // UPDATE ONLINE 3 CARDS
+  // ONLINE — COMMON COUNT
   // =====================================================
 
   (offerSettings || [])
-    .filter(offer => offer.mode === 'online')
+    .filter(
+      offer => offer.mode === 'online'
+    )
     .forEach(offer => {
 
       const tierIndex =
@@ -485,15 +449,19 @@ async function refreshSlots() {
 
 
       const displayBase =
-        Number(offer.display_base || 0);
+        Number(
+          offer.display_base || 0
+        );
 
       const displayTotal =
         displayBase +
-        Number(offer.total_slots);
+        Number(
+          offer.total_slots || 0
+        );
 
       const currentDisplay =
         displayBase +
-        commonOnlineUsed;
+        onlineUsed;
 
 
       const card =
@@ -507,11 +475,14 @@ async function refreshSlots() {
         );
 
 
-      // =================================================
-      // OFFER COMPLETED
-      // =================================================
+      // ===============================================
+      // COMPLETED
+      // ===============================================
 
-      if (currentDisplay >= displayTotal) {
+      if (
+        currentDisplay >=
+        displayTotal
+      ) {
 
         slotElement.textContent =
           t('completed');
@@ -530,9 +501,9 @@ async function refreshSlots() {
 
       }
 
-      // =================================================
-      // OFFER STILL OPEN
-      // =================================================
+      // ===============================================
+      // AVAILABLE
+      // ===============================================
 
       else {
 
@@ -550,91 +521,42 @@ async function refreshSlots() {
             'offer-completed'
           );
         }
+
       }
 
     });
 
 
   // =====================================================
-  // LIVE / OFFLINE
+  // LIVE / OFFLINE — SEPARATE COUNT
   // =====================================================
-
-  const {
-    count: liveConfirmed,
-    error: liveConfirmedError
-  } = await sb
-    .from('meditation_bookings')
-    .select('*', {
-      count: 'exact',
-      head: true
-    })
-    .eq('program_id', program.id)
-    .eq('mode', 'offline')
-    .eq('reservation_status', 'confirmed')
-    .eq('payment_status', 'paid');
-
-
-  if (liveConfirmedError) {
-    console.error(
-      'Live confirmed count error:',
-      liveConfirmedError
-    );
-    return;
-  }
-
-
-  const {
-    count: livePending,
-    error: livePendingError
-  } = await sb
-    .from('meditation_bookings')
-    .select('*', {
-      count: 'exact',
-      head: true
-    })
-    .eq('program_id', program.id)
-    .eq('mode', 'offline')
-    .eq('reservation_status', 'pending')
-    .gt(
-      'reservation_expires_at',
-      new Date().toISOString()
-    );
-
-
-  if (livePendingError) {
-    console.error(
-      'Live pending count error:',
-      livePendingError
-    );
-    return;
-  }
-
-
-  const liveUsed =
-    Number(liveConfirmed || 0) +
-    Number(livePending || 0);
-
 
   const liveOffer =
     (offerSettings || []).find(
-      offer => offer.mode === 'offline'
+      offer =>
+        offer.mode === 'offline'
     );
-
 
   const liveSlotElement =
     document.getElementById(
       'slot-offline'
     );
 
-
-  if (liveOffer && liveSlotElement) {
+  if (
+    liveOffer &&
+    liveSlotElement
+  ) {
 
     const displayBase =
-      Number(liveOffer.display_base || 0);
+      Number(
+        liveOffer.display_base || 0
+      );
 
     const displayTotal =
       displayBase +
-      Number(liveOffer.total_slots);
+      Number(
+        liveOffer.total_slots || 0
+      );
 
     const currentDisplay =
       displayBase +
@@ -642,7 +564,9 @@ async function refreshSlots() {
 
 
     const liveCard =
-      liveSlotElement.closest('.offer');
+      liveSlotElement.closest(
+        '.offer'
+      );
 
     const liveButton =
       liveCard?.querySelector(
@@ -650,7 +574,14 @@ async function refreshSlots() {
       );
 
 
-    if (currentDisplay >= displayTotal) {
+    // ===============================================
+    // LIVE COMPLETED
+    // ===============================================
+
+    if (
+      currentDisplay >=
+      displayTotal
+    ) {
 
       liveSlotElement.textContent =
         t('completed');
@@ -667,7 +598,13 @@ async function refreshSlots() {
         );
       }
 
-    } else {
+    }
+
+    // ===============================================
+    // LIVE AVAILABLE
+    // ===============================================
+
+    else {
 
       liveSlotElement.textContent =
         `${currentDisplay} / ${displayTotal} ${t('filled')}`;
@@ -683,9 +620,13 @@ async function refreshSlots() {
           'offer-completed'
         );
       }
+
     }
+
   }
-}  
+
+}
+  
   async function loadProgram(){let q=sb.from('meditation_programs').select('*').eq('program_type','pournami').order('program_date',{ascending:false}).limit(1);const {data,error}=await q;program=data?.[0]||null;if(error||!program){document.getElementById('programStatus').className='status error';document.getElementById('programStatus').textContent=t('noAccess');document.getElementById('programStatus').classList.remove('hidden');return}renderVideos();renderOffers();if(!program.registration_open){const s=document.getElementById('programStatus');s.className='status';s.textContent=program.registration_open_at?`${t('comingSoon')}: ${new Date(program.registration_open_at).toLocaleString(currentLang==='ta'?'ta-IN':'en-IN')}`:t('noAccess');s.classList.remove('hidden')}}
 async function saveLead(){const name=document.getElementById('leadName').value.trim(),mobile=document.getElementById('leadMobile').value.trim();if(!name||!/^[0-9]{10}$/.test(mobile)){document.getElementById('leadMsg').innerHTML=`<div class="status error">${!name?t('required'):t('invalidMobile')}</div>`;return}const {error}=await sb.from('meditation_leads').insert({program_id:program?.id||null,name,mobile,language:currentLang,source:'landing_popup'});if(error){document.getElementById('leadMsg').innerHTML=`<div class="status error">${error.message}</div>`;return}document.getElementById('leadPopup').classList.remove('show');popupDone=true;toast(t('leadSaved'));}
 document.getElementById('leadForm').addEventListener('submit',e=>{e.preventDefault();saveLead()});
