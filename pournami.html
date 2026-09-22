@@ -370,23 +370,10 @@ async function refreshSlots() {
 
   if (!program?.id) return;
 
-  // Get real availability
-  const {
-    data: slotData,
-    error: slotError
-  } = await sb.rpc(
-    'get_meditation_offer_slots',
-    {
-      p_program_id: program.id
-    }
-  );
+  // =====================================================
+  // GET OFFER SETTINGS FROM SUPABASE
+  // =====================================================
 
-  if (slotError) {
-    console.error('Slot count error:', slotError);
-    return;
-  }
-
-  // Get display settings from Supabase
   const {
     data: offerSettings,
     error: settingsError
@@ -403,109 +390,302 @@ async function refreshSlots() {
 
   if (settingsError) {
     console.error(
-      'Offer display settings error:',
+      'Offer settings error:',
       settingsError
     );
     return;
   }
 
-  const settingsMap = {};
 
-  (offerSettings || []).forEach((offer) => {
+  // =====================================================
+  // COMMON ONLINE CONFIRMED BOOKINGS
+  // =====================================================
 
-    const key =
-      `${offer.mode}-${offer.display_order}`;
+  const {
+    count: onlineConfirmed,
+    error: onlineConfirmedError
+  } = await sb
+    .from('meditation_bookings')
+    .select('*', {
+      count: 'exact',
+      head: true
+    })
+    .eq('program_id', program.id)
+    .eq('mode', 'online')
+    .eq('reservation_status', 'confirmed')
+    .eq('payment_status', 'paid');
 
-    settingsMap[key] = offer;
 
-  });
+  if (onlineConfirmedError) {
+    console.error(
+      'Online confirmed count error:',
+      onlineConfirmedError
+    );
+    return;
+  }
 
-  // -------------------------------------------------------
-  // UPDATE DISPLAY
-  // -------------------------------------------------------
 
-  (slotData || []).forEach((offer) => {
+  // =====================================================
+  // COMMON ONLINE ACTIVE PENDING BOOKINGS
+  // =====================================================
 
-    const used =
-      Number(offer.total_slots) -
-      Number(offer.available_slots);
+  const {
+    count: onlinePending,
+    error: onlinePendingError
+  } = await sb
+    .from('meditation_bookings')
+    .select('*', {
+      count: 'exact',
+      head: true
+    })
+    .eq('program_id', program.id)
+    .eq('mode', 'online')
+    .eq('reservation_status', 'pending')
+    .gt(
+      'reservation_expires_at',
+      new Date().toISOString()
+    );
 
-    const key =
-      `${offer.mode}-${offer.display_order}`;
 
-    const setting =
-      settingsMap[key];
+  if (onlinePendingError) {
+    console.error(
+      'Online pending count error:',
+      onlinePendingError
+    );
+    return;
+  }
 
-    if (!setting) return;
 
-    const displayBase =
-      Number(setting.display_base || 0);
+  // =====================================================
+  // COMMON ONLINE COUNT
+  // =====================================================
 
-    const displayTotal =
-      displayBase +
-      Number(setting.total_slots);
+  const commonOnlineUsed =
+    Number(onlineConfirmed || 0) +
+    Number(onlinePending || 0);
 
-    const currentDisplay =
-      displayBase + used;
 
-    // -----------------------------------------------------
-    // ONLINE
-    // -----------------------------------------------------
+  // =====================================================
+  // UPDATE ONLINE 3 CARDS
+  // =====================================================
 
-    if (offer.mode === 'online') {
+  (offerSettings || [])
+    .filter(offer => offer.mode === 'online')
+    .forEach(offer => {
 
       const tierIndex =
         Number(offer.display_order) - 1;
 
-      const el =
+      const slotElement =
         document.getElementById(
           `slot-${tierIndex}`
         );
 
-      if (!el) return;
+      if (!slotElement) return;
 
-      if (currentDisplay >= displayTotal) {
 
-        el.textContent =
-          t('completed');
+      const displayBase =
+        Number(offer.display_base || 0);
 
-      } else {
+      const displayTotal =
+        displayBase +
+        Number(offer.total_slots);
 
-        el.textContent =
-          `${currentDisplay} / ${displayTotal} ${t('filled')}`;
+      const currentDisplay =
+        displayBase +
+        commonOnlineUsed;
 
-      }
-    }
 
-    // -----------------------------------------------------
-    // OFFLINE / LIVE
-    // -----------------------------------------------------
-
-    if (offer.mode === 'offline') {
-
-      const el =
-        document.getElementById(
-          'slot-offline'
+      const card =
+        document.querySelector(
+          `.offer[data-tier="${tierIndex}"]`
         );
 
-      if (!el) return;
+      const button =
+        card?.querySelector(
+          'button.cta'
+        );
+
+
+      // =================================================
+      // OFFER COMPLETED
+      // =================================================
 
       if (currentDisplay >= displayTotal) {
 
-        el.textContent =
+        slotElement.textContent =
           t('completed');
 
-      } else {
+        if (button) {
+          button.disabled = true;
+          button.textContent =
+            t('completed');
+        }
 
-        el.textContent =
-          `${currentDisplay} / ${displayTotal} ${t('filled')}`;
+        if (card) {
+          card.classList.add(
+            'offer-completed'
+          );
+        }
 
       }
-    }
 
-  });
-}
-  
+      // =================================================
+      // OFFER STILL OPEN
+      // =================================================
+
+      else {
+
+        slotElement.textContent =
+          `${currentDisplay} / ${displayTotal} ${t('filled')}`;
+
+        if (button) {
+          button.disabled = false;
+          button.textContent =
+            t('book');
+        }
+
+        if (card) {
+          card.classList.remove(
+            'offer-completed'
+          );
+        }
+      }
+
+    });
+
+
+  // =====================================================
+  // LIVE / OFFLINE
+  // =====================================================
+
+  const {
+    count: liveConfirmed,
+    error: liveConfirmedError
+  } = await sb
+    .from('meditation_bookings')
+    .select('*', {
+      count: 'exact',
+      head: true
+    })
+    .eq('program_id', program.id)
+    .eq('mode', 'offline')
+    .eq('reservation_status', 'confirmed')
+    .eq('payment_status', 'paid');
+
+
+  if (liveConfirmedError) {
+    console.error(
+      'Live confirmed count error:',
+      liveConfirmedError
+    );
+    return;
+  }
+
+
+  const {
+    count: livePending,
+    error: livePendingError
+  } = await sb
+    .from('meditation_bookings')
+    .select('*', {
+      count: 'exact',
+      head: true
+    })
+    .eq('program_id', program.id)
+    .eq('mode', 'offline')
+    .eq('reservation_status', 'pending')
+    .gt(
+      'reservation_expires_at',
+      new Date().toISOString()
+    );
+
+
+  if (livePendingError) {
+    console.error(
+      'Live pending count error:',
+      livePendingError
+    );
+    return;
+  }
+
+
+  const liveUsed =
+    Number(liveConfirmed || 0) +
+    Number(livePending || 0);
+
+
+  const liveOffer =
+    (offerSettings || []).find(
+      offer => offer.mode === 'offline'
+    );
+
+
+  const liveSlotElement =
+    document.getElementById(
+      'slot-offline'
+    );
+
+
+  if (liveOffer && liveSlotElement) {
+
+    const displayBase =
+      Number(liveOffer.display_base || 0);
+
+    const displayTotal =
+      displayBase +
+      Number(liveOffer.total_slots);
+
+    const currentDisplay =
+      displayBase +
+      liveUsed;
+
+
+    const liveCard =
+      liveSlotElement.closest('.offer');
+
+    const liveButton =
+      liveCard?.querySelector(
+        'button.cta'
+      );
+
+
+    if (currentDisplay >= displayTotal) {
+
+      liveSlotElement.textContent =
+        t('completed');
+
+      if (liveButton) {
+        liveButton.disabled = true;
+        liveButton.textContent =
+          t('completed');
+      }
+
+      if (liveCard) {
+        liveCard.classList.add(
+          'offer-completed'
+        );
+      }
+
+    } else {
+
+      liveSlotElement.textContent =
+        `${currentDisplay} / ${displayTotal} ${t('filled')}`;
+
+      if (liveButton) {
+        liveButton.disabled = false;
+        liveButton.textContent =
+          t('book');
+      }
+
+      if (liveCard) {
+        liveCard.classList.remove(
+          'offer-completed'
+        );
+      }
+    }
+  }
+}  
   async function loadProgram(){let q=sb.from('meditation_programs').select('*').eq('program_type','pournami').order('program_date',{ascending:false}).limit(1);const {data,error}=await q;program=data?.[0]||null;if(error||!program){document.getElementById('programStatus').className='status error';document.getElementById('programStatus').textContent=t('noAccess');document.getElementById('programStatus').classList.remove('hidden');return}renderVideos();renderOffers();if(!program.registration_open){const s=document.getElementById('programStatus');s.className='status';s.textContent=program.registration_open_at?`${t('comingSoon')}: ${new Date(program.registration_open_at).toLocaleString(currentLang==='ta'?'ta-IN':'en-IN')}`:t('noAccess');s.classList.remove('hidden')}}
 async function saveLead(){const name=document.getElementById('leadName').value.trim(),mobile=document.getElementById('leadMobile').value.trim();if(!name||!/^[0-9]{10}$/.test(mobile)){document.getElementById('leadMsg').innerHTML=`<div class="status error">${!name?t('required'):t('invalidMobile')}</div>`;return}const {error}=await sb.from('meditation_leads').insert({program_id:program?.id||null,name,mobile,language:currentLang,source:'landing_popup'});if(error){document.getElementById('leadMsg').innerHTML=`<div class="status error">${error.message}</div>`;return}document.getElementById('leadPopup').classList.remove('show');popupDone=true;toast(t('leadSaved'));}
 document.getElementById('leadForm').addEventListener('submit',e=>{e.preventDefault();saveLead()});
