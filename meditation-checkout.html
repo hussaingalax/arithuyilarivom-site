@@ -629,11 +629,9 @@ We will take you to the login page. Please use this password to login.`
   return;
 }
 
-
-/*
-  Existing member:
-  No new password is returned.
-*/
+/* ---------------------------------
+   EXISTING MEMBER
+--------------------------------- */
 
 alert(
 
@@ -647,7 +645,22 @@ alert(
 
 window.location.href =
   'member-login.html?paid=1';
-  }
+
+} catch (error) {
+
+  console.error(
+    'Payment / account error:',
+    error
+  );
+
+  show(
+    error.message ||
+    'Something went wrong',
+    false
+  );
+
+}
+    
 /* ---------------------------------
    LANGUAGE
 --------------------------------- */
