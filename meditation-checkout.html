@@ -556,32 +556,97 @@ Please note this password and press OK.`
     }
 
 
-    /* STEP 5
-       Go to member login
+    /* ---------------------------------
+   STEP 5
+   Auto login new member
+--------------------------------- */
+
+if (accountData.password) {
+
+  const memberEmail =
+    `${accountData.mobile}@member.arithuyilarivom.com`;
+
+  const {
+    data: loginData,
+    error: loginError
+  } = await sb.auth.signInWithPassword({
+
+    email: memberEmail,
+
+    password: accountData.password
+
+  });
+
+  if (loginError) {
+
+    console.error(
+      'Auto login failed:',
+      loginError
+    );
+
+    /*
+      Account was created successfully,
+      but automatic login failed.
+      Keep the user informed instead of
+      silently losing the session.
     */
+
+    alert(
+
+      currentLang === 'ta'
+
+        ? `உங்கள் account வெற்றிகரமாக உருவாக்கப்பட்டது.
+
+Mobile: ${accountData.mobile}
+
+Password: ${accountData.password}
+
+Login page-க்கு செல்கிறோம். இந்த password-ஐ பயன்படுத்தி login செய்யுங்கள்.`
+
+        : `Your account was created successfully.
+
+Mobile: ${accountData.mobile}
+
+Password: ${accountData.password}
+
+We will take you to the login page. Please use this password to login.`
+
+    );
 
     window.location.href =
       'member-login.html?paid=1';
 
-
-  } catch (error) {
-
-    console.error(
-      'Payment / account error:',
-      error
-    );
-
-
-    show(
-      error.message ||
-      'Something went wrong',
-      false
-    );
-
+    return;
   }
 
+  /*
+    Auto login successful
+  */
+
+  window.location.href =
+    'member-dashboard.html';
+
+  return;
 }
 
+
+/*
+  Existing member:
+  No new password is returned.
+*/
+
+alert(
+
+  currentLang === 'ta'
+
+    ? 'Payment வெற்றிகரமாக முடிந்தது. உங்கள் account ஏற்கனவே உள்ளது. தயவுசெய்து login செய்யுங்கள்.'
+
+    : 'Payment successful. Your member account already exists. Please login.'
+
+);
+
+window.location.href =
+  'member-login.html?paid=1';
 
 /* ---------------------------------
    LANGUAGE
