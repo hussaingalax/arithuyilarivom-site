@@ -105,3 +105,143 @@
 .contact a:hover {
   text-shadow: 0 0 15px rgba(240,199,88,.4);
 }
+
+
+/* =========================================
+   PREMIUM CONTACT CARD
+========================================= */
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  max-width: 620px;
+  margin: 0 auto;
+
+  padding: 32px 24px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(244,210,122,.14),
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(18,43,72,.98),
+      rgba(7,20,38,.98)
+    );
+
+  border: 1px solid rgba(244,210,122,.45);
+  border-radius: 26px;
+
+  box-shadow:
+    0 0 0 1px rgba(244,210,122,.08),
+    0 18px 50px rgba(0,0,0,.35),
+    0 0 35px rgba(217,173,72,.10);
+}
+
+.contact strong {
+  display: block;
+
+  font-size: 24px;
+  font-weight: 900;
+
+  color: var(--gold2);
+
+  margin-bottom: 8px;
+}
+
+.contact-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+
+  margin-bottom: 6px;
+}
+
+.contact-phone {
+  font-size: 18px;
+  font-weight: 800;
+
+  color: var(--gold2);
+  text-decoration: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 18px;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.contact-actions a {
+  min-width: 130px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 11px 18px;
+
+  border-radius: 13px;
+
+  border: 1px solid var(--gold);
+
+  background:
+    linear-gradient(
+      135deg,
+      #f4d27a,
+      #d9ad48
+    );
+
+  color: #071426;
+
+  font-weight: 900;
+  text-decoration: none;
+
+  box-shadow:
+    0 7px 20px rgba(0,0,0,.22);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.contact-actions a:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 26px rgba(217,173,72,.25);
+}
+
+@media (max-width: 640px) {
+
+  .contact {
+    padding: 26px 18px;
+    border-radius: 22px;
+  }
+
+  .contact strong {
+    font-size: 21px;
+  }
+
+  .contact-actions {
+    width: 100%;
+  }
+
+  .contact-actions a {
+    flex: 1;
+    min-width: 120px;
+  }
+
+}
