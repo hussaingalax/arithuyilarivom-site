@@ -245,3 +245,39 @@
   }
 
 }
+
+
+/* =========================================
+   CONTACT COMPACT FIX
+========================================= */
+
+.contact {
+  padding: 24px 20px;
+}
+
+.contact strong {
+  margin-bottom: 4px;
+  font-size: 23px;
+}
+
+.contact-name {
+  margin-bottom: 3px;
+  font-size: 16px;
+}
+
+.contact-phone {
+  margin-bottom: 12px;
+  font-size: 17px;
+}
+
+.contact-actions {
+  gap: 8px;
+}
+
+.contact-actions a {
+  color: #071426 !important;
+  font-size: 14px;
+  padding: 10px 16px;
+  min-width: 125px;
+  text-shadow: none;
+}
