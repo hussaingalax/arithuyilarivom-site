@@ -2,35 +2,63 @@
 <html lang="en">
 
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
 
   <title>Complete Booking</title>
 
-  <link rel="stylesheet" href="styles.css">
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script src="config.js"></script>
-  <script src="i18n.js"></script>
+
+  <script src="i18n.js?v=20260922-2"></script>
+
 </head>
+
 
 <body>
 
+
 <header class="topbar">
+
   <div class="container topbar-inner">
 
-    <div class="brand" data-i18n="brand">
+    <div
+      class="brand"
+      data-i18n="brand"
+    >
       Arithuyil Arivom
     </div>
 
+
     <div class="lang">
-      <button data-lang="en">EN</button>
-      <button data-lang="ta">தமிழ்</button>
+
+      <button data-lang="en">
+        EN
+      </button>
+
+      <button data-lang="ta">
+        தமிழ்
+      </button>
+
     </div>
 
   </div>
+
 </header>
+
 
 
 <main class="dashboard">
@@ -39,14 +67,24 @@
 
     <div class="two-col">
 
-      <!-- PAYMENT CARD -->
+
+      <!-- =========================================
+           PAYMENT CARD
+      ========================================== -->
+
       <div class="card">
+
 
         <h1 data-i18n="payment">
           Continue to Payment
         </h1>
 
-        <div id="summary" class="muted"></div>
+
+        <div
+          id="summary"
+          class="muted"
+        ></div>
+
 
         <div class="countdown-bar">
 
@@ -54,11 +92,16 @@
             Offer Timer
           </div>
 
-          <div id="timer" class="timer">
+
+          <div
+            id="timer"
+            class="timer"
+          >
             05:00
           </div>
 
         </div>
+
 
         <button
           id="payBtn"
@@ -69,23 +112,33 @@
           Continue to Payment
         </button>
 
+
         <div id="msg"></div>
+
 
       </div>
 
 
-      <!-- IMPORTANT -->
+
+      <!-- =========================================
+           IMPORTANT
+      ========================================== -->
+
       <div class="card">
 
         <h2 data-i18n="important">
-  Important
-</h2>
+          Important
+        </h2>
 
-<p data-i18n="holdMessage">
-  Your selected offer is held temporarily. Payment must be completed before the reservation expires.
-</p>
+
+        <p data-i18n="holdMessage">
+          Your selected offer is held temporarily.
+          Payment must be completed before the
+          reservation expires.
+        </p>
 
       </div>
+
 
     </div>
 
@@ -94,93 +147,98 @@
 </main>
 
 
+
 <script>
 
-const sb = window.supabase.createClient(
-  MEDITATION_CONFIG.SUPABASE_URL,
-  MEDITATION_CONFIG.SUPABASE_ANON_KEY
-);
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+const sb =
+  window.supabase.createClient(
+    MEDITATION_CONFIG.SUPABASE_URL,
+    MEDITATION_CONFIG.SUPABASE_ANON_KEY
+  );
+
+
+
+/* =========================================
+   BOOKING ID
+========================================= */
 
 const bookingId =
-  new URLSearchParams(location.search).get('booking');
+  new URLSearchParams(location.search)
+    .get('booking');
+
+
+
+/* =========================================
+   GLOBAL STATE
+========================================= */
 
 let booking = null;
+
 let timer = null;
 
 
-/* ---------------------------------
+
+/* =========================================
    SHOW MESSAGE
---------------------------------- */
+========================================= */
 
-function show(msg, ok = true) {
+function show(message, ok = true) {
 
-  document.getElementById('msg').innerHTML = `
+  const el =
+    document.getElementById('msg');
+
+  if (!el) return;
+
+
+  el.innerHTML = `
     <div class="status ${ok ? 'success' : 'error'}">
-      ${msg}
+      ${message}
     </div>
   `;
 
 }
 
 
-/* ---------------------------------
-   LOAD BOOKING
---------------------------------- */
 
-async function init() {
+/* =========================================
+   RENDER BOOKING SUMMARY
+========================================= */
 
-  if (!bookingId) {
+function renderSummary() {
 
-    show(
-      currentLang === 'ta'
-        ? 'செல்லுபடியாகும் பதிவு கிடைக்கவில்லை.'
-        : 'Invalid booking.',
-      false
-    );
-
-    return;
-  }
+  if (!booking) return;
 
 
-  const { data, error } = await sb.rpc(
-    'get_meditation_booking',
-    {
-      p_booking_id: bookingId
-    }
-  );
-
-
-  if (error || !data) {
-
-    console.error('Booking load error:', error);
-
-    show(
-      currentLang === 'ta'
-        ? 'பதிவு கிடைக்கவில்லை.'
-        : 'Booking not found.',
-      false
-    );
-
-    return;
-  }
-
-
-  booking = data;
+  const data = booking;
 
 
   const programTitle =
     currentLang === 'ta'
-      ? (data.program?.title_ta || data.program?.title_en)
-      : data.program?.title_en;
+      ? (
+          data.program?.title_ta ||
+          data.program?.title_en ||
+          ''
+        )
+      : (
+          data.program?.title_en ||
+          ''
+        );
 
 
   const modeText =
     data.mode === 'online'
+
       ? (
           currentLang === 'ta'
             ? 'ஆன்லைன் • Zoom'
             : 'Online • Zoom'
         )
+
       : (
           currentLang === 'ta'
             ? 'நேரடி வகுப்பு • ஆதம்பாக்கம் மையம்'
@@ -188,63 +246,260 @@ async function init() {
         );
 
 
-  document.getElementById('summary').innerHTML = `
-    <strong>${programTitle || ''}</strong>
+  const summary =
+    document.getElementById('summary');
+
+
+  if (!summary) return;
+
+
+  summary.innerHTML = `
+
+    <strong>
+      ${programTitle}
+    </strong>
+
     <br>
+
     ${modeText}
+
     <br>
-    <span class="price">₹${data.offer_price}</span>
+
+    <span class="price">
+      ₹${data.offer_price}
+    </span>
+
   `;
 
+}
+
+
+
+/* =========================================
+   DYNAMIC LANGUAGE RENDER
+========================================= */
+
+window.renderDynamic = function () {
+
+  renderSummary();
+
+};
+
+
+
+/* =========================================
+   LOAD BOOKING
+========================================= */
+
+async function init() {
+
+
+  /* ---------------------------------
+     Validate booking ID
+  --------------------------------- */
+
+  if (!bookingId) {
+
+    show(
+
+      currentLang === 'ta'
+
+        ? 'செல்லுபடியாகும் பதிவு கிடைக்கவில்லை.'
+
+        : 'Invalid booking.',
+
+      false
+
+    );
+
+    return;
+
+  }
+
+
+
+  /* ---------------------------------
+     Load booking
+  --------------------------------- */
+
+  const {
+    data,
+    error
+  } = await sb.rpc(
+
+    'get_meditation_booking',
+
+    {
+      p_booking_id:
+        bookingId
+    }
+
+  );
+
+
+
+  /* ---------------------------------
+     Booking error
+  --------------------------------- */
+
+  if (error || !data) {
+
+    console.error(
+      'Booking load error:',
+      error
+    );
+
+
+    show(
+
+      currentLang === 'ta'
+
+        ? 'பதிவு கிடைக்கவில்லை.'
+
+        : 'Booking not found.',
+
+      false
+
+    );
+
+    return;
+
+  }
+
+
+
+  /* ---------------------------------
+     Save booking
+  --------------------------------- */
+
+  booking = data;
+
+
+
+  /* ---------------------------------
+     Render summary
+  --------------------------------- */
+
+  renderSummary();
+
+
+
+  /* ---------------------------------
+     Reservation expiry
+  --------------------------------- */
 
   const expiry =
-    new Date(data.reservation_expires_at).getTime();
+    new Date(
+      data.reservation_expires_at
+    ).getTime();
 
 
   startTimer(expiry);
 
 
-  document.getElementById('payBtn').onclick =
-    createOrder;
+
+  /* ---------------------------------
+     Payment button
+  --------------------------------- */
+
+  const payBtn =
+    document.getElementById('payBtn');
+
+
+  if (payBtn) {
+
+    payBtn.onclick =
+      createOrder;
+
+  }
 
 }
 
 
-/* ---------------------------------
+
+/* =========================================
    TIMER
---------------------------------- */
+========================================= */
 
 function startTimer(end) {
+
+
+  /* ---------------------------------
+     Clear previous timer
+  --------------------------------- */
 
   clearInterval(timer);
 
 
+
+  /* ---------------------------------
+     Timer tick
+  --------------------------------- */
+
   const tick = () => {
 
-    const seconds = Math.max(
-      0,
-      Math.floor((end - Date.now()) / 1000)
-    );
+
+    const seconds =
+      Math.max(
+
+        0,
+
+        Math.floor(
+          (end - Date.now()) / 1000
+        )
+
+      );
 
 
-    document.getElementById('timer').textContent =
-      `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 
+    const timerEl =
+      document.getElementById('timer');
+
+
+    if (timerEl) {
+
+      timerEl.textContent =
+
+        `${String(
+          Math.floor(seconds / 60)
+        ).padStart(2, '0')}:${String(
+          seconds % 60
+        ).padStart(2, '0')}`;
+
+    }
+
+
+
+    /* ---------------------------------
+       Expired
+    --------------------------------- */
 
     if (seconds <= 0) {
 
       clearInterval(timer);
 
 
-      document.getElementById('payBtn').disabled =
-        true;
+      const payBtn =
+        document.getElementById('payBtn');
+
+
+      if (payBtn) {
+
+        payBtn.disabled = true;
+
+      }
 
 
       show(
+
         currentLang === 'ta'
+
           ? 'இந்த சலுகைக்கான நேரம் முடிந்துவிட்டது. தற்போது கிடைக்கும் சலுகைகளைப் பார்க்க பதிவு பக்கத்திற்குச் செல்கிறோம்...'
+
           : 'This offer has expired. Taking you to the available offers...',
+
         false
+
       );
 
 
@@ -260,83 +515,170 @@ function startTimer(end) {
   };
 
 
+
+  /* ---------------------------------
+     Run immediately
+  --------------------------------- */
+
   tick();
 
-  timer = setInterval(tick, 500);
+
+
+  /* ---------------------------------
+     Continue every 500ms
+  --------------------------------- */
+
+  timer =
+    setInterval(
+      tick,
+      500
+    );
 
 }
 
 
-/* ---------------------------------
+
+/* =========================================
    CREATE RAZORPAY ORDER
---------------------------------- */
+========================================= */
 
 async function createOrder() {
 
-  document.getElementById('payBtn').disabled =
-    true;
+
+  const payBtn =
+    document.getElementById('payBtn');
+
+
+  if (payBtn) {
+
+    payBtn.disabled = true;
+
+  }
+
 
 
   try {
+
+
+    /* ---------------------------------
+       API URL
+    --------------------------------- */
 
     const url =
       `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/create-meditation-order`;
 
 
-    const response = await fetch(
-      url,
-      {
-        method: 'POST',
 
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey':
-            MEDITATION_CONFIG.SUPABASE_ANON_KEY,
-          'Authorization':
-            `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
-        },
+    /* ---------------------------------
+       Create order
+    --------------------------------- */
 
-        body: JSON.stringify({
-          booking_id: booking.id
-        })
-      }
-    );
+    const response =
+      await fetch(
+
+        url,
+
+        {
+
+          method: 'POST',
 
 
-    const data = await response.json();
+          headers: {
+
+            'Content-Type':
+              'application/json',
+
+            'apikey':
+              MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+
+            'Authorization':
+              `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+
+          },
 
 
-    if (!response.ok || !data.success) {
+          body:
+            JSON.stringify({
+
+              booking_id:
+                booking.id
+
+            })
+
+        }
+
+      );
+
+
+
+    /* ---------------------------------
+       Response
+    --------------------------------- */
+
+    const data =
+      await response.json();
+
+
+
+    /* ---------------------------------
+       Validate response
+    --------------------------------- */
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
 
       throw new Error(
+
         data.error ||
         'Unable to create payment order'
+
       );
 
     }
 
 
+
+    /* =================================
+       RAZORPAY OPTIONS
+    ================================= */
+
     const options = {
 
+
       key:
+
         data.key_id ||
         MEDITATION_CONFIG.RAZORPAY_KEY_ID,
+
 
       amount:
         data.amount,
 
+
       currency:
         data.currency,
+
 
       name:
         'Arithuyil Arivom',
 
+
       description:
+
         booking.program?.title_en ||
         'Pournami Dhyanam',
 
+
       order_id:
         data.order_id,
+
+
+
+      /* ---------------------------------
+         Customer details
+      --------------------------------- */
 
       prefill: {
 
@@ -352,20 +694,44 @@ async function createOrder() {
 
       },
 
+
+
+      /* ---------------------------------
+         Theme
+      --------------------------------- */
+
       theme: {
-        color: '#d9ad48'
+
+        color:
+          '#d9ad48'
+
       },
 
 
-      handler:
-        async function (razorpayResponse) {
 
-          await verify(razorpayResponse);
+      /* ---------------------------------
+         Payment success
+      --------------------------------- */
+
+      handler:
+
+        async function (
+          razorpayResponse
+        ) {
+
+          await verify(
+            razorpayResponse
+          );
 
         }
 
     };
 
+
+
+    /* ---------------------------------
+       Open Razorpay
+    --------------------------------- */
 
     const razorpay =
       new Razorpay(options);
@@ -374,11 +740,22 @@ async function createOrder() {
     razorpay.open();
 
 
-    document.getElementById('payBtn').disabled =
-      false;
+
+    /* ---------------------------------
+       Re-enable button
+       if Razorpay opens successfully
+    --------------------------------- */
+
+    if (payBtn) {
+
+      payBtn.disabled = false;
+
+    }
+
 
 
   } catch (error) {
+
 
     console.error(
       'Create order error:',
@@ -387,39 +764,54 @@ async function createOrder() {
 
 
     show(
+
       error.message ||
       'Unable to create payment order',
+
       false
+
     );
 
 
-    document.getElementById('payBtn').disabled =
-      false;
+    if (payBtn) {
+
+      payBtn.disabled = false;
+
+    }
 
   }
 
 }
 
 
-/* ---------------------------------
+
+/* =========================================
    VERIFY PAYMENT
---------------------------------- */
+========================================= */
 
 async function verify(response) {
 
+
   try {
 
-    /* STEP 1
+
+    /* =================================
+       STEP 1
        Verify Razorpay payment
-    */
+    ================================= */
 
     const verifyResponse =
       await fetch(
+
         `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/verify-meditation-payment`,
+
         {
+
           method: 'POST',
 
+
           headers: {
+
             'Content-Type':
               'application/json',
 
@@ -428,29 +820,36 @@ async function verify(response) {
 
             'Authorization':
               `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+
           },
 
-          body: JSON.stringify({
 
-            booking_id:
-              booking.id,
+          body:
+            JSON.stringify({
 
-            razorpay_order_id:
-              response.razorpay_order_id,
+              booking_id:
+                booking.id,
 
-            razorpay_payment_id:
-              response.razorpay_payment_id,
+              razorpay_order_id:
+                response.razorpay_order_id,
 
-            razorpay_signature:
-              response.razorpay_signature
+              razorpay_payment_id:
+                response.razorpay_payment_id,
 
-          })
+              razorpay_signature:
+                response.razorpay_signature
+
+            })
+
         }
+
       );
+
 
 
     const verifyData =
       await verifyResponse.json();
+
 
 
     if (
@@ -459,24 +858,33 @@ async function verify(response) {
     ) {
 
       throw new Error(
+
         verifyData.error ||
         'Payment verification failed'
+
       );
 
     }
 
 
-    /* STEP 2
+
+    /* =================================
+       STEP 2
        Create / attach member account
-    */
+    ================================= */
 
     const accountResponse =
       await fetch(
+
         `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=create-member`,
+
         {
+
           method: 'POST',
 
+
           headers: {
+
             'Content-Type':
               'application/json',
 
@@ -485,20 +893,27 @@ async function verify(response) {
 
             'Authorization':
               `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+
           },
 
-          body: JSON.stringify({
 
-            booking_id:
-              booking.id
+          body:
+            JSON.stringify({
 
-          })
+              booking_id:
+                booking.id
+
+            })
+
         }
+
       );
+
 
 
     const accountData =
       await accountResponse.json();
+
 
 
     if (
@@ -507,174 +922,229 @@ async function verify(response) {
     ) {
 
       throw new Error(
+
         accountData.error ||
         'Account creation failed'
+
       );
 
     }
 
 
-    /* STEP 3
+
+    /* =================================
+       STEP 3
        Save mobile locally
-    */
+    ================================= */
 
     localStorage.setItem(
+
       'aa_member_mobile',
+
       accountData.mobile ||
       booking.mobile
+
     );
 
 
-    /* STEP 4
-       Show password if newly created
-    */
+
+    /* =================================
+       STEP 4
+       NEW MEMBER
+       Password returned
+    ================================= */
 
     if (accountData.password) {
+
+
+      /* ---------------------------------
+         Show login details once
+      --------------------------------- */
 
       alert(
 
         currentLang === 'ta'
 
-          ? `உங்கள் உறுப்பினர் உள்நுழைவு விவரங்கள்
+          ? `உங்கள் உறுப்பினர் கணக்கு வெற்றிகரமாக உருவாக்கப்பட்டது.
+
+மொபைல்: ${accountData.mobile}
+
+கடவுச்சொல்: ${accountData.password}
+
+இந்த கடவுச்சொல்லை பாதுகாப்பாக வைத்துக் கொள்ளுங்கள்.`
+
+          : `Your member account has been created successfully.
 
 Mobile: ${accountData.mobile}
 
 Password: ${accountData.password}
 
-இந்த password-ஐ note செய்து OK அழுத்துங்கள்.`
-
-          : `Your member login details
-
-Mobile: ${accountData.mobile}
-
-Password: ${accountData.password}
-
-Please note this password and press OK.`
+Please keep this password safe.`
 
       );
+
+
+
+      /* =================================
+         STEP 5
+         AUTO LOGIN
+      ================================= */
+
+      const memberEmail =
+        `${accountData.mobile}@member.arithuyilarivom.com`;
+
+
+
+      const {
+        data: loginData,
+        error: loginError
+      } =
+        await sb.auth.signInWithPassword({
+
+          email:
+            memberEmail,
+
+          password:
+            accountData.password
+
+        });
+
+
+
+      /* ---------------------------------
+         Auto login failed
+      --------------------------------- */
+
+      if (loginError) {
+
+
+        console.error(
+
+          'Auto login failed:',
+
+          loginError
+
+        );
+
+
+        alert(
+
+          currentLang === 'ta'
+
+            ? 'உங்கள் account வெற்றிகரமாக உருவாக்கப்பட்டது. Automatic login முடியவில்லை. Login page-க்கு செல்கிறோம்.'
+
+            : 'Your account was created successfully. Automatic login could not be completed. We will take you to the login page.'
+
+        );
+
+
+        window.location.href =
+          'member-login.html?paid=1';
+
+
+        return;
+
+      }
+
+
+
+      /* ---------------------------------
+         Auto login successful
+      --------------------------------- */
+
+      console.log(
+
+        'Member auto login successful:',
+
+        loginData?.user?.id
+
+      );
+
+
+      window.location.href =
+        'member-dashboard.html';
+
+
+      return;
 
     }
 
 
-    /* ---------------------------------
-   STEP 5
-   Auto login new member
---------------------------------- */
 
-if (accountData.password) {
-
-  const memberEmail =
-    `${accountData.mobile}@member.arithuyilarivom.com`;
-
-  const {
-    data: loginData,
-    error: loginError
-  } = await sb.auth.signInWithPassword({
-
-    email: memberEmail,
-
-    password: accountData.password
-
-  });
-
-  if (loginError) {
-
-    console.error(
-      'Auto login failed:',
-      loginError
-    );
-
-    /*
-      Account was created successfully,
-      but automatic login failed.
-      Keep the user informed instead of
-      silently losing the session.
-    */
+    /* =================================
+       EXISTING MEMBER
+    ================================= */
 
     alert(
 
       currentLang === 'ta'
 
-        ? `உங்கள் account வெற்றிகரமாக உருவாக்கப்பட்டது.
+        ? 'Payment வெற்றிகரமாக முடிந்தது. உங்கள் member account ஏற்கனவே உள்ளது. தயவுசெய்து login செய்யுங்கள்.'
 
-Mobile: ${accountData.mobile}
-
-Password: ${accountData.password}
-
-Login page-க்கு செல்கிறோம். இந்த password-ஐ பயன்படுத்தி login செய்யுங்கள்.`
-
-        : `Your account was created successfully.
-
-Mobile: ${accountData.mobile}
-
-Password: ${accountData.password}
-
-We will take you to the login page. Please use this password to login.`
+        : 'Payment successful. Your member account already exists. Please login.'
 
     );
+
 
     window.location.href =
       'member-login.html?paid=1';
 
+
     return;
+
+
+
+  } catch (error) {
+
+
+    /* =================================
+       PAYMENT / ACCOUNT ERROR
+    ================================= */
+
+    console.error(
+
+      'Payment / account error:',
+
+      error
+
+    );
+
+
+    show(
+
+      error.message ||
+      'Something went wrong',
+
+      false
+
+    );
+
   }
 
-  /*
-    Auto login successful
-  */
-
-  window.location.href =
-    'member-dashboard.html';
-
-  return;
 }
 
-/* ---------------------------------
-   EXISTING MEMBER
---------------------------------- */
 
-alert(
 
-  currentLang === 'ta'
+/* =========================================
+   LANGUAGE
+========================================= */
 
-    ? 'Payment வெற்றிகரமாக முடிந்தது. உங்கள் account ஏற்கனவே உள்ளது. தயவுசெய்து login செய்யுங்கள்.'
-
-    : 'Payment successful. Your member account already exists. Please login.'
-
+setLang(
+  currentLang
 );
 
-window.location.href =
-  'member-login.html?paid=1';
-
-} catch (error) {
-
-  console.error(
-    'Payment / account error:',
-    error
-  );
-
-  show(
-    error.message ||
-    'Something went wrong',
-    false
-  );
-
-}
-    
-/* ---------------------------------
-   LANGUAGE
---------------------------------- */
-
-setLang(currentLang);
 
 
-/* ---------------------------------
+/* =========================================
    START
---------------------------------- */
+========================================= */
 
 init();
 
+
 </script>
 
+
 </body>
+
 </html>
