@@ -261,8 +261,16 @@ async function renderOffers() {
       badge = 'FINAL OFFER';
     }
 
+    // Display totals requested by management
+    const displayTotals = [100, 115, 200];
+    const displayTotal =
+      displayTotals[index] || Number(offer.total_slots);
+
     cards.push(`
-      <div class="offer" data-tier="${tierIndex}">
+      <div
+        class="offer"
+        data-tier="${tierIndex}"
+      >
 
         <span class="badge">
           ${badge}
@@ -270,12 +278,24 @@ async function renderOffers() {
 
         <h3>Online</h3>
 
-       <div>
-  <span class="price">₹${program.online_regular_price}</span>
-</div>
-        <div class="slots" id="slot-${tierIndex}">
-  <span class="slot-placeholder">&nbsp;</span>
-</div>
+        <div>
+          <span class="old">
+            ₹4,999
+          </span>
+
+          <span class="price">
+            ₹${Number(offer.price)}
+          </span>
+        </div>
+
+        <div
+          class="slots"
+          id="slot-${tierIndex}"
+          data-display-base="90"
+          data-display-total="${displayTotal}"
+        >
+          <span class="slot-placeholder">&nbsp;</span>
+        </div>
 
         <button
           class="cta full"
@@ -290,45 +310,7 @@ async function renderOffers() {
   });
 
   // -------------------------------------------------------
-  // REGULAR ONLINE PRICE
-  // -------------------------------------------------------
-
-  cards.push(`
-    <div class="offer">
-
-      <span class="badge">
-        REGULAR
-      </span>
-
-      <h3>Online</h3>
-
-      <div>
-        <span class="old">
-          ₹${program.online_regular_price}
-        </span>
-
-        <span class="price">
-          ₹${program.online_regular_price}
-        </span>
-      </div>
-
-      <div class="slots">
-        After launch offers
-      </div>
-
-      <button
-        class="cta full"
-        onclick="startBooking('online',null)"
-        data-i18n="book"
-      >
-        Book Now
-      </button>
-
-    </div>
-  `);
-
-  // -------------------------------------------------------
-  // OFFLINE OFFER
+  // OFFLINE / LIVE OFFER
   // -------------------------------------------------------
 
   if (offlineOffer) {
@@ -344,7 +326,7 @@ async function renderOffers() {
 
         <div>
           <span class="old">
-            ₹${program.offline_regular_price}
+            ₹9,999
           </span>
 
           <span class="price">
@@ -353,11 +335,11 @@ async function renderOffers() {
         </div>
 
         <div
-  class="slots"
-  id="slot-offline"
->
-  <span class="slot-placeholder">&nbsp;</span>
-</div>
+          class="slots"
+          id="slot-offline"
+        >
+          <span class="slot-placeholder">&nbsp;</span>
+        </div>
 
         <button
           class="cta full"
@@ -372,18 +354,17 @@ async function renderOffers() {
   }
 
   document.getElementById('offersGrid').innerHTML =
-  cards.join('');
+    cards.join('');
 
-document
-  .getElementById('offersGrid')
-  .querySelectorAll('[data-i18n]')
-  .forEach(el => {
-    el.textContent = t(el.dataset.i18n);
-  });
+  document
+    .getElementById('offersGrid')
+    .querySelectorAll('[data-i18n]')
+    .forEach(el => {
+      el.textContent = t(el.dataset.i18n);
+    });
 
-refreshSlots();
-}
-  
+  refreshSlots();
+}  
 async function refreshSlots() {
 
   if (!program?.id) return;
