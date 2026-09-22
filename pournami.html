@@ -124,11 +124,12 @@
       <div class="card">
 
         <img
-          class="poster"
-          src="pournami-reference.jpg"
-          alt="Pournami meditation reference poster"
-          data-i18n-alt="posterAlt"
-        >
+  id="programReferenceImage"
+  class="poster"
+  src="pournami-reference-en.jpg"
+  alt="Pournami meditation reference poster"
+  data-i18n-alt="posterAlt"
+>
 
       </div>
 
@@ -1332,6 +1333,16 @@ if (window.location.hash === '#booking') {
   }, 500);
 }
 
+function updateReferencePoster(lang) {
+  const img = document.getElementById('programReferenceImage');
+  if (!img) return;
+
+  img.src = lang === 'ta'
+    ? 'pournami-reference-ta.jpg'
+    : 'pournami-reference-en.jpg';
+}
+
 setLang(currentLang);
+updateReferencePoster(currentLang);
 loadProgram();
 </script></body></html>
