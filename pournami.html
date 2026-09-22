@@ -370,9 +370,10 @@ async function refreshSlots() {
 
   if (!program?.id) return;
 
+  // Get real availability
   const {
-    data,
-    error
+    data: slotData,
+    error: slotError
   } = await sb.rpc(
     'get_meditation_offer_slots',
     {
@@ -380,22 +381,76 @@ async function refreshSlots() {
     }
   );
 
-  if (error) {
-    console.error('Slot count error:', error);
+  if (slotError) {
+    console.error('Slot count error:', slotError);
     return;
   }
 
-  const offers = data || [];
+  // Get display settings from Supabase
+  const {
+    data: offerSettings,
+    error: settingsError
+  } = await sb
+    .from('meditation_program_offers')
+    .select(`
+      mode,
+      display_order,
+      display_base,
+      total_slots
+    `)
+    .eq('program_id', program.id)
+    .eq('active', true);
 
-  offers.forEach((offer) => {
+  if (settingsError) {
+    console.error(
+      'Offer display settings error:',
+      settingsError
+    );
+    return;
+  }
+
+  const settingsMap = {};
+
+  (offerSettings || []).forEach((offer) => {
+
+    const key =
+      `${offer.mode}-${offer.display_order}`;
+
+    settingsMap[key] = offer;
+
+  });
+
+  // -------------------------------------------------------
+  // UPDATE DISPLAY
+  // -------------------------------------------------------
+
+  (slotData || []).forEach((offer) => {
 
     const used =
       Number(offer.total_slots) -
       Number(offer.available_slots);
 
-    // -------------------------------------------------------
-    // ONLINE OFFERS
-    // -------------------------------------------------------
+    const key =
+      `${offer.mode}-${offer.display_order}`;
+
+    const setting =
+      settingsMap[key];
+
+    if (!setting) return;
+
+    const displayBase =
+      Number(setting.display_base || 0);
+
+    const displayTotal =
+      displayBase +
+      Number(setting.total_slots);
+
+    const currentDisplay =
+      displayBase + used;
+
+    // -----------------------------------------------------
+    // ONLINE
+    // -----------------------------------------------------
 
     if (offer.mode === 'online') {
 
@@ -409,39 +464,22 @@ async function refreshSlots() {
 
       if (!el) return;
 
-      const displayBase = 90;
-
-      const displayTotalMap = {
-        1: 100,
-        2: 115,
-        3: 200
-      };
-
-      const displayTotal =
-        displayTotalMap[
-          Number(offer.display_order)
-        ] || (
-          displayBase +
-          Number(offer.total_slots)
-        );
-
-      const currentDisplay =
-        displayBase + used;
-
       if (currentDisplay >= displayTotal) {
 
-        el.textContent = t('completed');
+        el.textContent =
+          t('completed');
 
       } else {
 
         el.textContent =
           `${currentDisplay} / ${displayTotal} ${t('filled')}`;
+
       }
     }
 
-    // -------------------------------------------------------
-    // OFFLINE / LIVE OFFER
-    // -------------------------------------------------------
+    // -----------------------------------------------------
+    // OFFLINE / LIVE
+    // -----------------------------------------------------
 
     if (offer.mode === 'offline') {
 
@@ -452,26 +490,21 @@ async function refreshSlots() {
 
       if (!el) return;
 
-      const displayBase = 75;
-      const displayTotal = 120;
-
-      const currentDisplay =
-        displayBase + used;
-
       if (currentDisplay >= displayTotal) {
 
-        el.textContent = t('completed');
+        el.textContent =
+          t('completed');
 
       } else {
 
         el.textContent =
           `${currentDisplay} / ${displayTotal} ${t('filled')}`;
+
       }
     }
 
   });
 }
-
   
   async function loadProgram(){let q=sb.from('meditation_programs').select('*').eq('program_type','pournami').order('program_date',{ascending:false}).limit(1);const {data,error}=await q;program=data?.[0]||null;if(error||!program){document.getElementById('programStatus').className='status error';document.getElementById('programStatus').textContent=t('noAccess');document.getElementById('programStatus').classList.remove('hidden');return}renderVideos();renderOffers();if(!program.registration_open){const s=document.getElementById('programStatus');s.className='status';s.textContent=program.registration_open_at?`${t('comingSoon')}: ${new Date(program.registration_open_at).toLocaleString(currentLang==='ta'?'ta-IN':'en-IN')}`:t('noAccess');s.classList.remove('hidden')}}
 async function saveLead(){const name=document.getElementById('leadName').value.trim(),mobile=document.getElementById('leadMobile').value.trim();if(!name||!/^[0-9]{10}$/.test(mobile)){document.getElementById('leadMsg').innerHTML=`<div class="status error">${!name?t('required'):t('invalidMobile')}</div>`;return}const {error}=await sb.from('meditation_leads').insert({program_id:program?.id||null,name,mobile,language:currentLang,source:'landing_popup'});if(error){document.getElementById('leadMsg').innerHTML=`<div class="status error">${error.message}</div>`;return}document.getElementById('leadPopup').classList.remove('show');popupDone=true;toast(t('leadSaved'));}
