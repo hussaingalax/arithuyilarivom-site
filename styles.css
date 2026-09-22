@@ -40,3 +40,8 @@
   transform: translateY(-2px);
   box-shadow: 0 0 25px rgba(240,199,88,.22);
 }
+
+
+<div>
+  <span class="price">₹${program.online_regular_price}</span>
+</div>
