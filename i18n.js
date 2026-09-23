@@ -806,7 +806,7 @@ posterAlt:
 // =========================================================
 
 let currentLang =
-  localStorage.getItem('aa_meditation_lang') || 'en';
+  localStorage.getItem('aa_meditation_lang') || 'ta';
 
 
 // =========================================================
