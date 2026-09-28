@@ -212,7 +212,7 @@
 
 <div id="toast" class="toast"></div>
 <script>
-const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);let program=null;let tiers=[];let popupDone=false;
+const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);let program=null;let tiers=[];
 function toast(msg,ok=true){const el=document.getElementById('toast');el.innerHTML=`<div class="status ${ok?'success':'error'}">${msg}</div>`;setTimeout(()=>el.innerHTML='',4000)}
 function safeEmbed(url){try{const u=new URL(url);if(u.hostname.includes('youtube.com')){let id=u.searchParams.get('v');return id?`https://www.youtube.com/embed/${id}`:url}if(u.hostname==='youtu.be'){return `https://www.youtube.com/embed/${u.pathname.slice(1)}`}return ''}catch{return ''}}
 function renderVideos(){const urls=Array.isArray(program?.testimonial_urls)?program.testimonial_urls:[];document.getElementById('videos').innerHTML=[0,1,2].map(i=>{const e=safeEmbed(urls[i]||'');return `<div class="card"><div class="video">${e?`<iframe src="${e}" title="Testimonial ${i+1}" loading="lazy" allowfullscreen></iframe>`:`<div class="video-placeholder">YouTube testimonial ${i+1}<br><span class="small">Admin can add the video link.</span></div>`}</div></div>`}).join('')}
@@ -555,6 +555,11 @@ function formatProgramDate(p){
 function applyProgramData(){
   if(!program)return;
   const title=currentLang==='ta'?(program.title_ta||program.title_en):(program.title_en||program.title_ta);
+  const typeLabel=program.program_type==='amavasai'
+    ? (currentLang==='ta'?'அமாவாசை தியானம்':'Amavasai Meditation')
+    : (currentLang==='ta'?'பௌர்ணமி தியானம்':'Pournami Dhyanam');
+  const eyebrow=document.querySelector('[data-i18n="heroEyebrow"]');
+  if(eyebrow)eyebrow.textContent=typeLabel;
   const heroTitle=document.querySelector('[data-i18n="heroTitle"]');
   const heroDesc=document.querySelector('[data-i18n="heroDesc"]');
   const why=document.querySelector('[data-i18n="why"]');
@@ -585,12 +590,38 @@ function applyProgramData(){
 }
 async function loadProgram(){
   const requestedId=getProgramIdFromUrl();
-  let q=sb.from('meditation_programs').select('*');
-  q=requestedId
-    ?q.eq('id',requestedId).limit(1)
-    :q.in('status',['published','draft']).order('program_date',{ascending:true}).limit(1);
+  let data=null,error=null;
 
-  const {data,error}=await q;
+  if(requestedId){
+    const r=await sb.from('meditation_programs').select('*').eq('id',requestedId).limit(1);
+    data=r.data;error=r.error;
+  }else{
+    // Default public page = nearest upcoming program.
+    // This prevents an older Pournami record from being selected when a new Amavasai program exists.
+    const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+    const upcoming=await sb.from('meditation_programs')
+      .select('*')
+      .in('status',['published','draft'])
+      .gte('program_date',today)
+      .order('program_date',{ascending:true})
+      .order('start_time',{ascending:true})
+      .limit(1);
+
+    if(upcoming.error){
+      error=upcoming.error;
+    }else if(upcoming.data?.length){
+      data=upcoming.data;
+    }else{
+      const fallback=await sb.from('meditation_programs')
+        .select('*')
+        .in('status',['published','draft'])
+        .order('program_date',{ascending:false})
+        .order('start_time',{ascending:false})
+        .limit(1);
+      data=fallback.data;error=fallback.error;
+    }
+  }
+
   program=data?.[0]||null;
 
   if(error||!program){
@@ -1319,9 +1350,10 @@ function updateReferencePoster(lang) {
   const img = document.getElementById('programReferenceImage');
   if (!img) return;
 
-  img.src = lang === 'ta'
-    ? 'pournami-reference-ta.jpg'
-    : 'pournami-reference-en.jpg';
+  const url = lang === 'ta'
+    ? (program?.poster_ta_url || program?.poster_en_url)
+    : (program?.poster_en_url || program?.poster_ta_url);
+  if(url) img.src = url;
 }
 
 setLang(currentLang);
