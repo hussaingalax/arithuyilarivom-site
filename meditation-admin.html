@@ -126,6 +126,61 @@ function escapeHtml(value){
   return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
 
+function field(id){
+  return document.getElementById(id);
+}
+
+function setValue(id,value){
+  const el=field(id);
+  if(el) el.value=value??'';
+}
+
+function editProgram(p){
+  if(!p) return;
+
+  setValue('programId',p.id);
+  setValue('type',p.program_type||'pournami');
+  setValue('titleEn',p.title_en||'');
+  setValue('titleTa',p.title_ta||'');
+  setValue('date',p.program_date||'');
+  setValue('time',String(p.start_time||'').slice(0,5));
+  setValue('onlineRegular',p.online_regular_price??4999);
+  setValue('offlineRegular',p.offline_regular_price??9999);
+  setValue('offlineOffer',p.offline_offer_price??499);
+
+  const tiers=normalizeOfferTiers(p.offer_tiers);
+  setValue('tiers',JSON.stringify(tiers.length?tiers:DEFAULT_OFFER_TIERS,null,2));
+  setValue('timer',p.offer_timer_minutes??5);
+  setValue('zoom',p.zoom_url||p.class_link||'');
+  setValue('venueName',p.venue_name||'');
+  setValue('venueAddress',p.venue_address||'');
+
+  const en=p.content_en||{};
+  const ta=p.content_ta||{};
+  setValue('descriptionEn',en.description||'');
+  setValue('descriptionTa',ta.description||'');
+  setValue('whyEn',en.why||'');
+  setValue('whyTa',ta.why||'');
+  setValue('benefitsEn',Array.isArray(en.benefits)?en.benefits.join('\n'):(en.benefits||''));
+  setValue('benefitsTa',Array.isArray(ta.benefits)?ta.benefits.join('\n'):(ta.benefits||''));
+
+  setValue('posterEn',p.poster_en_url||'');
+  setValue('posterTa',p.poster_ta_url||'');
+  setValue('map',p.map_url||MEDITATION_CONFIG.DEFAULT_MAP_URL||'');
+  setValue('open',String(!!p.registration_open));
+
+  const videos=Array.isArray(p.testimonial_urls)?p.testimonial_urls:[];
+  setValue('yt1',videos[0]||'');
+  setValue('yt2',videos[1]||'');
+  setValue('yt3',videos[2]||'');
+
+  document.getElementById('classLinkStatus').innerHTML=p.class_link_published
+    ? `🟢 Published${p.class_link_published_at?`<br><small>${new Date(p.class_link_published_at).toLocaleString()}</small>`:''}`
+    : '🔴 Not Published';
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 document.getElementById('programForm').addEventListener('submit',async e=>{
   e.preventDefault();
 
