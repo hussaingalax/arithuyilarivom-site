@@ -2,7 +2,7 @@
   <button type="button" id="forgotPassword" class="pill">
     Forgot Admin Password?
   </button>
-</div></form></div><div id="app" class="hidden"><div class="section-title"><h1>Program Management</h1><p>Create Amavasai and Pournami programs, configure offers, open registration and add Zoom/testimonials.</p></div><div class="grid grid-2"><form id="programForm" class="card"><h3>Create / Update Program</h3><input type="hidden" id="programId"><div class="field"><label>Type</label><select id="type" class="input"><option value="pournami">Pournami</option><option value="amavasai">Amavasai</option></select></div><div class="field"><label>Title (English)</label><input id="titleEn" class="input" required></div><div class="field"><label>Title (Tamil)</label><input id="titleTa" class="input" required></div><div class="field"><label>Date</label><input id="date" class="input" type="date" required></div><div class="field"><label>Start Time</label><input id="time" class="input" type="time" required></div><div class="field"><label>Online Regular Price</label><input id="onlineRegular" class="input" type="number" value="4999" required></div><div class="field"><label>Offline Regular Price</label><input id="offlineRegular" class="input" type="number" value="9999" required></div><div class="field"><label>Program Description (English)</label><textarea id="descriptionEn" class="input" rows="3"></textarea></div><div class="field"><label>Program Description (Tamil)</label><textarea id="descriptionTa" class="input" rows="3"></textarea></div><div class="field"><label>About / Why (English)</label><textarea id="whyEn" class="input" rows="3"></textarea></div><div class="field"><label>About / Why (Tamil)</label><textarea id="whyTa" class="input" rows="3"></textarea></div><div class="field"><label>Benefits (English) — one per line</label><textarea id="benefitsEn" class="input" rows="4"></textarea></div><div class="field"><label>Benefits (Tamil) — one per line</label><textarea id="benefitsTa" class="input" rows="4"></textarea></div><div class="field"><label>English Poster URL</label><input id="posterEn" class="input" placeholder="https://..."></div><div class="field"><label>Tamil Poster URL</label><input id="posterTa" class="input" placeholder="https://..."></div><div class="field"><label>Venue Name</label><input id="venueName" class="input"></div><div class="field"><label>Venue Address</label><textarea id="venueAddress" class="input" rows="2"></textarea></div><div class="field"><label>Current Offline Launch Offer Price</label><input id="offlineOffer" class="input" type="number" value="499" required><div class="small">Regular offline price remains ₹1499. Admin controls the launch offer price.</div></div><div class="field"><label>Online Offer Tiers JSON</label><textarea id="tiers" class="input" rows="6">[{"price":99,"display_base":90,"total_slots":100},{"price":199,"display_base":90,"total_slots":115},{"price":249,"display_base":90,"total_slots":200}]</textarea><div class="small">display_base = starting filled number shown to customers. total_slots = final displayed total at which that tier closes. Example: 90/100 means 10 real bookings close the tier. Tiers activate sequentially.</div></div><div class="field"><label>5-minute timer</label><input id="timer" class="input" type="number" value="5" min="1" max="30"></div><div class="field">
+</div></form></div><div id="app" class="hidden"><div class="section-title"><h1>Program Management</h1><p>Create Amavasai and Pournami programs, configure offers, open registration and add Zoom/testimonials.</p></div><div class="grid grid-2"><form id="programForm" class="card"><h3>Create / Update Program</h3><input type="hidden" id="programId"><div class="field"><label>Type</label><select id="type" class="input"><option value="pournami">Pournami</option><option value="amavasai">Amavasai</option></select></div><div class="field"><label>Title (English)</label><input id="titleEn" class="input" required></div><div class="field"><label>Title (Tamil)</label><input id="titleTa" class="input" required></div><div class="field"><label>Date</label><input id="date" class="input" type="date" required></div><div class="field"><label>Start Time</label><input id="time" class="input" type="time" required></div><div class="field"><label>Online Regular Price</label><input id="onlineRegular" class="input" type="number" value="999" required></div><div class="field"><label>Offline Regular Price</label><input id="offlineRegular" class="input" type="number" value="1499" readonly></div><div class="field"><label>Current Offline Launch Offer Price</label><input id="offlineOffer" class="input" type="number" value="499" required><div class="small">Regular offline price remains ₹1499. Admin controls the launch offer price.</div></div><div class="field"><label>Offer Tiers JSON</label><textarea id="tiers" class="input" rows="4">[{"price":99,"slots":10},{"price":199,"slots":15},{"price":249,"slots":0}]</textarea><div class="small">Set slots to 0 to disable a tier. Admin decides limits for each future program.</div></div><div class="field"><label>5-minute timer</label><input id="timer" class="input" type="number" value="5" min="1" max="30"></div><div class="field">
   <label>Class Link</label>
   <input id="zoom" class="input" placeholder="https://zoom.us/...">
   <div class="small">
@@ -47,17 +47,63 @@ const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_
     'Please check the inbox and create a new password.'
   );
 };async function loadAll(){loadPrograms();loadBookings();loadLeads()}
-async function loadPrograms(){const {data}=await sb.from('meditation_programs').select('*').order('program_date',{ascending:false});document.getElementById('programs').innerHTML=(data||[]).map(p=>`<div class="card" style="margin-bottom:10px"><strong>${p.title_en}</strong><br>${p.program_date} • ${p.start_time}<br><span class="pill">${p.registration_open?'OPEN':'CLOSED'}</span> <button class="cta secondary" onclick='editProgram(${JSON.stringify(p)})'>Edit</button> <a class="cta secondary" href="pournami.html?program=${encodeURIComponent(p.id)}" target="_blank">Open Website</a></div>`).join('')}
+async function loadPrograms(){const {data}=await sb.from('meditation_programs').select('*').order('program_date',{ascending:false});document.getElementById('programs').innerHTML=(data||[]).map(p=>`<div class="card" style="margin-bottom:10px"><strong>${p.title_en}</strong><br>${p.program_date} • ${p.start_time}<br><span class="pill">${p.registration_open?'OPEN':'CLOSED'}</span> <button class="cta secondary" onclick='editProgram(${JSON.stringify(p)})'>Edit</button></div>`).join('')}
+function field(id){return document.getElementById(id)}
+function setValue(id,value){const el=field(id);if(el)el.value=value==null?'':value;return el}
 function editProgram(p){
-document.getElementById('programId').value=p.id;document.getElementById('type').value=p.program_type||'pournami';document.getElementById('titleEn').value=p.title_en||'';document.getElementById('titleTa').value=p.title_ta||'';document.getElementById('date').value=p.program_date||'';document.getElementById('time').value=(p.start_time||'').slice(0,5);document.getElementById('onlineRegular').value=p.online_regular_price??4999;document.getElementById('offlineRegular').value=p.offline_regular_price??9999;document.getElementById('offlineOffer').value=p.offline_offer_price??499;document.getElementById('offlineBase').value=p.offline_display_base??75;document.getElementById('offlineSlots').value=p.offline_total_slots??120;document.getElementById('tiers').value=JSON.stringify(p.offer_tiers||[]);document.getElementById('timer').value=p.offer_timer_minutes??5;document.getElementById('zoom').value=p.zoom_url||'';document.getElementById('map').value=p.map_url||'';document.getElementById('open').value=String(!!p.registration_open);
-const en=p.content_en||{},ta=p.content_ta||{};document.getElementById('descriptionEn').value=en.description||'';document.getElementById('descriptionTa').value=ta.description||'';document.getElementById('whyEn').value=en.why||'';document.getElementById('whyTa').value=ta.why||'';document.getElementById('benefitsEn').value=Array.isArray(en.benefits)?en.benefits.join('\n'):'';document.getElementById('benefitsTa').value=Array.isArray(ta.benefits)?ta.benefits.join('\n'):'';document.getElementById('posterEn').value=p.poster_en_url||'';document.getElementById('posterTa').value=p.poster_ta_url||'';document.getElementById('venueName').value=p.venue_name||'';document.getElementById('venueAddress').value=p.venue_address||'';
-const y=p.testimonial_urls||[];document.getElementById('yt1').value=y[0]||'';document.getElementById('yt2').value=y[1]||'';document.getElementById('yt3').value=y[2]||'';document.getElementById('classLinkStatus').innerHTML=p.class_link_published?'🟢 Published':'🔴 Not Published';scrollTo({top:0,behavior:'smooth'});
+  setValue('programId',p.id);
+  setValue('type',p.program_type);
+  setValue('titleEn',p.title_en);
+  setValue('titleTa',p.title_ta);
+  setValue('date',p.program_date);
+  setValue('time',p.start_time?String(p.start_time).slice(0,5):'');
+  setValue('onlineRegular',p.online_regular_price ?? 4999);
+  setValue('offlineRegular',p.offline_regular_price ?? 9999);
+  setValue('offlineOffer',p.offline_offer_price ?? 499);
+  setValue('tiers',JSON.stringify(p.offer_tiers||[]));
+  setValue('timer',p.offer_timer_minutes ?? 5);
+  setValue('zoom',p.zoom_url||p.class_link||'');
+  const status=field('classLinkStatus');
+  if(status){status.innerHTML=p.class_link_published?`🟢 Published${p.class_link_published_at?`<br><small>${new Date(p.class_link_published_at).toLocaleString()}</small>`:''}`:'🔴 Not Published'}
+  setValue('map',p.map_url||'');
+  setValue('open',String(!!p.registration_open));
+  const y=Array.isArray(p.testimonial_urls)?p.testimonial_urls:[];
+  setValue('yt1',y[0]||'');setValue('yt2',y[1]||'');setValue('yt3',y[2]||'');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
+
 document.getElementById('programForm').addEventListener('submit',async e=>{
-e.preventDefault();let tiers;try{tiers=JSON.parse(document.getElementById('tiers').value||'[]')}catch{alert('Invalid Offer Tiers JSON');return}
-const content_en={description:document.getElementById('descriptionEn').value.trim(),why:document.getElementById('whyEn').value.trim(),benefits:document.getElementById('benefitsEn').value.split('\n').map(x=>x.trim()).filter(Boolean)},content_ta={description:document.getElementById('descriptionTa').value.trim(),why:document.getElementById('whyTa').value.trim(),benefits:document.getElementById('benefitsTa').value.split('\n').map(x=>x.trim()).filter(Boolean)};
-const payload={program_type:document.getElementById('type').value,title_en:document.getElementById('titleEn').value.trim(),title_ta:document.getElementById('titleTa').value.trim(),program_date:document.getElementById('date').value,start_time:document.getElementById('time').value,online_regular_price:Number(document.getElementById('onlineRegular').value)||4999,offline_regular_price:Number(document.getElementById('offlineRegular').value)||9999,offline_offer_price:Number(document.getElementById('offlineOffer').value)||499,offline_display_base:Number(document.getElementById('offlineBase').value)||75,offline_total_slots:Number(document.getElementById('offlineSlots').value)||120,offer_tiers:tiers,offer_timer_minutes:Number(document.getElementById('timer').value)||5,zoom_url:document.getElementById('zoom').value||null,map_url:document.getElementById('map').value||null,venue_name:document.getElementById('venueName').value.trim()||null,venue_address:document.getElementById('venueAddress').value.trim()||null,poster_en_url:document.getElementById('posterEn').value.trim()||null,poster_ta_url:document.getElementById('posterTa').value.trim()||null,content_en,content_ta,registration_open:document.getElementById('open').value==='true',status:document.getElementById('open').value==='true'?'published':'draft',testimonial_urls:[document.getElementById('yt1').value,document.getElementById('yt2').value,document.getElementById('yt3').value].filter(Boolean)};
-const id=document.getElementById('programId').value,r=id?await sb.from('meditation_programs').update(payload).eq('id',id):await sb.from('meditation_programs').insert(payload);if(r.error)alert(r.error.message);else{alert('Program saved successfully.');e.target.reset();document.getElementById('programId').value='';document.getElementById('map').value=MEDITATION_CONFIG.DEFAULT_MAP_URL;loadPrograms();}
+  e.preventDefault();
+  const btn=e.submitter||e.target.querySelector('button[type="submit"],button.cta.full');
+  if(btn){btn.disabled=true;btn.textContent='Saving...'}
+  try{
+    let tiers;
+    try{tiers=JSON.parse(field('tiers')?.value||'[]');if(!Array.isArray(tiers))throw new Error()}catch{alert('Invalid Offer Tiers JSON');return}
+    const onlineRegular=Number(field('onlineRegular')?.value)||4999;
+    const offlineRegular=Number(field('offlineRegular')?.value)||9999;
+    const offlineOffer=Number(field('offlineOffer')?.value)||499;
+    const payload={
+      program_type:field('type')?.value,
+      title_en:field('titleEn')?.value?.trim(),title_ta:field('titleTa')?.value?.trim(),
+      program_date:field('date')?.value,start_time:field('time')?.value,
+      online_regular_price:onlineRegular,offline_regular_price:offlineRegular,
+      offline_offer_price:offlineOffer,offer_tiers:tiers,
+      offer_timer_minutes:Number(field('timer')?.value)||5,
+      zoom_url:field('zoom')?.value?.trim()||null,map_url:field('map')?.value?.trim()||null,
+      registration_open:field('open')?.value==='true',
+      status:field('open')?.value==='true'?'published':'draft',
+      testimonial_urls:['yt1','yt2','yt3'].map(id=>field(id)?.value?.trim()).filter(Boolean)
+    };
+    if(!payload.title_en||!payload.title_ta||!payload.program_date||!payload.start_time){alert('Please fill all required program fields.');return}
+    const id=field('programId')?.value;
+    const r=id?await sb.from('meditation_programs').update(payload).eq('id',id):await sb.from('meditation_programs').insert(payload);
+    if(r.error){console.error('Save Program error:',r.error);alert(r.error.message);return}
+    alert('Program saved successfully.');
+    e.target.reset();setValue('programId','');
+    setValue('onlineRegular',4999);setValue('offlineRegular',9999);setValue('offlineOffer',499);
+    const map=field('map');if(map)map.value=MEDITATION_CONFIG.DEFAULT_MAP_URL||'';
+    await loadPrograms();
+  }catch(err){console.error('Save Program error:',err);alert(err?.message||'Unable to save program. Please try again.')}finally{if(btn){btn.disabled=false;btn.textContent='Save Program'}}
 });
 async function loadBookings(){const {data}=await sb.from('meditation_bookings').select('*,meditation_programs(title_en)').order('created_at',{ascending:false}).limit(300);document.getElementById('bookings').innerHTML=(data||[]).map(b=>`<tr><td>${b.booking_no}</td><td>${b.meditation_programs?.title_en||''}</td><td>${b.name}<br>${b.mobile}</td><td>${b.mode}</td><td>₹${b.offer_price}</td><td>${b.payment_status}<br>${b.reservation_status}</td><td><select class="input" style="padding:7px" onchange="setAttendance('${b.id}',this.value)"><option ${b.attendance_status==='pending'?'selected':''}>pending</option><option ${b.attendance_status==='attended'?'selected':''}>attended</option><option ${b.attendance_status==='absent'?'selected':''}>absent</option></select></td></tr>`).join('')}
 
