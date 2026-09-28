@@ -27,7 +27,7 @@
   🔐 <span data-i18n="login">Member Login</span>
 </a><div class="lang"><button data-lang="en">EN</button><button data-lang="ta">தமிழ்</button></div></div></div></header>
 <main>
-<section class="hero"><div class="container"><div class="eyebrow" data-i18n="heroEyebrow">Pournami Dhyanam</div><h1 data-i18n="heroTitle">Pournami Meditation for Mind & Inner Relaxation</h1><p data-i18n="heroDesc">A guided meditation experience designed to create a calm space for reflection, relaxation and focused practice.</p><div class="hero-buttons"><a href="#booking" class="cta" data-i18n="book">Book Now</a><a href="#details" class="cta secondary" data-i18n="details">Program Details</a></div><div class="hero-art"><img src="guru.jpg" alt="Guru conducting a meditation program"></div></div></section>
+<section class="hero"><div class="container"><div class="eyebrow" id="programEyebrow"></div><h1 id="programHeroTitle"></h1><p id="programHeroDesc"></p><div class="hero-buttons"><a href="#booking" class="cta" data-i18n="book">Book Now</a><a href="#details" class="cta secondary" data-i18n="details">Program Details</a></div><div class="hero-art"><img src="guru.jpg" alt="Guru conducting a meditation program"></div></div></section>
 
 <section id="details" class="section">
 
@@ -55,16 +55,9 @@
 
         <div class="card">
 
-          <h3 data-i18n="why">
-            Why Pournami Dhyanam?
-          </h3>
+          <h3 id="programWhyTitle"></h3>
 
-          <p
-            class="muted"
-            data-i18n="whyText"
-          >
-            Pournami is presented as a special time for inward attention and reflective practice.
-          </p>
+          <p class="muted" id="programWhyText"></p>
 
         </div>
 
@@ -79,21 +72,13 @@
 
           <ul class="muted">
 
-            <li data-i18n="benefit1">
-              Guided relaxation and meditation practice.
-            </li>
+            <li></li>
 
-            <li data-i18n="benefit2">
-              A dedicated environment for calm and reflection.
-            </li>
+            <li></li>
 
-            <li data-i18n="benefit3">
-              Focused breathing, awareness and inner stillness practices.
-            </li>
+            <li></li>
 
-            <li data-i18n="benefit4">
-              Online participation through Zoom or direct participation at Adambakkam.
-            </li>
+            <li></li>
 
           </ul>
 
@@ -109,24 +94,12 @@
           </h3>
 
           <p>
-            <strong data-i18n="currentProgramTitle">
-              Arithuyil Arivom Pournami Dhyanam
-            </strong>
+            <strong id="currentProgramTitle"></strong>
           </p>
 
-          <p
-            class="muted"
-            data-i18n="currentProgramDate"
-          >
-            Saturday, 26 September 2026 • 7:30 PM
-          </p>
+          <p class="muted" id="currentProgramDate"></p>
 
-          <p
-            class="muted"
-            data-i18n="currentProgramMode"
-          >
-            Online via Zoom or Live at RS Plaza, Adambakkam.
-          </p>
+          <p class="muted" id="currentProgramMode"></p>
 
           <a
   class="location-link"
@@ -218,41 +191,48 @@ function safeEmbed(url){try{const u=new URL(url);if(u.hostname.includes('youtube
 function renderVideos(){const urls=Array.isArray(program?.testimonial_urls)?program.testimonial_urls:[];document.getElementById('videos').innerHTML=[0,1,2].map(i=>{const e=safeEmbed(urls[i]||'');return `<div class="card"><div class="video">${e?`<iframe src="${e}" title="Testimonial ${i+1}" loading="lazy" allowfullscreen></iframe>`:`<div class="video-placeholder">YouTube testimonial ${i+1}<br><span class="small">Admin can add the video link.</span></div>`}</div></div>`}).join('')}
 
 async function renderOffers(){
-  if(!program){document.getElementById('offersGrid').innerHTML='';return;}
-
-  const {data:dbOffers,error}=await sb.from('meditation_program_offers')
-    .select('*').eq('program_id',program.id).eq('active',true)
-    .order('mode',{ascending:true}).order('display_order',{ascending:true});
-
-  let offers=!error&&dbOffers?.length?dbOffers:[];
-  if(!offers.length){
-    offers=(Array.isArray(program.offer_tiers)?program.offer_tiers:[])
-      .map((x,i)=>({mode:'online',display_order:i+1,price:Number(x.price)||0,total_slots:Number(x.slots)||0,display_base:0}))
-      .filter(x=>x.total_slots>0);
-    if(Number(program.offline_offer_price)>0)
-      offers.push({mode:'offline',display_order:99,price:Number(program.offline_offer_price),total_slots:Number(program.offline_slots||0),display_base:Number(program.offline_display_base||0)});
+  if(!program){
+    document.getElementById('offersGrid').innerHTML='';
+    return;
   }
 
-  const onlineOffers=offers.filter(o=>o.mode==='online'&&Number(o.total_slots)>0)
-    .sort((a,b)=>Number(a.display_order)-Number(b.display_order));
-  const offlineOffer=offers.find(o=>o.mode==='offline');
-  const cards=[];
+  const tiers=Array.isArray(program.offer_tiers)?program.offer_tiers:[];
+  const onlineOffers=tiers
+    .map((o,i)=>({
+      mode:'online',
+      display_order:i+1,
+      price:Number(o.price)||0,
+      display_base:Number(o.display_base)||0,
+      total_slots:Number(o.total_slots)||0
+    }))
+    .filter(o=>o.total_slots>0);
 
+  const offlineOffer={
+    mode:'offline',
+    display_order:99,
+    price:Number(program.offline_offer_price)||0,
+    display_base:Number(program.offline_display_base)||0,
+    total_slots:Number(program.offline_total_slots)||0
+  };
+
+  const cards=[];
   onlineOffers.forEach((offer,index)=>{
-    const tierIndex=Number(offer.display_order)-1;
+    const tierIndex=offer.display_order-1;
     const badge=index===0?'EARLY LAUNCH':index===1?'NEXT OFFER':index===2?'FINAL OFFER':'OFFER';
     cards.push(`<div class="offer" data-tier="${tierIndex}">
-      <span class="badge">${badge}</span><h3>${t('online')}</h3>
-      <div><span class="old">₹${Number(program.online_regular_price||0).toLocaleString('en-IN')}</span> <span class="price">₹${Number(offer.price).toLocaleString('en-IN')}</span></div>
+      <span class="badge">${badge}</span>
+      <h3>${t('online')}</h3>
+      <div><span class="old">₹${Number(program.online_regular_price||0).toLocaleString('en-IN')}</span> <span class="price">₹${offer.price.toLocaleString('en-IN')}</span></div>
       <div class="slots" id="slot-${tierIndex}">&nbsp;</div>
       <button class="cta full" onclick="startBooking('online',${tierIndex})">${t('book')}</button>
     </div>`);
   });
 
-  if(offlineOffer){
-    cards.push(`<div class="offer">
-      <span class="badge">${t('live')}</span><h3>${program.venue_name||t('offline')}</h3>
-      <div><span class="old">₹${Number(program.offline_regular_price||0).toLocaleString('en-IN')}</span> <span class="price">₹${Number(offlineOffer.price).toLocaleString('en-IN')}</span></div>
+  if(offlineOffer.price>0 && offlineOffer.total_slots>0){
+    cards.push(`<div class="offer" data-tier="offline">
+      <span class="badge">${t('live')}</span>
+      <h3>${program.venue_name||t('offline')}</h3>
+      <div><span class="old">₹${Number(program.offline_regular_price||0).toLocaleString('en-IN')}</span> <span class="price">₹${offlineOffer.price.toLocaleString('en-IN')}</span></div>
       <div class="slots" id="slot-offline">&nbsp;</div>
       <button class="cta full" onclick="startBooking('offline',-1)">${t('book')}</button>
     </div>`);
@@ -262,387 +242,84 @@ async function renderOffers(){
   refreshSlots();
 }
 
-async function refreshSlots() {
+async function refreshSlots(){
+  if(!program?.id)return;
 
-  if (!program?.id) return;
-
-  // =====================================================
-  // GET OFFER SETTINGS FROM SUPABASE
-  // =====================================================
-
-  const {
-    data: offerSettings,
-    error: settingsError
-  } = await sb
-    .from('meditation_program_offers')
-    .select(`
-      mode,
-      display_order,
-      display_base,
-      total_slots
-    `)
-    .eq('program_id', program.id)
-    .eq('active', true);
-
-  if (settingsError) {
-    console.error('Offer settings error:', settingsError);
-  }
-
-  let safeOfferSettings = offerSettings || [];
-  if (!safeOfferSettings.length && Array.isArray(program?.offer_tiers)) {
-    safeOfferSettings = program.offer_tiers.map((x,i)=>({
-      mode:'online',
-      display_order:i+1,
-      display_base:0,
-      total_slots:Number(x.slots)||0
-    })).filter(x=>x.total_slots>0);
-    if(Number(program.offline_offer_price)>0){
-      safeOfferSettings.push({
-        mode:'offline',
-        display_order:99,
-        display_base:0,
-        total_slots:Number(program.offline_slots||0)
-      });
-    }
-  }
-
-
-  // =====================================================
-  // GET COMMON COUNTS FROM DATABASE RPC
-  // =====================================================
-
-  const {
-    data: countData,
-    error: countError
-  } = await sb.rpc(
+  const {data:countData,error:countError}=await sb.rpc(
     'get_meditation_common_counts',
-    {
-      p_program_id: program.id
-    }
+    {p_program_id:program.id}
   );
 
-  if (countError) {
-    console.error(
-      'Common booking count error:',
-      countError
-    );
+  if(countError){
+    console.error('Common booking count error:',countError);
     return;
   }
 
+  const onlineUsed=Math.max(0,Number(countData?.online_used||0));
+  const liveUsed=Math.max(0,Number(countData?.live_used||0));
 
-  const onlineUsed =
-    Number(countData?.online_used || 0);
+  const tiers=(Array.isArray(program.offer_tiers)?program.offer_tiers:[])
+    .map((o,i)=>({
+      index:i,
+      price:Number(o.price)||0,
+      base:Number(o.display_base)||0,
+      total:Number(o.total_slots)||0,
+      capacity:Math.max(0,Number(o.total_slots||0)-Number(o.display_base||0))
+    }))
+    .filter(o=>o.capacity>0);
 
-  const liveUsed =
-    Number(countData?.live_used || 0);
+  let previousCapacity=0;
 
+  tiers.forEach(tier=>{
+    const el=document.getElementById(`slot-${tier.index}`);
+    const card=document.querySelector(`.offer[data-tier="${tier.index}"]`);
+    const button=card?.querySelector('button.cta');
+    if(!el)return;
 
-  // =====================================================
-  // ONLINE — COMMON COUNT
-  // =====================================================
-
-  safeOfferSettings
-    .filter(
-      offer => offer.mode === 'online'
-    )
-    .forEach(offer => {
-
-      const tierIndex =
-        Number(offer.display_order) - 1;
-
-      const slotElement =
-        document.getElementById(
-          `slot-${tierIndex}`
-        );
-
-      if (!slotElement) return;
-
-
-      const displayBase =
-        Number(
-          offer.display_base || 0
-        );
-
-      const displayTotal =
-        displayBase +
-        Number(
-          offer.total_slots || 0
-        );
-
-      const currentDisplay =
-        displayBase +
-        onlineUsed;
-
-
-      const card =
-        document.querySelector(
-          `.offer[data-tier="${tierIndex}"]`
-        );
-
-      const button =
-        card?.querySelector(
-          'button.cta'
-        );
-
-
-      // ===============================================
-      // COMPLETED
-      // ===============================================
-
-      if (
-        currentDisplay >=
-        displayTotal
-      ) {
-
-        slotElement.textContent =
-          t('completed');
-
-        if (button) {
-          button.disabled = true;
-          button.textContent =
-            t('completed');
-        }
-
-        if (card) {
-          card.classList.add(
-            'offer-completed'
-          );
-        }
-
-      }
-
-      // ===============================================
-      // AVAILABLE
-      // ===============================================
-
-      else {
-
-        slotElement.textContent =
-          `${currentDisplay} / ${displayTotal} ${t('filled')}`;
-
-        if (button) {
-          button.disabled = false;
-          button.textContent =
-            t('book');
-        }
-
-        if (card) {
-          card.classList.remove(
-            'offer-completed'
-          );
-        }
-
-      }
-
-    });
-
-
-  // =====================================================
-  // LIVE / OFFLINE — SEPARATE COUNT
-  // =====================================================
-
-  const liveOffer =
-    safeOfferSettings.find(
-      offer =>
-        offer.mode === 'offline'
+    const tierUsed=Math.min(
+      tier.capacity,
+      Math.max(0,onlineUsed-previousCapacity)
     );
+    const current=tier.base+tierUsed;
+    const total=tier.total;
+    const priorTiersFull=onlineUsed>=previousCapacity;
+    const tierFull=tierUsed>=tier.capacity;
 
-  const liveSlotElement =
-    document.getElementById(
-      'slot-offline'
-    );
-
-  if (
-    liveOffer &&
-    liveSlotElement
-  ) {
-
-    const displayBase =
-      Number(
-        liveOffer.display_base || 0
-      );
-
-    const displayTotal =
-      displayBase +
-      Number(
-        liveOffer.total_slots || 0
-      );
-
-    const currentDisplay =
-      displayBase +
-      liveUsed;
-
-
-    const liveCard =
-      liveSlotElement.closest(
-        '.offer'
-      );
-
-    const liveButton =
-      liveCard?.querySelector(
-        'button.cta'
-      );
-
-
-    // ===============================================
-    // LIVE COMPLETED
-    // ===============================================
-
-    if (
-      currentDisplay >=
-      displayTotal
-    ) {
-
-      liveSlotElement.textContent =
-        t('completed');
-
-      if (liveButton) {
-        liveButton.disabled = true;
-        liveButton.textContent =
-          t('completed');
-      }
-
-      if (liveCard) {
-        liveCard.classList.add(
-          'offer-completed'
-        );
-      }
-
-    }
-
-    // ===============================================
-    // LIVE AVAILABLE
-    // ===============================================
-
-    else {
-
-      liveSlotElement.textContent =
-        `${currentDisplay} / ${displayTotal} ${t('filled')}`;
-
-      if (liveButton) {
-        liveButton.disabled = false;
-        liveButton.textContent =
-          t('book');
-      }
-
-      if (liveCard) {
-        liveCard.classList.remove(
-          'offer-completed'
-        );
-      }
-
-    }
-
-  }
-
-}
-  
-  function getProgramIdFromUrl(){
-  const q=new URLSearchParams(location.search);
-  return q.get('program')||q.get('program_id')||'';
-}
-function programText(key,fallback){
-  const c=program?.[`content_${currentLang}`];
-  return c&&c[key]!=null?c[key]:fallback;
-}
-function formatProgramDate(p){
-  if(!p?.program_date)return '';
-  const d=new Date(`${p.program_date}T${(p.start_time||'00:00').slice(0,5)}:00`);
-  if(Number.isNaN(d.getTime()))return p.program_date;
-  return d.toLocaleDateString(currentLang==='ta'?'ta-IN':'en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})+
-    (p.start_time?` • ${d.toLocaleTimeString(currentLang==='ta'?'ta-IN':'en-IN',{hour:'numeric',minute:'2-digit'})}`:'');
-}
-function applyProgramData(){
-  if(!program)return;
-  const title=currentLang==='ta'?(program.title_ta||program.title_en):(program.title_en||program.title_ta);
-  const typeLabel=program.program_type==='amavasai'
-    ? (currentLang==='ta'?'அமாவாசை தியானம்':'Amavasai Meditation')
-    : (currentLang==='ta'?'பௌர்ணமி தியானம்':'Pournami Dhyanam');
-  const eyebrow=document.querySelector('[data-i18n="heroEyebrow"]');
-  if(eyebrow)eyebrow.textContent=typeLabel;
-  const heroTitle=document.querySelector('[data-i18n="heroTitle"]');
-  const heroDesc=document.querySelector('[data-i18n="heroDesc"]');
-  const why=document.querySelector('[data-i18n="why"]');
-  const whyText=document.querySelector('[data-i18n="whyText"]');
-  if(heroTitle)heroTitle.textContent=title;
-  if(heroDesc)heroDesc.textContent=programText('description',heroDesc.textContent);
-  if(why)why.textContent=currentLang==='ta'?'இந்த நிகழ்ச்சி பற்றி':'About This Program';
-  if(whyText)whyText.textContent=programText('why',whyText.textContent);
-
-  const ul=document.querySelector('[data-i18n="benefit1"]')?.closest('ul');
-  const benefits=programText('benefits',[]);
-  if(ul&&Array.isArray(benefits)&&benefits.length)ul.innerHTML=benefits.map(x=>`<li class="muted">${x}</li>`).join('');
-
-  const titleEl=document.querySelector('[data-i18n="currentProgramTitle"]');
-  const dateEl=document.querySelector('[data-i18n="currentProgramDate"]');
-  const modeEl=document.querySelector('[data-i18n="currentProgramMode"]');
-  if(titleEl)titleEl.textContent=title;
-  if(dateEl)dateEl.textContent=formatProgramDate(program);
-  if(modeEl&&program.venue_name)modeEl.textContent=currentLang==='ta'?`நேரடி நிகழ்ச்சி: ${program.venue_name}`:`Live at ${program.venue_name}`;
-
-  const loc=document.querySelector('.location-link');
-  if(loc){loc.href=program.map_url||'#';loc.style.display=program.map_url?'inline-flex':'none';}
-
-  const poster=document.getElementById('programReferenceImage');
-  const posterUrl=currentLang==='ta'?(program.poster_ta_url||program.poster_en_url):(program.poster_en_url||program.poster_ta_url);
-  if(poster&&posterUrl){poster.src=posterUrl;poster.alt=title;}
-  document.title=title;
-}
-async function loadProgram(){
-  const requestedId=getProgramIdFromUrl();
-  let data=null,error=null;
-
-  if(requestedId){
-    const r=await sb.from('meditation_programs').select('*').eq('id',requestedId).limit(1);
-    data=r.data;error=r.error;
-  }else{
-    // Default public page = nearest upcoming program.
-    // This prevents an older Pournami record from being selected when a new Amavasai program exists.
-    const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
-    const upcoming=await sb.from('meditation_programs')
-      .select('*')
-      .in('status',['published','draft'])
-      .gte('program_date',today)
-      .order('program_date',{ascending:true})
-      .order('start_time',{ascending:true})
-      .limit(1);
-
-    if(upcoming.error){
-      error=upcoming.error;
-    }else if(upcoming.data?.length){
-      data=upcoming.data;
+    if(tierFull){
+      el.textContent=t('completed');
+      if(button){button.disabled=true;button.textContent=t('completed');}
+      card?.classList.add('offer-completed');
+    }else if(priorTiersFull){
+      el.textContent=`${current} / ${total} ${t('filled')}`;
+      if(button){button.disabled=false;button.textContent=t('book');}
+      card?.classList.remove('offer-completed');
     }else{
-      const fallback=await sb.from('meditation_programs')
-        .select('*')
-        .in('status',['published','draft'])
-        .order('program_date',{ascending:false})
-        .order('start_time',{ascending:false})
-        .limit(1);
-      data=fallback.data;error=fallback.error;
+      el.textContent=`${tier.base} / ${total} ${t('filled')}`;
+      if(button){button.disabled=true;button.textContent=t('comingSoon');}
+      card?.classList.remove('offer-completed');
     }
-  }
 
-  program=data?.[0]||null;
+    previousCapacity+=tier.capacity;
+  });
 
-  if(error||!program){
-    console.error('Program loading error:',error);
-    const s=document.getElementById('programStatus');
-    s.className='status error';s.textContent=t('noAccess');s.classList.remove('hidden');return;
-  }
+  const offline=document.getElementById('slot-offline');
+  if(offline){
+    const base=Number(program.offline_display_base||0);
+    const total=Number(program.offline_total_slots||0);
+    const capacity=Math.max(0,total-base);
+    const current=base+Math.min(capacity,liveUsed);
+    const card=offline.closest('.offer');
+    const button=card?.querySelector('button.cta');
 
-  applyProgramData();
-  renderVideos();
-  renderOffers();
-
-  const s=document.getElementById('programStatus');
-  if(!program.registration_open){
-    s.className='status';
-    s.textContent=program.registration_open_at
-      ?`${t('comingSoon')}: ${new Date(program.registration_open_at).toLocaleString(currentLang==='ta'?'ta-IN':'en-IN')}`
-      :t('noAccess');
-    s.classList.remove('hidden');
-  }else{
-    s.classList.add('hidden');
+    if(liveUsed>=capacity){
+      offline.textContent=t('completed');
+      if(button){button.disabled=true;button.textContent=t('completed');}
+      card?.classList.add('offer-completed');
+    }else{
+      offline.textContent=`${current} / ${total} ${t('filled')}`;
+      if(button){button.disabled=false;button.textContent=t('book');}
+      card?.classList.remove('offer-completed');
+    }
   }
 }
 
@@ -1357,6 +1034,5 @@ function updateReferencePoster(lang) {
 }
 
 setLang(currentLang);
-updateReferencePoster(currentLang);
 loadProgram();
 </script></body></html>
