@@ -3,7 +3,7 @@
   <button type="button" id="forgotPassword" class="pill">
     Forgot Admin Password?
   </button>
-</div></form></div><div id="app" class="hidden"><div class="section-title"><h1>Program Management</h1><p>Create Amavasai and Pournami programs, manage content, venue, posters, offers, registration and class links.</p></div><div class="grid grid-2"><form id="programForm" class="card"><h3>Create / Update Program</h3><input type="hidden" id="programId"><div class="field"><label>Type</label><select id="type" class="input"><option value="pournami">Pournami</option><option value="amavasai">Amavasai</option></select></div><div class="field"><label>Title (English)</label><input id="titleEn" class="input" required></div><div class="field"><label>Title (Tamil)</label><input id="titleTa" class="input" required></div><div class="field"><label>Date</label><input id="date" class="input" type="date" required></div><div class="field"><label>Start Time</label><input id="time" class="input" type="time" required></div><div class="field"><label>Online Regular Price</label><input id="onlineRegular" class="input" type="number" value="4999" required></div><div class="field"><label>Offline Regular Price</label><input id="offlineRegular" class="input" type="number" value="9999" readonly></div><div class="field"><label>Current Offline Launch Offer Price</label><input id="offlineOffer" class="input" type="number" value="499" required><div class="small">Regular offline price remains ₹9999. Admin controls the launch offer price.</div></div><div class="field"><label>Offer Tiers JSON</label><textarea id="tiers" class="input" rows="4">[{"mode":"online","display_order":1,"price":99,"display_base":90,"total_slots":10},{"mode":"online","display_order":2,"price":199,"display_base":90,"total_slots":25},{"mode":"online","display_order":3,"price":249,"display_base":90,"total_slots":110},{"mode":"offline","display_order":1,"price":499,"display_base":75,"total_slots":45}]</textarea><div class="small">Online: ₹99 = 90/100 (10 actual), ₹199 = 90/115 (25 actual), ₹249 = 90/200 (110 actual). Offline: ₹499 = 75/120 (45 actual).</div></div><div class="field"><label>5-minute timer</label><input id="timer" class="input" type="number" value="5" min="1" max="30"></div><div class="field">
+</div></form></div><div id="app" class="hidden"><div class="section-title"><h1>Program Management</h1><p>Create Amavasai and Pournami programs, manage content, venue, posters, offers, registration and class links.</p></div><div class="grid grid-2"><form id="programForm" class="card"><h3>Create / Update Program</h3><input type="hidden" id="programId"><div class="field"><label>Type</label><select id="type" class="input"><option value="pournami">Pournami</option><option value="amavasai">Amavasai</option></select></div><div class="field"><label>Title (English)</label><input id="titleEn" class="input" required></div><div class="field"><label>Title (Tamil)</label><input id="titleTa" class="input" required></div><div class="field"><label>Date</label><input id="date" class="input" type="date" required></div><div class="field"><label>Start Time</label><input id="time" class="input" type="time" required></div><div class="field"><label>Online Regular Price</label><input id="onlineRegular" class="input" type="number" value="4999" required></div><div class="field"><label>Offline Regular Price</label><input id="offlineRegular" class="input" type="number" value="9999"></div><div class="field"><label>Current Offline Launch Offer Price</label><input id="offlineOffer" class="input" type="number" value="499" required><div class="small">Regular offline price remains ₹9999. Admin controls the launch offer price.</div></div><div class="field"><label>Offer Tiers JSON</label><textarea id="tiers" class="input" rows="4">[{"mode":"online","display_order":1,"price":99,"display_base":90,"total_slots":100},{"mode":"online","display_order":2,"price":199,"display_base":90,"total_slots":115},{"mode":"online","display_order":3,"price":249,"display_base":90,"total_slots":200},{"mode":"offline","display_order":1,"price":499,"display_base":75,"total_slots":120}]</textarea><div class="small">Online: ₹99 = 90/100, ₹199 = 90/115, ₹249 = 90/200. Offline: ₹499 = 75/120.</div></div><div class="field"><label>5-minute timer</label><input id="timer" class="input" type="number" value="5" min="1" max="30"></div><div class="field">
   <label>Class Link</label>
   <input id="zoom" class="input" placeholder="https://zoom.us/...">
   <div class="small">
@@ -66,42 +66,30 @@ const DEFAULT_OFFER_TIERS=[
 ];
 
 function normalizeOfferTiers(value){
-  let tiers=Array.isArray(value)?value:[];
-  tiers=tiers.map((x,i)=>({
-    mode:x.mode==='offline'?'offline':'online',
-    display_order:Number(x.display_order)||((x.mode==='offline')?1:i+1),
-    price:Number(x.price)||0,
-    display_base:Number(x.display_base)||0,
-    total_slots:Number(x.total_slots ?? x.slots)||0
-  })).filter(x=>x.price>0 && x.total_slots>0);
-  return tiers;
-}
-
-async function syncWebsiteOffers(programId,tiers){
-  // Keep the existing website offer table in sync with the program editor.
-  // The public page reads meditation_program_offers, not only offer_tiers JSON.
-  const {error:deleteError}=await sb
-    .from('meditation_program_offers')
-    .delete()
-    .eq('program_id',programId);
-  if(deleteError) throw new Error('Program saved, but website offers could not be cleared: '+deleteError.message);
-
-  const rows=tiers.map(t=>({
-    program_id:programId,
-    mode:t.mode,
-    display_order:t.display_order,
-    price:t.price,
-    display_base:t.display_base,
-    total_slots:t.total_slots,
-    active:true
-  }));
-
-  if(!rows.length) return;
-
-  const {error:insertError}=await sb
-    .from('meditation_program_offers')
-    .insert(rows);
-  if(insertError) throw new Error('Program saved, but website offers could not be synced: '+insertError.message);
+  const source=Array.isArray(value)?value:[];
+  return source.map((x,i)=>{
+    const mode=x.mode==='offline'?'offline':'online';
+    const order=Number(x.display_order)||((mode==='offline')?1:i+1);
+    const price=Number(x.price)||0;
+    const base=Number.isFinite(Number(x.display_base))
+      ? Number(x.display_base)
+      : (mode==='offline'?75:90);
+    let total;
+    if (x.total_slots !== undefined && x.total_slots !== null && x.total_slots !== '') {
+      total=Number(x.total_slots)||0;
+    } else if (x.slots !== undefined && x.slots !== null && x.slots !== '') {
+      total=base+(Number(x.slots)||0);
+    } else {
+      total=0;
+    }
+    return {
+      mode,
+      display_order:order,
+      price,
+      display_base:base,
+      total_slots:total
+    };
+  }).filter(x=>x.price>0 && x.total_slots>x.display_base);
 }
 
 async function loadAll(){loadPrograms();loadBookings();loadLeads()}
@@ -245,8 +233,6 @@ document.getElementById('programForm').addEventListener('submit',async e=>{
       if(error) throw error;
       programId=data.id;
     }
-
-    await syncWebsiteOffers(programId,tiers);
 
     alert('Program saved successfully.');
     e.target.reset();
