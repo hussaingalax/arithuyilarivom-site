@@ -1156,7 +1156,7 @@ async function createOrder() {
 ========================================= */
 
 async function waitForPaymentConfirmation(
-  maxAttempts = 10,
+  maxAttempts = 20,
   intervalMs = 3000
 ) {
 
@@ -1168,21 +1168,36 @@ async function waitForPaymentConfirmation(
 
     try {
 
-      const {
-        data,
-        error
-      } = await sb.rpc(
-        'get_meditation_booking',
+      /*
+         IMPORTANT:
+         Payment recovery must not depend on the
+         get_meditation_booking RPC because that RPC is
+         returning HTTP 400 in the browser after Razorpay success.
+
+         Use the existing meditation-api booking endpoint instead.
+      */
+      const response = await fetch(
+        `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=booking&id=${encodeURIComponent(booking.id)}`,
         {
-          p_booking_id:
-            booking.id
+          method: 'GET',
+          headers: {
+            'apikey':
+              MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+            'Authorization':
+              `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+          }
         }
       );
 
+      const result = await response.json();
+
       if (
-        !error &&
-        data
+        response.ok &&
+        result?.success &&
+        result?.booking
       ) {
+
+        const data = result.booking;
 
         const isPaid =
           data.payment_status === 'paid';
@@ -1196,7 +1211,7 @@ async function waitForPaymentConfirmation(
         ) {
 
           console.log(
-            'Payment confirmed by webhook:',
+            'Payment confirmed by backend recovery:',
             attempt
           );
 
@@ -1209,7 +1224,7 @@ async function waitForPaymentConfirmation(
     } catch (error) {
 
       console.warn(
-        'Webhook confirmation check failed:',
+        'Backend payment recovery check failed:',
         error
       );
 
@@ -1232,6 +1247,7 @@ async function waitForPaymentConfirmation(
 
   return false;
 }
+
 /* =========================================
    VERIFY PAYMENT
 ========================================= */
@@ -1409,13 +1425,11 @@ async function verify(response) {
          Show login details once
       --------------------------------- */
 
-      setPaymentProcessing(false);
-
       showMemberSuccessPopup(
-        accountData.mobile || booking.mobile,
-        accountData.password,
-        booking.program?.whatsapp_community_link || null
-      );
+  accountData.mobile || booking.mobile,
+  accountData.password,
+  booking.meditation_programs?.whatsapp_community_link || null
+);
 
 
 
@@ -1428,13 +1442,32 @@ return;
 
 
 
+      /* ---------------------------------
+         Auto login successful
+      --------------------------------- */
+
+      console.log(
+
+        'Member auto login successful:',
+
+        loginData?.user?.id
+
+      );
+
+
+      window.location.href =
+        'member-dashboard.html';
+
+
+      return;
+
+    }
+
 
 
     /* =================================
        EXISTING MEMBER
     ================================= */
-
-    setPaymentProcessing(false);
 
     alert(
 
@@ -1534,18 +1567,12 @@ return;
         booking.mobile
       );
 
+      /*
+         Existing/new member:
+         send to login page.
+      */
+
       setPaymentProcessing(false);
-
-      if (accountData.password) {
-
-        showMemberSuccessPopup(
-          accountData.mobile || booking.mobile,
-          accountData.password,
-          booking.program?.whatsapp_community_link || null
-        );
-
-        return;
-      }
 
       window.location.href =
         'member-login.html?paid=1';
