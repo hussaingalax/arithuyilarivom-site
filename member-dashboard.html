@@ -185,6 +185,12 @@ async function joinClass(booking, link) {
   }
 }
 
+window.renderDynamic = function() {
+  if (Array.isArray(allBookings) && allBookings.length) {
+    render(allBookings);
+  }
+};
+
 async function render(bs) {
   allBookings = bs;
 
@@ -323,7 +329,7 @@ async function render(bs) {
     </div>` : '';
 
   const currentHtml = current ? `
-    <p><strong>${esc(current.meditation_programs?.title_en || '')}</strong></p>
+    <p><strong>${esc((window.currentLang || 'en') === 'ta' ? (current.meditation_programs?.title_ta || current.meditation_programs?.title_en || '') : (current.meditation_programs?.title_en || ''))}</strong></p>
     <p class="muted">
       ${esc(current.meditation_programs?.program_date || '')}
       • ${esc(current.meditation_programs?.start_time || '')}
