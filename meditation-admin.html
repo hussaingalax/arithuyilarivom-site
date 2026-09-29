@@ -1,4 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meditation Admin</title><link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><header class="topbar"><div class="container topbar-inner"><div class="brand">Arithuyil Arivom • Meditation Admin</div><div><button id="logout" class="cta secondary">Logout</button></div></div></header><main class="dashboard"><div class="container"><div id="login" class="card" style="max-width:520px;margin:auto"><h1>Admin Login</h1><p class="muted">Use the approved admin email. Supabase Auth password is required.</p><form id="adminLogin"><div class="field"><label>Email</label><input class="input" id="email" value="arithuyilarivom@gmail.com" readonly></div><div class="field"><label>Password</label><input class="input" id="password" type="password" required></div><button class="cta full">Login</button><div style="margin-top:15px;text-align:center">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meditation Admin</title><link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<meta name="admin-build" content="20260929-no-field"></head><body><header class="topbar"><div class="container topbar-inner"><div class="brand">Arithuyil Arivom • Meditation Admin</div><div><button id="logout" class="cta secondary">Logout</button></div></div></header><main class="dashboard"><div class="container"><div id="login" class="card" style="max-width:520px;margin:auto"><h1>Admin Login</h1><p class="muted">Use the approved admin email. Supabase Auth password is required.</p><form id="adminLogin"><div class="field"><label>Email</label><input class="input" id="email" value="arithuyilarivom@gmail.com" readonly></div><div class="field"><label>Password</label><input class="input" id="password" type="password" required></div><button class="cta full">Login</button><div style="margin-top:15px;text-align:center">
   <button type="button" id="forgotPassword" class="pill">
     Forgot Admin Password?
   </button>
@@ -126,12 +127,9 @@ function escapeHtml(value){
   return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
 
-function field(id){
-  return document.getElementById(id);
-}
 
 function setValue(id,value){
-  const el=field(id);
+  const el=document.getElementById(id);
   if(el) el.value=value??'';
 }
 
@@ -188,47 +186,47 @@ document.getElementById('programForm').addEventListener('submit',async e=>{
   if(btn){btn.disabled=true;btn.textContent='Saving...';}
 
   try{
-    const tiers=normalizeOfferTiers(JSON.parse(field('tiers')?.value||'[]'));
+    const tiers=normalizeOfferTiers(JSON.parse(document.getElementById('tiers')?.value||'[]'));
 
     if(!tiers.length){
       alert('Please enter at least one valid offer tier.');
       return;
     }
 
-    const onlineRegular=Number(field('onlineRegular')?.value);
-    const offlineRegular=Number(field('offlineRegular')?.value);
-    const offlineOffer=Number(field('offlineOffer')?.value);
+    const onlineRegular=Number(document.getElementById('onlineRegular')?.value);
+    const offlineRegular=Number(document.getElementById('offlineRegular')?.value);
+    const offlineOffer=Number(document.getElementById('offlineOffer')?.value);
 
     const payload={
-      program_type:field('type')?.value,
-      title_en:field('titleEn')?.value?.trim(),
-      title_ta:field('titleTa')?.value?.trim(),
-      program_date:field('date')?.value,
-      start_time:field('time')?.value,
+      program_type:document.getElementById('type')?.value,
+      title_en:document.getElementById('titleEn')?.value?.trim(),
+      title_ta:document.getElementById('titleTa')?.value?.trim(),
+      program_date:document.getElementById('date')?.value,
+      start_time:document.getElementById('time')?.value,
       online_regular_price:Number.isFinite(onlineRegular)&&onlineRegular>0?onlineRegular:4999,
       offline_regular_price:Number.isFinite(offlineRegular)&&offlineRegular>0?offlineRegular:9999,
       offline_offer_price:Number.isFinite(offlineOffer)&&offlineOffer>0?offlineOffer:499,
       offer_tiers:tiers,
-      offer_timer_minutes:Number(field('timer')?.value)||5,
-      zoom_url:field('zoom')?.value?.trim()||null,
-      venue_name:field('venueName')?.value?.trim()||null,
-      venue_address:field('venueAddress')?.value?.trim()||null,
+      offer_timer_minutes:Number(document.getElementById('timer')?.value)||5,
+      zoom_url:document.getElementById('zoom')?.value?.trim()||null,
+      venue_name:document.getElementById('venueName')?.value?.trim()||null,
+      venue_address:document.getElementById('venueAddress')?.value?.trim()||null,
       content_en:{
-        description:field('descriptionEn')?.value?.trim()||'',
-        why:field('whyEn')?.value?.trim()||'',
-        benefits:(field('benefitsEn')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean)
+        description:document.getElementById('descriptionEn')?.value?.trim()||'',
+        why:document.getElementById('whyEn')?.value?.trim()||'',
+        benefits:(document.getElementById('benefitsEn')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean)
       },
       content_ta:{
-        description:field('descriptionTa')?.value?.trim()||'',
-        why:field('whyTa')?.value?.trim()||'',
-        benefits:(field('benefitsTa')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean)
+        description:document.getElementById('descriptionTa')?.value?.trim()||'',
+        why:document.getElementById('whyTa')?.value?.trim()||'',
+        benefits:(document.getElementById('benefitsTa')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean)
       },
-      poster_en_url:field('posterEn')?.value?.trim()||null,
-      poster_ta_url:field('posterTa')?.value?.trim()||null,
-      map_url:field('map')?.value?.trim()||null,
-      registration_open:field('open')?.value==='true',
-      status:field('open')?.value==='true'?'published':'draft',
-      testimonial_urls:['yt1','yt2','yt3'].map(id=>field(id)?.value?.trim()).filter(Boolean)
+      poster_en_url:document.getElementById('posterEn')?.value?.trim()||null,
+      poster_ta_url:document.getElementById('posterTa')?.value?.trim()||null,
+      map_url:document.getElementById('map')?.value?.trim()||null,
+      registration_open:document.getElementById('open')?.value==='true',
+      status:document.getElementById('open')?.value==='true'?'published':'draft',
+      testimonial_urls:['yt1','yt2','yt3'].map(id=>document.getElementById(id)?.value?.trim()).filter(Boolean)
     };
 
     if(!payload.title_en||!payload.title_ta||!payload.program_date||!payload.start_time){
@@ -236,7 +234,7 @@ document.getElementById('programForm').addEventListener('submit',async e=>{
       return;
     }
 
-    const id=field('programId')?.value;
+    const id=document.getElementById('programId')?.value;
     let programId=id;
 
     if(id){
@@ -258,7 +256,7 @@ document.getElementById('programForm').addEventListener('submit',async e=>{
     setValue('offlineOffer',499);
     setValue('tiers',JSON.stringify(DEFAULT_OFFER_TIERS,null,2));
 
-    const map=field('map');
+    const map=document.getElementById('map');
     if(map) map.value=MEDITATION_CONFIG.DEFAULT_MAP_URL||'';
 
     await loadPrograms();
