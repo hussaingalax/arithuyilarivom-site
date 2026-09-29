@@ -30,7 +30,22 @@
       Hide Class Link
     </button>
   </div>
-</div><div class="field"><label>Venue Name</label><input id="venueName" class="input" placeholder="RS Plaza, Adambakkam, Chennai"></div>
+</div>
+<div class="field">
+  <label>WhatsApp Community Invite Link</label>
+
+  <input
+    id="whatsappCommunityLink"
+    class="input"
+    type="url"
+    placeholder="https://chat.whatsapp.com/..."
+  >
+
+  <div class="small">
+    This WhatsApp Community link belongs to this program.
+  </div>
+</div>
+<div class="field"><label>Venue Name</label><input id="venueName" class="input" placeholder="RS Plaza, Adambakkam, Chennai"></div>
 <div class="field"><label>Venue Address</label><textarea id="venueAddress" class="input" rows="2" placeholder="Full venue address"></textarea></div>
 <div class="field"><label>Program Description (English)</label><textarea id="descriptionEn" class="input" rows="4"></textarea></div>
 <div class="field"><label>Program Description (Tamil)</label><textarea id="descriptionTa" class="input" rows="4"></textarea></div>
@@ -146,6 +161,10 @@ function editProgram(p){
   setValue('tiers',JSON.stringify(tiers.length?tiers:DEFAULT_OFFER_TIERS,null,2));
   setValue('timer',p.offer_timer_minutes??5);
   setValue('zoom',p.zoom_url||p.class_link||'');
+  setValue(
+  'whatsappCommunityLink',
+  p.whatsapp_community_link || ''
+);
   setValue('venueName',p.venue_name||'');
   setValue('venueAddress',p.venue_address||'');
 
@@ -220,6 +239,10 @@ document.getElementById('programForm').addEventListener('submit',async e=>{
       poster_en_url:document.getElementById('posterEn')?.value?.trim()||null,
       poster_ta_url:document.getElementById('posterTa')?.value?.trim()||null,
       map_url:document.getElementById('map')?.value?.trim()||null,
+      whatsapp_community_link:
+  document.getElementById(
+    'whatsappCommunityLink'
+  )?.value?.trim() || null,
       registration_open:document.getElementById('open')?.value==='true',
       status:document.getElementById('open')?.value==='true'?'published':'draft',
       testimonial_urls:['yt1','yt2','yt3'].map(id=>document.getElementById(id)?.value?.trim()).filter(Boolean)
