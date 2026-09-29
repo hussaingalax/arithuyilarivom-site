@@ -429,27 +429,54 @@ function renderDynamic(){
 }
 
 async function getProgramFromDatabase(){
-  const params=new URLSearchParams(window.location.search);
-  const requestedId=params.get('program')||sessionStorage.getItem('aa_selected_program_id');
+
+  const params = new URLSearchParams(window.location.search);
+  const requestedId = params.get('program');
+
+  // -------------------------------------------------------
+  // 1. If a specific program is requested in URL,
+  //    use it ONLY if registration is currently OPEN.
+  // -------------------------------------------------------
 
   if(requestedId){
-    const {data,error}=await sb.from('meditation_programs').select('*').eq('id',requestedId).limit(1);
-    if(!error&&data?.[0]) return data[0];
-    sessionStorage.removeItem('aa_selected_program_id');
+
+    const { data, error } = await sb
+      .from('meditation_programs')
+      .select('*')
+      .eq('id', requestedId)
+      .eq('registration_open', true)
+      .limit(1);
+
+    if(!error && data?.[0]){
+      return data[0];
+    }
+
   }
 
-  const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
-  // LIVE PAGE RULE: show the program that is currently OPEN for booking.
-  // Date is used only to choose the nearest upcoming open program.
-  const result=await sb.from('meditation_programs')
+  // -------------------------------------------------------
+  // 2. Otherwise automatically find the nearest
+  //    UPCOMING program whose registration is OPEN.
+  // -------------------------------------------------------
+
+  const today = new Date().toLocaleDateString(
+    'en-CA',
+    { timeZone: 'Asia/Kolkata' }
+  );
+
+  const { data, error } = await sb
+    .from('meditation_programs')
     .select('*')
-    .eq('registration_open',true)
-    .gte('program_date',today)
-    .order('program_date',{ascending:true})
-    .order('start_time',{ascending:true})
+    .eq('registration_open', true)
+    .gte('program_date', today)
+    .order('program_date', { ascending: true })
+    .order('start_time', { ascending: true })
     .limit(1);
-  if(result.error)throw result.error;
-  return result.data?.[0]||null;
+
+  if(error){
+    throw error;
+  }
+
+  return data?.[0] || null;
 }
 
 async function loadProgram(){
