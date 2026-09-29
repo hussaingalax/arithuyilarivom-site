@@ -67,28 +67,36 @@ const DEFAULT_OFFER_TIERS=[
 
 function normalizeOfferTiers(value){
   const source=Array.isArray(value)?value:[];
+  const legacy=source.length>0 && source.every(x=>
+    Number(x.display_base||0)===0 && Number(x.total_slots||0)>0 && Number(x.total_slots||0)<=110
+  );
+  if(legacy){
+    const byPrice={99:DEFAULT_OFFER_TIERS[0],199:DEFAULT_OFFER_TIERS[1],249:DEFAULT_OFFER_TIERS[2],499:DEFAULT_OFFER_TIERS[3]};
+    const migrated=source.map((x,i)=>{
+      const mapped=byPrice[Number(x.price)];
+      if(mapped) return {...mapped};
+      const mode=x.mode==='offline'?'offline':'online';
+      const base=mode==='offline'?75:90;
+      const capacity=Number(x.total_slots||x.slots||0);
+      return {mode,display_order:Number(x.display_order)||i+1,price:Number(x.price)||0,display_base:base,total_slots:base+capacity};
+    });
+    const prices=new Set(migrated.map(x=>Number(x.price)));
+    if(prices.has(99)||prices.has(199)||prices.has(249)||prices.has(499)){
+      return DEFAULT_OFFER_TIERS.map(x=>({...x}));
+    }
+  }
   return source.map((x,i)=>{
     const mode=x.mode==='offline'?'offline':'online';
     const order=Number(x.display_order)||((mode==='offline')?1:i+1);
     const price=Number(x.price)||0;
-    const base=Number.isFinite(Number(x.display_base))
-      ? Number(x.display_base)
-      : (mode==='offline'?75:90);
+    const base=Number.isFinite(Number(x.display_base)) ? Number(x.display_base) : (mode==='offline'?75:90);
     let total;
     if (x.total_slots !== undefined && x.total_slots !== null && x.total_slots !== '') {
       total=Number(x.total_slots)||0;
     } else if (x.slots !== undefined && x.slots !== null && x.slots !== '') {
       total=base+(Number(x.slots)||0);
-    } else {
-      total=0;
-    }
-    return {
-      mode,
-      display_order:order,
-      price,
-      display_base:base,
-      total_slots:total
-    };
+    } else total=0;
+    return {mode,display_order:order,price,display_base:base,total_slots:total};
   }).filter(x=>x.price>0 && x.total_slots>x.display_base);
 }
 
