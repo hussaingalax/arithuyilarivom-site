@@ -123,8 +123,8 @@
         <img
   id="programReferenceImage"
   class="poster"
-  src="pournami-reference-en.jpg"
-  alt="Pournami meditation reference poster"
+  src=""
+  alt=""
   data-i18n-alt="posterAlt"
 >
 
@@ -190,56 +190,53 @@ function toast(msg,ok=true){const el=document.getElementById('toast');el.innerHT
 function safeEmbed(url){try{const u=new URL(url);if(u.hostname.includes('youtube.com')){let id=u.searchParams.get('v');return id?`https://www.youtube.com/embed/${id}`:url}if(u.hostname==='youtu.be'){return `https://www.youtube.com/embed/${u.pathname.slice(1)}`}return ''}catch{return ''}}
 function renderVideos(){const urls=Array.isArray(program?.testimonial_urls)?program.testimonial_urls:[];document.getElementById('videos').innerHTML=[0,1,2].map(i=>{const e=safeEmbed(urls[i]||'');return `<div class="card"><div class="video">${e?`<iframe src="${e}" title="Testimonial ${i+1}" loading="lazy" allowfullscreen></iframe>`:`<div class="video-placeholder">YouTube testimonial ${i+1}<br><span class="small">Admin can add the video link.</span></div>`}</div></div>`}).join('')}
 
+
+function getProgramTiers(){
+  const source=Array.isArray(program?.offer_tiers)?program.offer_tiers:[];
+  return source.map((o,i)=>({
+    mode:o.mode==='offline'?'offline':'online',
+    index:Number(o.display_order||i+1)-1,
+    price:Number(o.price)||0,
+    base:Number(o.display_base ?? (o.mode==='offline'?75:90))||0,
+    total:Number(o.total_slots ?? 0)||0
+  })).filter(o=>o.price>0 && o.total>o.base);
+}
+
 async function renderOffers(){
+  const grid=document.getElementById('offersGrid');
   if(!program){
-    document.getElementById('offersGrid').innerHTML='';
+    if(grid) grid.innerHTML='';
     return;
   }
 
-  const tiers=Array.isArray(program.offer_tiers)?program.offer_tiers:[];
-  const onlineOffers=tiers
-    .map((o,i)=>({
-      mode:'online',
-      display_order:i+1,
-      price:Number(o.price)||0,
-      display_base:Number(o.display_base)||0,
-      total_slots:Number(o.total_slots)||0
-    }))
-    .filter(o=>o.total_slots>0);
-
-  const offlineOffer={
-    mode:'offline',
-    display_order:99,
-    price:Number(program.offline_offer_price)||0,
-    display_base:Number(program.offline_display_base)||0,
-    total_slots:Number(program.offline_total_slots)||0
-  };
-
+  const tiers=getProgramTiers();
+  const online=tiers.filter(o=>o.mode==='online').sort((a,b)=>a.index-b.index);
+  const offline=tiers.find(o=>o.mode==='offline');
   const cards=[];
-  onlineOffers.forEach((offer,index)=>{
-    const tierIndex=offer.display_order-1;
-    const badge=index===0?'EARLY LAUNCH':index===1?'NEXT OFFER':index===2?'FINAL OFFER':'OFFER';
-    cards.push(`<div class="offer" data-tier="${tierIndex}">
+
+  online.forEach((offer,index)=>{
+    const badge=index===0?t('earlyLaunch'):index===1?t('nextOffer'):index===2?t('finalOffer'):'OFFER';
+    cards.push(`<div class="offer" data-tier="${offer.index}">
       <span class="badge">${badge}</span>
       <h3>${t('online')}</h3>
       <div><span class="old">₹${Number(program.online_regular_price||0).toLocaleString('en-IN')}</span> <span class="price">₹${offer.price.toLocaleString('en-IN')}</span></div>
-      <div class="slots" id="slot-${tierIndex}">&nbsp;</div>
-      <button class="cta full" onclick="startBooking('online',${tierIndex})">${t('book')}</button>
+      <div class="slots" id="slot-${offer.index}">&nbsp;</div>
+      <button class="cta full" onclick="startBooking('online',${offer.index})">${t('book')}</button>
     </div>`);
   });
 
-  if(offlineOffer.price>0 && offlineOffer.total_slots>0){
+  if(offline){
     cards.push(`<div class="offer" data-tier="offline">
       <span class="badge">${t('live')}</span>
-      <h3>${program.venue_name||t('offline')}</h3>
-      <div><span class="old">₹${Number(program.offline_regular_price||0).toLocaleString('en-IN')}</span> <span class="price">₹${offlineOffer.price.toLocaleString('en-IN')}</span></div>
+      <h3>${escapeHtml(program.venue_name||t('offline'))}</h3>
+      <div><span class="old">₹${Number(program.offline_regular_price||0).toLocaleString('en-IN')}</span> <span class="price">₹${offline.price.toLocaleString('en-IN')}</span></div>
       <div class="slots" id="slot-offline">&nbsp;</div>
       <button class="cta full" onclick="startBooking('offline',-1)">${t('book')}</button>
     </div>`);
   }
 
-  document.getElementById('offersGrid').innerHTML=cards.join('');
-  refreshSlots();
+  grid.innerHTML=cards.join('');
+  await refreshSlots();
 }
 
 async function refreshSlots(){
@@ -258,70 +255,212 @@ async function refreshSlots(){
   const onlineUsed=Math.max(0,Number(countData?.online_used||0));
   const liveUsed=Math.max(0,Number(countData?.live_used||0));
 
-  const tiers=(Array.isArray(program.offer_tiers)?program.offer_tiers:[])
-    .map((o,i)=>({
-      index:i,
-      price:Number(o.price)||0,
-      base:Number(o.display_base)||0,
-      total:Number(o.total_slots)||0,
-      capacity:Math.max(0,Number(o.total_slots||0)-Number(o.display_base||0))
-    }))
-    .filter(o=>o.capacity>0);
+  const online=getProgramTiers()
+    .filter(o=>o.mode==='online')
+    .sort((a,b)=>a.index-b.index);
 
-  let previousCapacity=0;
+  let consumed=0;
 
-  tiers.forEach(tier=>{
+  online.forEach(tier=>{
     const el=document.getElementById(`slot-${tier.index}`);
     const card=document.querySelector(`.offer[data-tier="${tier.index}"]`);
     const button=card?.querySelector('button.cta');
     if(!el)return;
 
-    const tierUsed=Math.min(
-      tier.capacity,
-      Math.max(0,onlineUsed-previousCapacity)
-    );
-    const current=tier.base+tierUsed;
-    const total=tier.total;
-    const priorTiersFull=onlineUsed>=previousCapacity;
-    const tierFull=tierUsed>=tier.capacity;
+    const capacity=tier.total-tier.base;
+    const used=Math.min(capacity,Math.max(0,onlineUsed-consumed));
+    const current=tier.base+used;
+    const full=used>=capacity;
+    const previousComplete=onlineUsed>=consumed;
 
-    if(tierFull){
+    if(full){
       el.textContent=t('completed');
       if(button){button.disabled=true;button.textContent=t('completed');}
       card?.classList.add('offer-completed');
-    }else if(priorTiersFull){
-      el.textContent=`${current} / ${total} ${t('filled')}`;
+    }else if(previousComplete){
+      el.textContent=`${current} / ${tier.total} ${t('filled')}`;
       if(button){button.disabled=false;button.textContent=t('book');}
       card?.classList.remove('offer-completed');
     }else{
-      el.textContent=`${tier.base} / ${total} ${t('filled')}`;
+      el.textContent=`${tier.base} / ${tier.total} ${t('filled')}`;
       if(button){button.disabled=true;button.textContent=t('comingSoon');}
       card?.classList.remove('offer-completed');
     }
 
-    previousCapacity+=tier.capacity;
+    consumed+=capacity;
   });
 
-  const offline=document.getElementById('slot-offline');
-  if(offline){
-    const base=Number(program.offline_display_base||0);
-    const total=Number(program.offline_total_slots||0);
-    const capacity=Math.max(0,total-base);
-    const current=base+Math.min(capacity,liveUsed);
-    const card=offline.closest('.offer');
+  const offline=getProgramTiers().find(o=>o.mode==='offline');
+  const el=document.getElementById('slot-offline');
+  if(offline&&el){
+    const capacity=offline.total-offline.base;
+    const used=Math.min(capacity,liveUsed);
+    const current=offline.base+used;
+    const card=el.closest('.offer');
     const button=card?.querySelector('button.cta');
 
-    if(liveUsed>=capacity){
-      offline.textContent=t('completed');
+    if(used>=capacity){
+      el.textContent=t('completed');
       if(button){button.disabled=true;button.textContent=t('completed');}
       card?.classList.add('offer-completed');
     }else{
-      offline.textContent=`${current} / ${total} ${t('filled')}`;
+      el.textContent=`${current} / ${offline.total} ${t('filled')}`;
       if(button){button.disabled=false;button.textContent=t('book');}
       card?.classList.remove('offer-completed');
     }
   }
 }
+
+function formatProgramDateTime(p){
+  try{
+    const d=new Date(`${p.program_date}T${String(p.start_time||'00:00').slice(0,5)}:00`);
+    return d.toLocaleString(currentLang==='ta'?'ta-IN':'en-IN',{
+      weekday:'long',day:'numeric',month:'long',year:'numeric',
+      hour:'numeric',minute:'2-digit',hour12:true
+    });
+  }catch{
+    return `${p.program_date||''} • ${String(p.start_time||'').slice(0,5)}`;
+  }
+}
+
+function renderDynamic(){
+  if(!program)return;
+
+  const ta=currentLang==='ta';
+  const content=ta?(program.content_ta||{}):(program.content_en||{});
+  const title=ta?(program.title_ta||program.title_en||''):(program.title_en||program.title_ta||'');
+  const description=content.description||'';
+  const why=content.why||'';
+  const benefits=Array.isArray(content.benefits)?content.benefits.filter(Boolean):[];
+
+  const eyebrow=document.getElementById('programEyebrow');
+  const heroTitle=document.getElementById('programHeroTitle');
+  const heroDesc=document.getElementById('programHeroDesc');
+  const whyTitle=document.getElementById('programWhyTitle');
+  const whyText=document.getElementById('programWhyText');
+  const currentTitle=document.getElementById('currentProgramTitle');
+  const currentDate=document.getElementById('currentProgramDate');
+  const currentMode=document.getElementById('currentProgramMode');
+
+  if(eyebrow) eyebrow.textContent=program.program_type==='amavasai'
+    ? (ta?'அமாவாசை தியானம்':'Amavasai Meditation')
+    : (ta?'பௌர்ணமி தியானம்':'Pournami Meditation');
+
+  if(heroTitle) heroTitle.textContent=title;
+  if(heroDesc) heroDesc.textContent=description;
+  if(whyTitle) whyTitle.textContent=ta?'இந்த நிகழ்ச்சி ஏன்?':'Why This Program?';
+  if(whyText) whyText.textContent=why;
+  if(currentTitle) currentTitle.textContent=title;
+  if(currentDate) currentDate.textContent=formatProgramDateTime(program);
+
+  const venue=program.venue_name||'';
+  const address=program.venue_address||'';
+  if(currentMode){
+    currentMode.textContent=ta
+      ? `Zoom மூலம் ஆன்லைன் அல்லது நேரில் ${venue}${address?` — ${address}`:''}.`
+      : `Online via Zoom or Live at ${venue}${address?` — ${address}`:''}.`;
+  }
+
+  const benefitsList=document.querySelector('#details .card ul');
+  if(benefitsList){
+    benefitsList.innerHTML=benefits.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
+  }
+
+  const mapLink=document.querySelector('.location-link');
+  if(mapLink){
+    mapLink.href=program.map_url||'#';
+    mapLink.style.display=program.map_url?'inline-flex':'none';
+  }
+
+  const poster=document.getElementById('programReferenceImage');
+  if(poster){
+    const url=ta?(program.poster_ta_url||program.poster_en_url):(program.poster_en_url||program.poster_ta_url);
+    if(url){
+      poster.src=url;
+      poster.alt=title;
+      poster.parentElement.style.display='';
+    }else{
+      poster.removeAttribute('src');
+      poster.parentElement.style.display='none';
+    }
+  }
+
+  document.title=title||'Arithuyil Arivom';
+  const ogTitle=document.querySelector('meta[property="og:title"]');
+  const ogDescription=document.querySelector('meta[property="og:description"]');
+  const ogImage=document.querySelector('meta[property="og:image"]');
+  if(ogTitle)ogTitle.content=title;
+  if(ogDescription)ogDescription.content=description;
+  const posterUrl=ta?(program.poster_ta_url||program.poster_en_url):(program.poster_en_url||program.poster_ta_url);
+  if(ogImage&&posterUrl)ogImage.content=posterUrl;
+}
+
+async function getProgramFromDatabase(){
+  const params=new URLSearchParams(window.location.search);
+  const requestedId=params.get('program')||sessionStorage.getItem('aa_selected_program_id');
+
+  if(requestedId){
+    const {data,error}=await sb.from('meditation_programs').select('*').eq('id',requestedId).limit(1);
+    if(!error&&data?.[0]) return data[0];
+    sessionStorage.removeItem('aa_selected_program_id');
+  }
+
+  const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+  const {data,error}=await sb.from('meditation_programs')
+    .select('*')
+    .eq('status','published')
+    .gte('program_date',today)
+    .order('program_date',{ascending:true})
+    .order('start_time',{ascending:true})
+    .limit(1);
+
+  if(error)throw error;
+  return data?.[0]||null;
+}
+
+async function loadProgram(){
+  try{
+    program=await getProgramFromDatabase();
+
+    if(!program){
+      document.getElementById('offersGrid').innerHTML='';
+      const s=document.getElementById('programStatus');
+      s.className='status error';
+      s.textContent=t('noAccess');
+      s.classList.remove('hidden');
+      return;
+    }
+
+    sessionStorage.setItem('aa_selected_program_id',program.id);
+
+    const url=new URL(window.location.href);
+    url.searchParams.set('program',program.id);
+    window.history.replaceState({},'',url.toString());
+
+    renderDynamic();
+    renderVideos();
+    await renderOffers();
+
+    const s=document.getElementById('programStatus');
+    if(!program.registration_open){
+      s.className='status';
+      s.textContent=program.registration_open_at
+        ? `${t('comingSoon')}: ${new Date(program.registration_open_at).toLocaleString(currentLang==='ta'?'ta-IN':'en-IN')}`
+        : t('noAccess');
+      s.classList.remove('hidden');
+    }else{
+      s.classList.add('hidden');
+    }
+  }catch(err){
+    console.error('Program loading error:',err);
+    const s=document.getElementById('programStatus');
+    s.className='status error';
+    s.textContent=t('errorLoading');
+    s.classList.remove('hidden');
+  }
+}
+
+window.renderDynamic=renderDynamic;
 
 async function startBooking(mode, tierIndex) {
 
