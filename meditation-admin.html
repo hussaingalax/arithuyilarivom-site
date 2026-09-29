@@ -59,10 +59,10 @@ const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_
   );
 };
 const DEFAULT_OFFER_TIERS=[
-  {mode:'online',display_order:1,price:99,display_base:90,total_slots:10},
-  {mode:'online',display_order:2,price:199,display_base:90,total_slots:25},
-  {mode:'online',display_order:3,price:249,display_base:90,total_slots:110},
-  {mode:'offline',display_order:1,price:499,display_base:75,total_slots:45}
+  {mode:'online',display_order:1,price:99,display_base:90,total_slots:100},
+  {mode:'online',display_order:2,price:199,display_base:90,total_slots:115},
+  {mode:'online',display_order:3,price:249,display_base:90,total_slots:200},
+  {mode:'offline',display_order:1,price:499,display_base:75,total_slots:120}
 ];
 
 function normalizeOfferTiers(value){
