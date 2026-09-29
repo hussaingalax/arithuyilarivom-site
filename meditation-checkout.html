@@ -1409,11 +1409,13 @@ async function verify(response) {
          Show login details once
       --------------------------------- */
 
+      setPaymentProcessing(false);
+
       showMemberSuccessPopup(
-  accountData.mobile || booking.mobile,
-  accountData.password,
-  booking.meditation_programs?.whatsapp_community_link || null
-);
+        accountData.mobile || booking.mobile,
+        accountData.password,
+        booking.program?.whatsapp_community_link || null
+      );
 
 
 
@@ -1426,32 +1428,13 @@ return;
 
 
 
-      /* ---------------------------------
-         Auto login successful
-      --------------------------------- */
-
-      console.log(
-
-        'Member auto login successful:',
-
-        loginData?.user?.id
-
-      );
-
-
-      window.location.href =
-        'member-dashboard.html';
-
-
-      return;
-
-    }
-
 
 
     /* =================================
        EXISTING MEMBER
     ================================= */
+
+    setPaymentProcessing(false);
 
     alert(
 
@@ -1551,12 +1534,18 @@ return;
         booking.mobile
       );
 
-      /*
-         Existing/new member:
-         send to login page.
-      */
-
       setPaymentProcessing(false);
+
+      if (accountData.password) {
+
+        showMemberSuccessPopup(
+          accountData.mobile || booking.mobile,
+          accountData.password,
+          booking.program?.whatsapp_community_link || null
+        );
+
+        return;
+      }
 
       window.location.href =
         'member-login.html?paid=1';
