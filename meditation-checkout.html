@@ -225,7 +225,139 @@
   </div>
 
 </div>
+<!-- =========================================
+     PAYMENT SUCCESS / MEMBER DETAILS POPUP
+========================================= -->
 
+<div
+  id="memberSuccessModal"
+  style="
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:100000;
+    background:rgba(0,0,0,.82);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  "
+>
+
+  <div
+    style="
+      width:min(460px,100%);
+      background:#fff;
+      border-radius:20px;
+      padding:30px 24px;
+      text-align:center;
+      box-shadow:0 20px 70px rgba(0,0,0,.4);
+    "
+  >
+
+    <div
+      style="
+        font-size:48px;
+        margin-bottom:10px;
+      "
+    >
+      ✅
+    </div>
+
+    <h2
+      id="memberSuccessTitle"
+      style="
+        margin:0 0 10px;
+        color:#222;
+      "
+    >
+      Payment Successful
+    </h2>
+
+    <p
+      id="memberSuccessMessage"
+      style="
+        color:#666;
+        line-height:1.6;
+        margin-bottom:22px;
+      "
+    >
+      Your member account has been created successfully.
+    </p>
+
+    <div
+      style="
+        background:#f7f7f7;
+        border-radius:14px;
+        padding:18px;
+        text-align:left;
+        margin-bottom:18px;
+      "
+    >
+
+      <div style="margin-bottom:12px">
+        <strong>Mobile</strong>
+        <div
+          id="memberSuccessMobile"
+          style="
+            margin-top:4px;
+            font-size:17px;
+          "
+        ></div>
+      </div>
+
+      <div>
+        <strong>Password</strong>
+        <div
+          id="memberSuccessPassword"
+          style="
+            margin-top:4px;
+            font-size:20px;
+            font-weight:700;
+            letter-spacing:1px;
+          "
+        ></div>
+      </div>
+
+    </div>
+
+    <p
+      id="memberPasswordNote"
+      style="
+        font-size:13px;
+        color:#777;
+        line-height:1.5;
+        margin-bottom:18px;
+      "
+    >
+      Please save these login details safely.
+    </p>
+
+    <a
+      id="whatsappCommunityButton"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="cta full"
+      style="
+        display:none;
+        text-decoration:none;
+        margin-bottom:10px;
+      "
+    >
+      💬 Join WhatsApp Community
+    </a>
+
+    <button
+      id="memberContinueButton"
+      class="cta full"
+      type="button"
+    >
+      Continue to Member Login
+    </button>
+
+  </div>
+
+</div>
 <style>
 @keyframes aaPaymentSpin {
   to {
@@ -316,6 +448,108 @@ function setPaymentProcessing(processing) {
   }
 }
 
+/* =========================================
+   MEMBER SUCCESS POPUP
+========================================= */
+
+function showMemberSuccessPopup(
+  mobile,
+  password,
+  whatsappLink = null
+) {
+
+  const modal =
+    document.getElementById(
+      'memberSuccessModal'
+    );
+
+  const mobileEl =
+    document.getElementById(
+      'memberSuccessMobile'
+    );
+
+  const passwordEl =
+    document.getElementById(
+      'memberSuccessPassword'
+    );
+
+  const whatsappBtn =
+    document.getElementById(
+      'whatsappCommunityButton'
+    );
+
+  const continueBtn =
+    document.getElementById(
+      'memberContinueButton'
+    );
+
+  if (!modal) return;
+
+  mobileEl.textContent =
+    mobile || '';
+
+  passwordEl.textContent =
+    password || '';
+
+  /* ---------------------------------------
+     WhatsApp Community
+  --------------------------------------- */
+
+  if (whatsappLink) {
+
+    whatsappBtn.href =
+      whatsappLink;
+
+    whatsappBtn.style.display =
+      'block';
+
+  } else {
+
+    whatsappBtn.style.display =
+      'none';
+
+  }
+
+  /* ---------------------------------------
+     Prevent repeated click on Join button
+  --------------------------------------- */
+
+  whatsappBtn.onclick = function () {
+
+    whatsappBtn.style.pointerEvents =
+      'none';
+
+    whatsappBtn.style.opacity =
+      '0.6';
+
+    whatsappBtn.textContent =
+      '💬 WhatsApp Community Opened';
+
+  };
+
+  /* ---------------------------------------
+     Continue button
+  --------------------------------------- */
+
+  continueBtn.onclick =
+    function () {
+
+      modal.style.display =
+        'none';
+
+      window.location.href =
+        'member-login.html?paid=1';
+
+    };
+
+  modal.style.display =
+    'flex';
+
+  document.body.style.overflow =
+    'hidden';
+}
+
+  
 /* =========================================
    SHOW MESSAGE
 ========================================= */
@@ -1175,89 +1409,19 @@ async function verify(response) {
          Show login details once
       --------------------------------- */
 
-      alert(
-
-        currentLang === 'ta'
-
-          ? `உங்கள் உறுப்பினர் கணக்கு வெற்றிகரமாக உருவாக்கப்பட்டது.
-
-மொபைல்: ${accountData.mobile}
-
-கடவுச்சொல்: ${accountData.password}
-
-இந்த கடவுச்சொல்லை பாதுகாப்பாக வைத்துக் கொள்ளுங்கள்.`
-
-          : `Your member account has been created successfully.
-
-Mobile: ${accountData.mobile}
-
-Password: ${accountData.password}
-
-Please keep this password safe.`
-
-      );
+      showMemberSuccessPopup(
+  accountData.mobile || booking.mobile,
+  accountData.password,
+  booking.meditation_programs?.whatsapp_community_link || null
+);
 
 
 
-      /* =================================
-         STEP 5
-         AUTO LOGIN
-      ================================= */
+    /* =================================
+   WAIT FOR USER TO CONTINUE
+================================= */
 
-      const memberEmail =
-        `${accountData.mobile}@member.arithuyilarivom.com`;
-
-
-
-      const {
-        data: loginData,
-        error: loginError
-      } =
-        await sb.auth.signInWithPassword({
-
-          email:
-            memberEmail,
-
-          password:
-            accountData.password
-
-        });
-
-
-
-      /* ---------------------------------
-         Auto login failed
-      --------------------------------- */
-
-      if (loginError) {
-
-
-        console.error(
-
-          'Auto login failed:',
-
-          loginError
-
-        );
-
-
-        alert(
-
-          currentLang === 'ta'
-
-            ? 'உங்கள் account வெற்றிகரமாக உருவாக்கப்பட்டது. Automatic login முடியவில்லை. Login page-க்கு செல்கிறோம்.'
-
-            : 'Your account was created successfully. Automatic login could not be completed. We will take you to the login page.'
-
-        );
-
-
-        window.location.href =
-          'member-login.html?paid=1';
-
-
-        return;
-
+return;
       }
 
 
