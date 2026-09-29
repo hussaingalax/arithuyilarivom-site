@@ -523,6 +523,88 @@ async function loadProgram(){
 
 window.renderDynamic=renderDynamic;
 
+function showAlreadyBookedPopup() {
+
+  const old =
+    document.getElementById(
+      'alreadyBookedPopup'
+    );
+
+  if (old) old.remove();
+
+  const isTamil =
+    currentLang === 'ta';
+
+  const popup =
+    document.createElement('div');
+
+  popup.id =
+    'alreadyBookedPopup';
+
+  popup.innerHTML = `
+
+    <div class="already-booked-overlay">
+
+      <div class="already-booked-card">
+
+        <div class="already-booked-icon">
+          ✓
+        </div>
+
+        <h2>
+          ${
+            isTamil
+              ? 'நீங்கள் ஏற்கனவே பதிவு செய்துள்ளீர்கள்'
+              : 'You Are Already Registered'
+          }
+        </h2>
+
+        <p>
+          ${
+            isTamil
+              ? 'இந்த நிகழ்ச்சிக்கு உங்கள் மொபைல் எண்ணில் ஏற்கனவே பதிவு செய்யப்பட்டுள்ளது.'
+              : 'You have already registered for this program with this mobile number.'
+          }
+        </p>
+
+        <a
+          href="member-login.html"
+          class="already-booked-login"
+        >
+          ${
+            isTamil
+              ? '🔐 Member Login'
+              : '🔐 Member Login'
+          }
+        </a>
+
+        <button
+          type="button"
+          class="already-booked-close"
+          id="alreadyBookedClose"
+        >
+          ${
+            isTamil
+              ? 'மூடு'
+              : 'Close'
+          }
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  document
+    .getElementById('alreadyBookedClose')
+    ?.addEventListener(
+      'click',
+      () => popup.remove()
+    );
+}
+  
 async function startBooking(mode, tierIndex) {
 
   if (!program || !program.registration_open) {
@@ -1066,6 +1148,92 @@ async function startBooking(mode, tierIndex) {
     });
 
 
+  .already-booked-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+}
+
+.already-booked-card {
+  width: min(100%, 430px);
+  padding: 32px 24px 24px;
+  border-radius: 22px;
+  border: 1px solid rgba(230, 190, 75, 0.55);
+  background: linear-gradient(
+    145deg,
+    #10223a,
+    #071321
+  );
+  color: #fff;
+  text-align: center;
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.65);
+}
+
+.already-booked-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(244, 207, 104, 0.12);
+  border: 1px solid rgba(244, 207, 104, 0.55);
+  color: #f4cf68;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.already-booked-card h2 {
+  margin: 0 0 12px;
+  color: #f4cf68;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.already-booked-card p {
+  margin: 0 0 22px;
+  color: #c9d1dc;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.already-booked-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  border-radius: 13px;
+  background: linear-gradient(
+    135deg,
+    #f5d36d,
+    #dcae3d
+  );
+  color: #101010;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.already-booked-close {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 13px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: #c5ced9;
+  cursor: pointer;
+}
+
   // -------------------------------------------------------
   // Submit booking details
   // -------------------------------------------------------
@@ -1155,7 +1323,67 @@ async function startBooking(mode, tierIndex) {
         submitButton.textContent =
           t('processing');
 
+// ---------------------------------------------------
+// CHECK ALREADY REGISTERED MEMBER
+// ---------------------------------------------------
 
+try {
+
+  const checkUrl =
+    `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api` +
+    `?action=check-existing-booking` +
+    `&program_id=${encodeURIComponent(program.id)}` +
+    `&mobile=${encodeURIComponent(mobile)}`;
+
+  const checkResponse = await fetch(checkUrl, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const checkData = await checkResponse.json();
+
+  if (
+    checkResponse.ok &&
+    checkData?.success &&
+    checkData?.already_booked
+  ) {
+
+    // Stop everything.
+    submitButton.disabled = false;
+
+    submitButton.textContent =
+      t('continueBooking');
+
+    errorBox.textContent = '';
+
+    showAlreadyBookedPopup();
+
+    return;
+  }
+
+} catch (checkError) {
+
+  console.error(
+    'Existing booking check failed:',
+    checkError
+  );
+
+  submitButton.disabled = false;
+
+  submitButton.textContent =
+    t('continueBooking');
+
+  errorBox.textContent =
+    currentLang === 'ta'
+      ? 'பதிவு சரிபார்ப்பில் சிக்கல் ஏற்பட்டுள்ளது. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.'
+      : 'Unable to verify your existing booking. Please try again.';
+
+  return;
+}
+
+        
         // ---------------------------------------------------
         // Create reservation
         // ---------------------------------------------------
