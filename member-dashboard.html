@@ -1,327 +1,519 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Member Dashboard</title><link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="i18n.js"></script></head><body><header class="topbar"><div class="container topbar-inner"><div class="brand" data-i18n="brand">Arithuyil Arivom</div><div class="nav-actions"><button id="logout" class="cta secondary" data-i18n="logout">Logout</button><div class="lang"><button data-lang="en">EN</button><button data-lang="ta">தமிழ்</button></div></div></div></header><main class="dashboard"><div class="container"><div class="section-title"><h1 data-i18n="dashboard">Dashboard</h1><p id="welcome"></p></div><div id="content" class="grid grid-2"></div></div></main><script>
-const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);let member=null;
-async function init(){const {data:{user}}=await sb.auth.getUser();if(!user){location.href='member-login.html';return}const {data:m}=await sb.from('meditation_members').select('*').eq('auth_user_id',user.id).single();member=m;document.getElementById('welcome').textContent=m?`${m.name} • ${m.mobile}`:'';const {data:bookings}=await sb.from('meditation_bookings').select('*,meditation_programs(*)').eq('member_id',m.id).order('created_at',{ascending:false});render(bookings||[])}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Member Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="i18n.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand" data-i18n="brand">Arithuyil Arivom</div>
+    <div class="nav-actions">
+      <button id="logout" class="cta secondary" data-i18n="logout">Logout</button>
+      <div class="lang">
+        <button data-lang="en">EN</button>
+        <button data-lang="ta">தமிழ்</button>
+      </div>
+    </div>
+  </div>
+</header>
 
- async function render(bs) {
+<main class="dashboard">
+<div class="container">
+  <div class="section-title">
+    <h1 data-i18n="dashboard">Dashboard</h1>
+    <p id="welcome"></p>
+  </div>
+  <div id="content" class="grid grid-2"></div>
+</div>
+</main>
 
-  let current = bs.find(
-    b =>
-      b.reservation_status === 'confirmed' &&
-      b.payment_status === 'paid'
+<script>
+const sb = window.supabase.createClient(
+  MEDITATION_CONFIG.SUPABASE_URL,
+  MEDITATION_CONFIG.SUPABASE_ANON_KEY
+);
+
+let member = null;
+let allBookings = [];
+
+function langText(en, ta) {
+  return (window.currentLang || 'en') === 'ta' ? ta : en;
+}
+
+function esc(value) {
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
+
+function programStart(program) {
+  if (!program?.program_date || !program?.start_time) return null;
+  return new Date(
+    `${program.program_date}T${String(program.start_time).slice(0,8)}+05:30`
   );
+}
 
-  let upcoming = bs.find(
-    b =>
-      b.reservation_status === 'confirmed' &&
-      b.meditation_programs?.program_date &&
-      new Date(b.meditation_programs.program_date) >=
-        new Date(new Date().toISOString().slice(0, 10))
-  );
+function displayAttendanceStatus(booking) {
+  const start = programStart(booking.meditation_programs);
+  const now = new Date();
+  const stored = String(booking.attendance_status || '').toLowerCase();
 
-  let classAccess = {
+  if (start) {
+    const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+
+    if (now >= end) {
+      return stored === 'processing'
+        ? langText('Class Completed', 'வகுப்பு முடிந்தது')
+        : langText('Absent', 'வரவில்லை');
+    }
+
+    if (stored === 'processing') {
+      return langText('Class Processing', 'வகுப்பு செயலாக்கத்தில் உள்ளது');
+    }
+
+    if (stored === 'completed') {
+      return langText('Class Completed', 'வகுப்பு முடிந்தது');
+    }
+
+    if (stored === 'absent') {
+      return langText('Absent', 'வரவில்லை');
+    }
+
+    return langText('Class Pending', 'வகுப்பு நிலுவையில் உள்ளது');
+  }
+
+  if (stored === 'completed') return langText('Class Completed', 'வகுப்பு முடிந்தது');
+  if (stored === 'processing') return langText('Class Processing', 'வகுப்பு செயலாக்கத்தில் உள்ளது');
+  if (stored === 'absent') return langText('Absent', 'வரவில்லை');
+  return langText('Class Pending', 'வகுப்பு நிலுவையில் உள்ளது');
+}
+
+async function getClassAccess(booking) {
+  const result = {
     eligible: false,
     published: false,
     class_link: null,
-    program: null
+    attendance_status: booking?.attendance_status || 'pending'
   };
 
-  // -------------------------------------------------------
-  // Secure class-link check
-  // -------------------------------------------------------
+  if (!booking || booking.mode !== 'online') return result;
 
-  if (current && current.mode === 'online') {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session?.access_token) return result;
 
-    const {
-      data: { session }
-    } = await sb.auth.getSession();
+  try {
+    const response = await fetch(
+      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=class-link`,
+      { headers: { Authorization: `Bearer ${session.access_token}` } }
+    );
 
-    if (session?.access_token) {
-
-      try {
-
-        const response = await fetch(
-          `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=class-link`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization:
-                `Bearer ${session.access_token}`
-            }
-          }
-        );
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-          classAccess = result;
-        }
-
-      } catch (error) {
-        console.error(
-          'Class link check failed:',
-          error
-        );
-      }
+    const data = await response.json();
+    if (response.ok && data.success) {
+      result.eligible = !!data.eligible;
+      result.published = !!data.published;
+      result.class_link = data.class_link || null;
     }
+
+    const statusResponse = await fetch(
+      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=class-status&booking_id=${encodeURIComponent(booking.id)}`,
+      { headers: { Authorization: `Bearer ${session.access_token}` } }
+    );
+
+    const statusData = await statusResponse.json();
+    if (statusResponse.ok && statusData.success) {
+      result.attendance_status = statusData.attendance_status || result.attendance_status;
+      booking.attendance_status = result.attendance_status;
+    }
+  } catch (error) {
+    console.error('Class access/status check failed:', error);
   }
 
-  // -------------------------------------------------------
-  // Class access UI
-  // -------------------------------------------------------
+  return result;
+}
+
+async function joinClass(booking, link) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session?.access_token) {
+    location.href = 'member-login.html';
+    return;
+  }
+
+  const button = document.getElementById('joinClassBtn');
+  if (button) {
+    button.disabled = true;
+    button.textContent = langText('Opening class...', 'வகுப்பு திறக்கப்படுகிறது...');
+  }
+
+  try {
+    const response = await fetch(
+      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=class-join`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({ booking_id: booking.id })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || 'Unable to join class');
+    }
+
+    booking.attendance_status = 'processing';
+
+    window.open(link, '_blank', 'noopener');
+
+    // Keep UI status as processing; it is not treated as final attendance.
+    await render(allBookings);
+  } catch (error) {
+    console.error(error);
+    alert(error.message || 'Unable to join class');
+    if (button) button.disabled = false;
+  }
+}
+
+async function render(bs) {
+  allBookings = bs;
+
+  const paidConfirmed = bs.filter(
+    b => b.payment_status === 'paid' &&
+         b.reservation_status === 'confirmed'
+  );
+
+  paidConfirmed.sort((a,b) => {
+    const da = programStart(a.meditation_programs)?.getTime() || 0;
+    const db = programStart(b.meditation_programs)?.getTime() || 0;
+    return db - da;
+  });
+
+  const now = new Date();
+
+  const current =
+    paidConfirmed
+      .filter(b => {
+        const d = programStart(b.meditation_programs);
+        return d && d.getTime() >= now.getTime() - 2 * 60 * 60 * 1000;
+      })
+      .sort((a,b) =>
+        (programStart(a.meditation_programs)?.getTime() || 0) -
+        (programStart(b.meditation_programs)?.getTime() || 0)
+      )[0]
+    || paidConfirmed[0]
+    || null;
+
+  const futurePrograms = [];
+  try {
+    const { data: programs, error } = await sb
+      .from('meditation_programs')
+      .select('*')
+      .eq('registration_open', true)
+      .gte('program_date', new Date().toISOString().slice(0,10))
+      .order('program_date', { ascending: true })
+      .order('start_time', { ascending: true });
+
+    if (!error) {
+      futurePrograms.push(...(programs || []));
+    }
+  } catch (e) {
+    console.error('Upcoming program load failed:', e);
+  }
+
+  let classAccess = null;
+  if (current?.mode === 'online') {
+    classAccess = await getClassAccess(current);
+  }
 
   let classAccessHtml = '';
 
   if (current?.mode === 'online') {
+    const start = programStart(current.meditation_programs);
+    const end = start ? new Date(start.getTime() + 2 * 60 * 60 * 1000) : null;
+    const status = displayAttendanceStatus(current);
 
-    if (classAccess.eligible && classAccess.published && classAccess.class_link) {
-
+    if (end && now >= end) {
       classAccessHtml = `
         <div class="notice" style="margin-top:15px">
-          <strong>🟢 Class is Ready</strong>
+          <strong>🔒 ${esc(status)}</strong>
           <p class="muted">
-            Your class link is now available.
+            ${esc(langText(
+              'The 2-hour class joining window has ended.',
+              '2 மணி நேர வகுப்பு இணைப்பு நேரம் முடிந்துவிட்டது.'
+            ))}
           </p>
-
-          <a
+        </div>`;
+    } else if (classAccess?.published && classAccess?.class_link) {
+      classAccessHtml = `
+        <div class="notice" style="margin-top:15px">
+          <strong>🟢 ${esc(langText('Class is Ready','வகுப்பு தயாராக உள்ளது'))}</strong>
+          <p class="muted">
+            ${esc(langText(
+              'Before joining: Video ON • Headphones compulsory • Keep a water bottle • Sit with back support.',
+              'இணைவதற்கு முன்: Video ON • Headphones கட்டாயம் • தண்ணீர் பாட்டில் அருகில் வைத்துக்கொள்ளுங்கள் • முதுகுக்கு ஆதரவுடன் அமருங்கள்.'
+            ))}
+          </p>
+          <button
+            id="joinClassBtn"
             class="cta full"
-            target="_blank"
-            rel="noopener"
-            href="${classAccess.class_link}"
+            type="button"
           >
-            🎥 Join Class
-          </a>
-        </div>
-      `;
-
+            🎥 ${esc(langText('Join Class','வகுப்பில் இணையுங்கள்'))}
+          </button>
+        </div>`;
     } else {
-
       classAccessHtml = `
         <div class="notice" style="margin-top:15px">
-          <strong>🔒 Class Link</strong>
-
+          <strong>🔒 ${esc(langText('Class Link','வகுப்பு இணைப்பு'))}</strong>
           <p class="muted">
-            The class link will be published
-            15 minutes before the program starts.
+            ${esc(langText(
+              'The class link will be available 15 minutes before the program starts.',
+              'வகுப்பு தொடங்குவதற்கு 15 நிமிடங்களுக்கு முன் class link கிடைக்கும்.'
+            ))}
           </p>
-
           <p class="small">
-            Only eligible confirmed online members
-            can access the class link.
+            ${esc(langText(
+              'Video ON • Headphones compulsory • Keep a water bottle • Sit with back support.',
+              'Video ON • Headphones கட்டாயம் • தண்ணீர் பாட்டில் வைத்துக்கொள்ளுங்கள் • முதுகுக்கு ஆதரவுடன் அமருங்கள்.'
+            ))}
           </p>
-        </div>
-      `;
+        </div>`;
     }
   }
 
-  // -------------------------------------------------------
-  // Current program card
-  // -------------------------------------------------------
+  const whatsappLink =
+    current?.meditation_programs?.whatsapp_community_link || '';
 
-  const currentHtml = current
-    ? `
-      <p>
-        <strong>
-          ${current.meditation_programs?.title_en || ''}
-        </strong>
-      </p>
-
+  const whatsappHtml = whatsappLink ? `
+    <div class="notice" style="margin-top:15px">
+      <strong>💬 ${esc(langText('WhatsApp Community','WhatsApp குழு'))}</strong>
       <p class="muted">
-        ${current.meditation_programs?.program_date || ''}
-        •
-        ${current.meditation_programs?.start_time || ''}
+        ${esc(langText(
+          'Join the program WhatsApp community using the button below.',
+          'கீழே உள்ள button மூலம் இந்த program WhatsApp குழுவில் இணையுங்கள்.'
+        ))}
       </p>
+      <a class="cta full" target="_blank" rel="noopener"
+         href="${esc(whatsappLink)}">
+        ${esc(langText('Join WhatsApp Group','WhatsApp குழுவில் இணையுங்கள்'))}
+      </a>
+    </div>` : '';
 
-      <p>
-        <span class="pill">${current.mode}</span>
-        <span class="pill">₹${current.offer_price}</span>
-      </p>
+  const instructionsHtml = current ? `
+    <div class="notice" style="margin-top:15px">
+      <strong>📌 ${esc(langText('Session Instructions','அமர்வு வழிமுறைகள்'))}</strong>
+      <ul style="margin:10px 0 0 20px">
+        <li>${esc(langText('Keep video ON throughout the full session.','முழு அமர்விலும் video ON வைத்திருக்க வேண்டும்.'))}</li>
+        <li>${esc(langText('Headphones are compulsory.','Headphones கட்டாயம்.'))}</li>
+        <li>${esc(langText('Keep a water bottle nearby.','தண்ணீர் பாட்டிலை அருகில் வைத்துக்கொள்ளுங்கள்.'))}</li>
+        <li>${esc(langText('Attend only while sitting.','அமர்ந்த நிலையில் மட்டும் கலந்து கொள்ளுங்கள்.'))}</li>
+        <li>${esc(langText('Sit with proper back support.','முதுகுக்கு சரியான ஆதரவுடன் அமருங்கள்.'))}</li>
+      </ul>
+    </div>` : '';
 
-      ${classAccessHtml}
+  const currentHtml = current ? `
+    <p><strong>${esc(current.meditation_programs?.title_en || '')}</strong></p>
+    <p class="muted">
+      ${esc(current.meditation_programs?.program_date || '')}
+      • ${esc(current.meditation_programs?.start_time || '')}
+    </p>
+    <p>
+      <span class="pill">${esc(current.mode)}</span>
+      <span class="pill">₹${esc(current.offer_price)}</span>
+      <span class="pill">${esc(displayAttendanceStatus(current))}</span>
+    </p>
+    ${classAccessHtml}
+    ${instructionsHtml}
+    ${whatsappHtml}
+    ${
+      current.mode === 'offline'
+      ? `<div style="margin-top:15px">
+          <p class="muted">${esc(langText('Offline Program','நேரடி வகுப்பு'))}</p>
+          <a class="pill" target="_blank" rel="noopener"
+             href="${esc(current.meditation_programs?.map_url || MEDITATION_CONFIG.DEFAULT_MAP_URL)}">
+            📍 ${esc(t('map'))}
+          </a>
+        </div>`
+      : ''
+    }
+  ` : `
+    <p class="muted">
+      ${esc(langText('No confirmed current booking.','உறுதிசெய்யப்பட்ட தற்போதைய booking இல்லை.'))}
+    </p>`;
 
-      ${
-        current.mode === 'offline'
-          ? `
-            <div style="margin-top:15px">
-              <p class="muted">
-                Offline Program
-              </p>
-
-              <a
-                class="pill"
-                target="_blank"
-                rel="noopener"
-                href="${
-                  current.meditation_programs?.map_url ||
-                  MEDITATION_CONFIG.DEFAULT_MAP_URL
-                }"
-              >
-                📍 ${t('map')}
-              </a>
-            </div>
-          `
-          : ''
-      }
-    `
-    : `
-      <p class="muted">
-        No confirmed current booking.
-      </p>
-    `;
-
-  // -------------------------------------------------------
-  // Dashboard HTML
-  // -------------------------------------------------------
+  const upcomingHtml = futurePrograms.length
+    ? futurePrograms.map(p => {
+        const already = paidConfirmed.some(b => b.program_id === p.id);
+        const title = (window.currentLang || 'en') === 'ta'
+          ? (p.title_ta || p.title_en)
+          : p.title_en;
+        return `
+          <div class="notice" style="margin-bottom:10px">
+            <strong>${esc(title || '')}</strong>
+            <p class="muted">
+              ${esc(p.program_date || '')} • ${esc(p.start_time || '')}
+            </p>
+            <span class="pill">
+              ${esc(already
+                ? langText('Already Booked','ஏற்கனவே பதிவு செய்துள்ளீர்கள்')
+                : langText('Registration Open','பதிவு திறந்துள்ளது'))}
+            </span>
+            ${
+              already ? '' :
+              `<a class="cta full" style="margin-top:10px" href="pournami.html?program=${encodeURIComponent(p.id)}">
+                ${esc(langText('View & Book','பார்த்து பதிவு செய்யுங்கள்'))}
+              </a>`
+            }
+          </div>`;
+      }).join('')
+    : `<p class="muted">${esc(langText(
+        'No upcoming programs are open for registration right now.',
+        'தற்போது பதிவு செய்ய திறந்திருக்கும் அடுத்த நிகழ்ச்சி இல்லை.'
+      ))}</p>`;
 
   document.getElementById('content').innerHTML = `
-
     <div class="card">
-
-      <h3>${t('current')}</h3>
-
+      <h3>${esc(t('current'))}</h3>
       ${currentHtml}
-
     </div>
 
     <div class="card">
-
-      <h3>${t('upcoming')}</h3>
-
-      <p class="muted">
-        Next Amavasai / Pournami registration is
-        controlled by the Admin. When opened,
-        it will appear here.
-      </p>
-
-      <a
-        class="cta full"
-        href="pournami.html"
-      >
-        View Programs
-      </a>
-
+      <h3>${esc(t('upcoming'))}</h3>
+      ${upcomingHtml}
     </div>
 
     <div class="card">
-
-      <h3>${t('feedback')}</h3>
-
+      <h3>${esc(t('feedback'))}</h3>
       ${
         current
-          ? `
-            <form id="feedbackForm">
-
-              <div class="field">
-                <label>${t('rating')}</label>
-
-                <select
-                  id="rating"
-                  class="input"
-                >
-                  <option value="5">5</option>
-                  <option value="4">4</option>
-                  <option value="3">3</option>
-                  <option value="2">2</option>
-                  <option value="1">1</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label>${t('experience')}</label>
-
-                <textarea
-                  id="feedback"
-                  class="input"
-                  rows="4"
-                ></textarea>
-              </div>
-
-              <button class="cta full">
-                ${t('submit')}
-              </button>
-
-            </form>
-          `
-          : `
-            <p class="muted">
-              Feedback becomes available after
-              a confirmed program.
-            </p>
-          `
+        ? `<form id="feedbackForm">
+            <div class="field">
+              <label>${esc(t('rating'))}</label>
+              <select id="rating" class="input">
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>${esc(t('experience'))}</label>
+              <textarea id="feedback" class="input" rows="4"></textarea>
+            </div>
+            <button class="cta full">${esc(t('submit'))}</button>
+          </form>`
+        : `<p class="muted">${esc(langText(
+            'Feedback becomes available after a confirmed program.',
+            'உறுதிசெய்யப்பட்ட program முடிந்த பிறகு feedback அளிக்கலாம்.'
+          ))}</p>`
       }
-
     </div>
 
     <div class="card">
-
-      <h3>Booking History</h3>
-
+      <h3>${esc(t('bookingHistory'))}</h3>
       ${
         bs.length
-          ? bs.map(b => `
-              <div
-                class="notice"
-                style="margin-bottom:10px"
-              >
-                <strong>
-                  ${b.meditation_programs?.title_en || ''}
-                </strong>
-
-                <br>
-
-                ${b.mode}
-                • ₹${b.offer_price}
-                • ${b.payment_status}
-                • ${b.attendance_status}
-              </div>
-            `).join('')
-          : `
-            <p class="muted">
-              No booking history.
-            </p>
-          `
+        ? bs.map(b => `
+          <div class="notice" style="margin-bottom:10px">
+            <strong>${esc(b.meditation_programs?.title_en || '')}</strong>
+            <br>
+            ${esc(b.mode)} • ₹${esc(b.offer_price)}
+            <br>
+            <span class="pill" style="margin-top:8px;display:inline-block">
+              ${esc(displayAttendanceStatus(b))}
+            </span>
+          </div>
+        `).join('')
+        : `<p class="muted">${esc(t('noBookingHistory'))}</p>`
       }
-
     </div>
   `;
 
-  // -------------------------------------------------------
-  // Feedback submit
-  // -------------------------------------------------------
-
-  const f =
-    document.getElementById('feedbackForm');
-
-  if (f) {
-
-    f.addEventListener(
-      'submit',
-      async e => {
-
-        e.preventDefault();
-
-        const {
-          error
-        } = await sb
-          .from('meditation_feedback')
-          .upsert({
-            booking_id: current.id,
-            member_id: member.id,
-            rating: Number(
-              document.getElementById('rating').value
-            ),
-            feedback:
-              document.getElementById('feedback').value
-          });
-
-        alert(
-          error
-            ? error.message
-            : 'Feedback submitted'
-        );
-      }
+  const joinBtn = document.getElementById('joinClassBtn');
+  if (joinBtn && classAccess?.class_link) {
+    joinBtn.addEventListener('click', () =>
+      joinClass(current, classAccess.class_link)
     );
   }
-} 
 
-document.getElementById('logout').onclick=async()=>{await sb.auth.signOut();location.href='member-login.html'};setLang(currentLang);init();
-</script></body></html>
+  const f = document.getElementById('feedbackForm');
+  if (f && current) {
+    f.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const { error } = await sb
+        .from('meditation_feedback')
+        .upsert({
+          booking_id: current.id,
+          member_id: member.id,
+          rating: Number(document.getElementById('rating').value),
+          feedback: document.getElementById('feedback').value
+        });
+
+      alert(error ? error.message : langText(
+        'Feedback submitted',
+        'Feedback பதிவு செய்யப்பட்டது'
+      ));
+    });
+  }
+}
+
+async function init() {
+  const { data: { user } } = await sb.auth.getUser();
+
+  if (!user) {
+    location.href = 'member-login.html';
+    return;
+  }
+
+  const { data: m, error: memberError } = await sb
+    .from('meditation_members')
+    .select('*')
+    .eq('auth_user_id', user.id)
+    .single();
+
+  if (memberError || !m) {
+    location.href = 'member-login.html';
+    return;
+  }
+
+  member = m;
+  document.getElementById('welcome').textContent =
+    `${m.name} • ${m.mobile}`;
+
+  const { data: bookings, error } = await sb
+    .from('meditation_bookings')
+    .select('*,meditation_programs(*)')
+    .eq('member_id', m.id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  await render(bookings || []);
+}
+
+document.getElementById('logout').onclick = async () => {
+  await sb.auth.signOut();
+  location.href = 'member-login.html';
+};
+
+setLang(currentLang);
+init();
+</script>
+</body>
+</html>
