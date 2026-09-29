@@ -1344,14 +1344,23 @@ try {
   const checkResponse = await fetch(checkUrl, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'apikey': MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
     }
   });
+
+  if (!checkResponse.ok) {
+    const checkErrorData = await checkResponse.json().catch(() => ({}));
+    throw new Error(
+      checkErrorData?.message ||
+      `Existing booking check failed (${checkResponse.status})`
+    );
+  }
 
   const checkData = await checkResponse.json();
 
   if (
-    checkResponse.ok &&
     checkData?.success &&
     checkData?.already_booked
   ) {
@@ -1391,35 +1400,58 @@ try {
 
         
         // ---------------------------------------------------
-        // Create reservation
+        // Create reservation through secure Edge Function
         // ---------------------------------------------------
 
-        const {
-          data,
-          error
-        } = await sb.rpc(
-          'create_meditation_reservation',
-          {
-            p_program_id: program.id,
+        const reserveUrl =
+          `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=reserve`;
 
-            p_name: name,
+        const reserveResponse = await fetch(reserveUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            program_id: program.id,
+            name,
+            mobile,
+            email: email || null,
+            location: customerLocation || null,
+            mode,
+            offer_tier_index: tierIndex
+          })
+        });
 
-            p_mobile: mobile,
+        const reserveData =
+          await reserveResponse.json().catch(() => ({}));
 
-            p_email: email || null,
+        if (!reserveResponse.ok || !reserveData?.success) {
 
-            p_location:
-              customerLocation || null,
+          submitButton.disabled = false;
 
-            p_mode: mode,
+          submitButton.textContent =
+            t('continueBooking');
 
-            p_offer_tier_index:
-              tierIndex
+          if (reserveData?.code === 'ALREADY_BOOKED') {
+            errorBox.textContent = '';
+            showAlreadyBookedPopup();
+          } else {
+            errorBox.textContent =
+              reserveData?.message ||
+              'Unable to create your reservation. Please try again.';
           }
-        );
 
+          await refreshSlots();
 
-        if (error) {
+          return;
+        }
+
+        const bookingId =
+          reserveData?.reservation?.booking_id;
+
+        if (!bookingId) {
 
           submitButton.disabled = false;
 
@@ -1427,20 +1459,19 @@ try {
             t('continueBooking');
 
           errorBox.textContent =
-            error.message;
-
-          await refreshSlots();
+            currentLang === 'ta'
+              ? 'பதிவு உருவாக்க முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.'
+              : 'Booking could not be created. Please try again.';
 
           return;
         }
-
 
         // ---------------------------------------------------
         // Continue to checkout
         // ---------------------------------------------------
 
         window.location.href =
-          `meditation-checkout.html?booking=${data.booking_id}`;
+          `meditation-checkout.html?booking=${bookingId}`;
 
       }
     );
