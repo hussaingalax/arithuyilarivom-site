@@ -370,9 +370,14 @@ function renderDynamic(){
   const currentDate=document.getElementById('currentProgramDate');
   const currentMode=document.getElementById('currentProgramMode');
 
-  if(eyebrow) eyebrow.textContent=program.program_type==='amavasai'
-    ? (ta?'அமாவாசை தியானம்':'Amavasai Meditation')
-    : (ta?'பௌர்ணமி தியானம்':'Pournami Meditation');
+  if(eyebrow) {
+    const typeLabels={
+      pournami: ta?'பௌர்ணமி தியானம்':'Pournami Meditation',
+      amavasai: ta?'அமாவாசை தியானம்':'Amavasai Meditation',
+      sleep: ta?'தூக்கத்திற்கான தியானம்':'Sleep Meditation'
+    };
+    eyebrow.textContent=typeLabels[program.program_type] || title;
+  }
 
   if(heroTitle) heroTitle.textContent=title;
   if(heroDesc) heroDesc.textContent=description;
@@ -434,8 +439,11 @@ async function getProgramFromDatabase(){
   }
 
   const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+  // LIVE PAGE RULE: show the program that is currently OPEN for booking.
+  // Date is used only to choose the nearest upcoming open program.
   const result=await sb.from('meditation_programs')
     .select('*')
+    .eq('registration_open',true)
     .gte('program_date',today)
     .order('program_date',{ascending:true})
     .order('start_time',{ascending:true})
