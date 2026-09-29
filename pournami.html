@@ -187,6 +187,34 @@
 <script>
 const sb=window.supabase.createClient(MEDITATION_CONFIG.SUPABASE_URL,MEDITATION_CONFIG.SUPABASE_ANON_KEY);let program=null;let tiers=[];
 function toast(msg,ok=true){const el=document.getElementById('toast');el.innerHTML=`<div class="status ${ok?'success':'error'}">${msg}</div>`;setTimeout(()=>el.innerHTML='',4000)}
+function escapeHtml(value){
+  return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function normalizePublicOffers(value){
+  const defaults=[
+    {mode:'online',display_order:1,price:99,display_base:90,total_slots:100},
+    {mode:'online',display_order:2,price:199,display_base:90,total_slots:115},
+    {mode:'online',display_order:3,price:249,display_base:90,total_slots:200},
+    {mode:'offline',display_order:1,price:499,display_base:75,total_slots:120}
+  ];
+  const source=Array.isArray(value)?value:[];
+  const legacy=source.length>0 && source.every(x=>Number(x.display_base||0)===0 && Number(x.total_slots||x.slots||0)>0);
+  if(legacy){
+    const byPrice={99:defaults[0],199:defaults[1],249:defaults[2],499:defaults[3]};
+    const prices=new Set(source.map(x=>Number(x.price)));
+    if([...prices].some(p=>byPrice[p])) return defaults.map(x=>({...x}));
+  }
+  return source.map((x,i)=>{
+    const mode=x.mode==='offline'?'offline':'online';
+    const d=Number(x.display_base);
+    const base=Number.isFinite(d)?d:(mode==='offline'?75:90);
+    const price=Number(x.price)||0;
+    const total=x.total_slots!=null?Number(x.total_slots):base+(Number(x.slots)||0);
+    return {mode,display_order:Number(x.display_order)||i+1,price,display_base:base,total_slots:total};
+  }).filter(x=>x.price>0&&x.total_slots>x.display_base);
+}
+
 function safeEmbed(url){try{const u=new URL(url);if(u.hostname.includes('youtube.com')){let id=u.searchParams.get('v');return id?`https://www.youtube.com/embed/${id}`:url}if(u.hostname==='youtu.be'){return `https://www.youtube.com/embed/${u.pathname.slice(1)}`}return ''}catch{return ''}}
 function renderVideos(){const urls=Array.isArray(program?.testimonial_urls)?program.testimonial_urls:[];document.getElementById('videos').innerHTML=[0,1,2].map(i=>{const e=safeEmbed(urls[i]||'');return `<div class="card"><div class="video">${e?`<iframe src="${e}" title="Testimonial ${i+1}" loading="lazy" allowfullscreen></iframe>`:`<div class="video-placeholder">YouTube testimonial ${i+1}<br><span class="small">Admin can add the video link.</span></div>`}</div></div>`}).join('')}
 
@@ -406,23 +434,12 @@ async function getProgramFromDatabase(){
   }
 
   const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
-  let result=await sb.from('meditation_programs')
+  const result=await sb.from('meditation_programs')
     .select('*')
-    .in('status',['published','draft'])
     .gte('program_date',today)
     .order('program_date',{ascending:true})
     .order('start_time',{ascending:true})
     .limit(1);
-
-  if(result.error){
-    result=await sb.from('meditation_programs')
-      .select('*')
-      .gte('program_date',today)
-      .order('program_date',{ascending:true})
-      .order('start_time',{ascending:true})
-      .limit(1);
-  }
-
   if(result.error)throw result.error;
   return result.data?.[0]||null;
 }
@@ -464,7 +481,7 @@ async function loadProgram(){
     console.error('Program loading error:',err);
     const s=document.getElementById('programStatus');
     s.className='status error';
-    s.textContent=t('errorLoading');
+    s.textContent=(err?.message||t('errorLoading'));
     s.classList.remove('hidden');
   }
 }
