@@ -43,7 +43,7 @@ let member = null;
 let allBookings = [];
 
 function langText(en, ta) {
-  return (window.currentLang || 'en') === 'ta' ? ta : en;
+  return (currentLang || 'en') === 'ta' ? ta : en;
 }
 
 function esc(value) {
@@ -186,7 +186,7 @@ async function joinClass(booking, link) {
 }
 
 window.renderDynamic = function() {
-  if (Array.isArray(allBookings) && allBookings.length) {
+  if (Array.isArray(allBookings)) {
     render(allBookings);
   }
 };
@@ -329,7 +329,7 @@ async function render(bs) {
     </div>` : '';
 
   const currentHtml = current ? `
-    <p><strong>${esc((window.currentLang || 'en') === 'ta' ? (current.meditation_programs?.title_ta || current.meditation_programs?.title_en || '') : (current.meditation_programs?.title_en || ''))}</strong></p>
+    <p><strong>${esc((currentLang || 'en') === 'ta' ? (current.meditation_programs?.title_ta || current.meditation_programs?.title_en || '') : (current.meditation_programs?.title_en || ''))}</strong></p>
     <p class="muted">
       ${esc(current.meditation_programs?.program_date || '')}
       • ${esc(current.meditation_programs?.start_time || '')}
@@ -361,7 +361,7 @@ async function render(bs) {
   const upcomingHtml = futurePrograms.length
     ? futurePrograms.map(p => {
         const already = paidConfirmed.some(b => b.program_id === p.id);
-        const title = (window.currentLang || 'en') === 'ta'
+        const title = (currentLang || 'en') === 'ta'
           ? (p.title_ta || p.title_en)
           : p.title_en;
         return `
