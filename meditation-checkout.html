@@ -917,7 +917,87 @@ async function createOrder() {
 }
 
 
+/* =========================================
+   WAIT FOR WEBHOOK PAYMENT CONFIRMATION
+========================================= */
 
+async function waitForPaymentConfirmation(
+  maxAttempts = 10,
+  intervalMs = 3000
+) {
+
+  for (
+    let attempt = 1;
+    attempt <= maxAttempts;
+    attempt++
+  ) {
+
+    try {
+
+      const {
+        data,
+        error
+      } = await sb.rpc(
+        'get_meditation_booking',
+        {
+          p_booking_id:
+            booking.id
+        }
+      );
+
+      if (
+        !error &&
+        data
+      ) {
+
+        const isPaid =
+          data.payment_status === 'paid';
+
+        const isConfirmed =
+          data.reservation_status === 'confirmed';
+
+        if (
+          isPaid &&
+          isConfirmed
+        ) {
+
+          console.log(
+            'Payment confirmed by webhook:',
+            attempt
+          );
+
+          booking = data;
+
+          return true;
+        }
+      }
+
+    } catch (error) {
+
+      console.warn(
+        'Webhook confirmation check failed:',
+        error
+      );
+
+    }
+
+    if (
+      attempt < maxAttempts
+    ) {
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            intervalMs
+          )
+      );
+
+    }
+  }
+
+  return false;
+}
 /* =========================================
    VERIFY PAYMENT
 ========================================= */
@@ -1228,33 +1308,132 @@ Please keep this password safe.`
 
 
 
-  } catch (error) {
-setPaymentProcessing(false);
+ } catch (error) {
 
-    /* =================================
-       PAYMENT / ACCOUNT ERROR
-    ================================= */
-    
-    console.error(
+  console.error(
+    'Payment / account error:',
+    error
+  );
 
-      'Payment / account error:',
+  /*
+     Payment may already be successful
+     at Razorpay even if browser verification
+     failed.
+  */
 
-      error
+  const confirmed =
+    await waitForPaymentConfirmation();
 
+  if (confirmed) {
+
+    console.log(
+      'Webhook confirmed payment.'
     );
 
+    /*
+       Payment is now confirmed.
+       Send member creation again.
+       This is safe because create-member
+       already handles existing members.
+    */
 
-    show(
+    try {
 
-      error.message ||
-      'Something went wrong',
+      const accountResponse =
+        await fetch(
 
-      false
+          `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=create-member`,
 
-    );
+          {
+            method: 'POST',
 
+            headers: {
+              'Content-Type':
+                'application/json',
+
+              'apikey':
+                MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+
+              'Authorization':
+                `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+            },
+
+            body:
+              JSON.stringify({
+                booking_id:
+                  booking.id
+              })
+          }
+        );
+
+      const accountData =
+        await accountResponse.json();
+
+      if (
+        !accountResponse.ok ||
+        !accountData.success
+      ) {
+
+        throw new Error(
+          accountData.error ||
+          'Member account confirmation failed'
+        );
+
+      }
+
+      localStorage.setItem(
+        'aa_member_mobile',
+        accountData.mobile ||
+        booking.mobile
+      );
+
+      /*
+         Existing/new member:
+         send to login page.
+      */
+
+      setPaymentProcessing(false);
+
+      window.location.href =
+        'member-login.html?paid=1';
+
+      return;
+
+    } catch (recoveryError) {
+
+      console.error(
+        'Webhook recovery member error:',
+        recoveryError
+      );
+
+      setPaymentProcessing(false);
+
+      show(
+        currentLang === 'ta'
+          ? 'Payment உறுதி செய்யப்பட்டது. Member account தயாராகிறது. தயவுசெய்து Login page-ல் தொடரவும்.'
+          : 'Payment is confirmed. Your member account is being prepared. Please continue from the Login page.',
+        true
+      );
+
+      return;
+    }
   }
 
+  /*
+     Payment could not be confirmed
+     within recovery window.
+  */
+
+  setPaymentProcessing(false);
+
+  show(
+    currentLang === 'ta'
+      ? 'Payment உறுதி செய்யப்படவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.'
+      : 'Payment could not be confirmed. Please try again.',
+    false
+  );
+
+}
 }
 
 
