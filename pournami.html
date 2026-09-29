@@ -406,16 +406,25 @@ async function getProgramFromDatabase(){
   }
 
   const today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
-  const {data,error}=await sb.from('meditation_programs')
+  let result=await sb.from('meditation_programs')
     .select('*')
-    .eq('status','published')
+    .in('status',['published','draft'])
     .gte('program_date',today)
     .order('program_date',{ascending:true})
     .order('start_time',{ascending:true})
     .limit(1);
 
-  if(error)throw error;
-  return data?.[0]||null;
+  if(result.error){
+    result=await sb.from('meditation_programs')
+      .select('*')
+      .gte('program_date',today)
+      .order('program_date',{ascending:true})
+      .order('start_time',{ascending:true})
+      .limit(1);
+  }
+
+  if(result.error)throw result.error;
+  return result.data?.[0]||null;
 }
 
 async function loadProgram(){
