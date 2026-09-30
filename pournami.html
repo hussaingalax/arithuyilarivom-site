@@ -424,8 +424,9 @@ function renderDynamic(){
   const ogImage=document.querySelector('meta[property="og:image"]');
   if(ogTitle)ogTitle.content=title;
   if(ogDescription)ogDescription.content=description;
-  const posterUrl=ta?(program.poster_ta_url||program.poster_en_url):(program.poster_en_url||program.poster_ta_url);
-  if(ogImage&&posterUrl)ogImage.content=posterUrl;
+  if(ogImage) {
+  ogImage.content = 'https://www.arithuyilarivom.com/public/sleep-ta.jpg';
+}
 }
 
 async function getProgramFromDatabase(){
