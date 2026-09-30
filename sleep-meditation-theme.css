@@ -1,0 +1,241 @@
+/* =========================================================
+   ARITHUYIL ARIVOM — SLEEP MEDITATION LANDING PAGE THEME
+   VISUAL ONLY — DO NOT CHANGE CONTENT / PROCESS / JAVASCRIPT
+   ========================================================= */
+
+/* Scope everything to the public dynamic landing page only */
+body:has(#programHeroTitle) {
+  --sleep-bg: #f4f9fc;
+  --sleep-bg-soft: #eaf4f8;
+  --sleep-card: rgba(255,255,255,.94);
+  --sleep-card-2: #ffffff;
+  --sleep-text: #173042;
+  --sleep-muted: #647985;
+  --sleep-line: #d7e7ed;
+  --sleep-accent: #4d91a8;
+  --sleep-accent-dark: #2f6f84;
+  --sleep-gold: #c99b3b;
+  --sleep-shadow: 0 12px 35px rgba(40, 78, 94, .10);
+
+  background:
+    radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 38%),
+    linear-gradient(180deg, var(--sleep-bg) 0%, #eef6f9 55%, #f8fbfc 100%);
+  color: var(--sleep-text);
+}
+
+/* Header */
+body:has(#programHeroTitle) .topbar {
+  background: rgba(255,255,255,.92);
+  border-bottom: 1px solid var(--sleep-line);
+  box-shadow: 0 4px 18px rgba(48, 83, 96, .06);
+}
+
+body:has(#programHeroTitle) .brand {
+  color: var(--sleep-text);
+}
+
+body:has(#programHeroTitle) .lang {
+  border-color: var(--sleep-line);
+  background: #f7fbfc;
+}
+
+body:has(#programHeroTitle) .lang button {
+  color: var(--sleep-text);
+}
+
+body:has(#programHeroTitle) .lang button.active {
+  background: var(--sleep-accent);
+  color: #fff;
+}
+
+/* Hero */
+body:has(#programHeroTitle) .hero {
+  padding-top: 54px;
+}
+
+body:has(#programHeroTitle) .eyebrow {
+  color: var(--sleep-accent-dark);
+  letter-spacing: 1.2px;
+}
+
+body:has(#programHeroTitle) .hero h1 {
+  color: var(--sleep-text);
+  text-shadow: none;
+}
+
+body:has(#programHeroTitle) .hero p {
+  color: var(--sleep-muted);
+}
+
+body:has(#programHeroTitle) .hero-art {
+  background: #fff;
+  border: 1px solid var(--sleep-line);
+  box-shadow: var(--sleep-shadow);
+}
+
+/* Section headings */
+body:has(#programHeroTitle) .section-title h2 {
+  color: var(--sleep-text);
+}
+
+body:has(#programHeroTitle) .section-title p,
+body:has(#programHeroTitle) .muted {
+  color: var(--sleep-muted);
+}
+
+/* Cards */
+body:has(#programHeroTitle) .card {
+  background: var(--sleep-card);
+  border: 1px solid var(--sleep-line);
+  box-shadow: var(--sleep-shadow);
+}
+
+body:has(#programHeroTitle) .card h3 {
+  color: var(--sleep-accent-dark);
+}
+
+/* Posters / videos */
+body:has(#programHeroTitle) .poster {
+  border-color: var(--sleep-line);
+}
+
+body:has(#programHeroTitle) .video {
+  background: #e9f3f7;
+  border-color: var(--sleep-line);
+}
+
+body:has(#programHeroTitle) .video-placeholder {
+  color: var(--sleep-muted);
+}
+
+/* Offers */
+body:has(#programHeroTitle) .offer {
+  background: linear-gradient(180deg, #ffffff, #f4fafc);
+  border-color: var(--sleep-line);
+  box-shadow: 0 8px 25px rgba(40,78,94,.07);
+}
+
+body:has(#programHeroTitle) .offer.active {
+  border-color: rgba(77,145,168,.55);
+  box-shadow: 0 0 0 2px rgba(77,145,168,.08);
+}
+
+body:has(#programHeroTitle) .offer .badge {
+  background: #dceef4;
+  color: var(--sleep-accent-dark);
+}
+
+body:has(#programHeroTitle) .offer h3,
+body:has(#programHeroTitle) .price {
+  color: var(--sleep-text);
+}
+
+body:has(#programHeroTitle) .old {
+  color: #71818a;
+}
+
+body:has(#programHeroTitle) .slots,
+body:has(#programHeroTitle) .pill {
+  color: var(--sleep-accent-dark);
+}
+
+/* Buttons — retain existing functionality, visual only */
+body:has(#programHeroTitle) .cta {
+  background: linear-gradient(135deg, #d9b45c, #c99b3b);
+  border-color: #c99b3b;
+  color: #fff;
+  box-shadow: 0 7px 20px rgba(120,91,31,.14);
+}
+
+body:has(#programHeroTitle) .cta.secondary {
+  background: #fff;
+  color: var(--sleep-accent-dark);
+  border-color: var(--sleep-line);
+}
+
+/* Notice / countdown */
+body:has(#programHeroTitle) .countdown-bar {
+  background: #eef7fa;
+  border-color: var(--sleep-line);
+  color: var(--sleep-text);
+}
+
+body:has(#programHeroTitle) .notice {
+  border-left-color: var(--sleep-accent);
+  color: var(--sleep-muted);
+}
+
+/* Contact */
+body:has(#programHeroTitle) .contact {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(77,145,168,.10), transparent 55%),
+    linear-gradient(145deg, #ffffff, #eef7fa);
+  border-color: var(--sleep-line) !important;
+  box-shadow: var(--sleep-shadow);
+}
+
+body:has(#programHeroTitle) .contact strong {
+  color: var(--sleep-accent-dark);
+}
+
+body:has(#programHeroTitle) .contact-name {
+  color: var(--sleep-text);
+}
+
+body:has(#programHeroTitle) .contact-phone,
+body:has(#programHeroTitle) .contact a {
+  color: var(--sleep-accent-dark) !important;
+}
+
+/* Footer */
+body:has(#programHeroTitle) .footer {
+  border-top-color: var(--sleep-line);
+  color: var(--sleep-muted);
+}
+
+/* Member / location action links */
+body:has(#programHeroTitle) .member-login-link,
+body:has(#programHeroTitle) .location-link {
+  color: var(--sleep-accent-dark) !important;
+  background: #f5fafc;
+  border-color: var(--sleep-line);
+  box-shadow: none;
+}
+
+/* Forms / popup — only if used by this page */
+body:has(#programHeroTitle) .popup-backdrop,
+body:has(#programHeroTitle) .modal-backdrop {
+  background: rgba(27, 51, 62, .42);
+}
+
+body:has(#programHeroTitle) .modal {
+  background: linear-gradient(180deg, #ffffff, #f3f9fb);
+  border-color: var(--sleep-line);
+  color: var(--sleep-text);
+  box-shadow: 0 20px 60px rgba(36,72,86,.18);
+}
+
+body:has(#programHeroTitle) .input {
+  background: #fff;
+  color: var(--sleep-text);
+  border-color: var(--sleep-line);
+}
+
+body:has(#programHeroTitle) .field label {
+  color: var(--sleep-text);
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  body:has(#programHeroTitle) .hero {
+    padding-top: 40px;
+  }
+
+  body:has(#programHeroTitle) .hero-art {
+    box-shadow: 0 8px 25px rgba(40,78,94,.08);
+  }
+
+  body:has(#programHeroTitle) .card {
+    box-shadow: 0 7px 22px rgba(40,78,94,.07);
+  }
+}
