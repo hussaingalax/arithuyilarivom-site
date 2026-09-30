@@ -169,17 +169,17 @@ body:has(#programHeroTitle) .notice {
 body:has(#programHeroTitle) .contact {
   background:
     radial-gradient(circle at 50% 0%, rgba(77,145,168,.10), transparent 55%),
-    linear-gradient(145deg, #ffffff, #eef7fa);
+    linear-gradient(145deg, #ffffff, #eef7fa) !important;
   border-color: var(--sleep-line) !important;
-  box-shadow: var(--sleep-shadow);
+  box-shadow: var(--sleep-shadow) !important;
 }
 
 body:has(#programHeroTitle) .contact strong {
-  color: var(--sleep-accent-dark);
+  color: var(--sleep-accent-dark) !important;
 }
 
 body:has(#programHeroTitle) .contact-name {
-  color: var(--sleep-text);
+  color: var(--sleep-text) !important;
 }
 
 body:has(#programHeroTitle) .contact-phone,
