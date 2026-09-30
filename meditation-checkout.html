@@ -397,6 +397,10 @@ const bookingId =
 
 let booking = null;
 
+const activeBookingId =
+  new URLSearchParams(location.search)
+    .get('booking');
+
 let timer = null;
 
 /* =========================================
@@ -1166,7 +1170,7 @@ async function waitForPaymentConfirmation(
   ) {
     try {
       const response = await fetch(
-        `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=booking&id=${encodeURIComponent(booking.id)}`,
+        `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=booking&id=${encodeURIComponent(activeBookingId)}`,
         {
           method: 'GET',
           headers: {
@@ -1195,7 +1199,9 @@ async function waitForPaymentConfirmation(
             attempt
           );
 
-          booking = data;
+          if (data && data.id) {
+            booking = data;
+          }
           return true;
         }
       }
@@ -1223,6 +1229,17 @@ async function waitForPaymentConfirmation(
 
 async function verify(response) {
   setPaymentProcessing(true);
+
+  if (!activeBookingId) {
+    setPaymentProcessing(false);
+    show(
+      currentLang === 'ta'
+        ? 'பதிவு விவரம் கிடைக்கவில்லை.'
+        : 'Booking reference is missing.',
+      true
+    );
+    return;
+  }
 
   try {
     /* =================================
@@ -1283,7 +1300,7 @@ async function verify(response) {
             `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
         },
         body: JSON.stringify({
-          booking_id: booking.id
+          booking_id: activeBookingId
         })
       }
     );
