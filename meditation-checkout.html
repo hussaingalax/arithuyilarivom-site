@@ -1248,7 +1248,7 @@ async function verify(response) {
     ================================= */
 
     const verifyResponse = await fetch(
-      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/verify-meditation-payment`,
+      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=verify-checkout`,
       {
         method: 'POST',
         headers: {
@@ -1305,16 +1305,26 @@ async function verify(response) {
       }
     );
 
-    const accountData =
-      await accountResponse.json();
+    const accountText =
+      await accountResponse.text();
+
+    let accountData = null;
+
+    try {
+      accountData = accountText
+        ? JSON.parse(accountText)
+        : null;
+    } catch {
+      accountData = null;
+    }
 
     if (
       !accountResponse.ok ||
-      !accountData.success
+      !accountData?.success
     ) {
       throw new Error(
-        accountData.error ||
-        'Account creation failed'
+        accountData?.error ||
+        `Member account creation failed (HTTP ${accountResponse.status})`
       );
     }
 
@@ -1398,16 +1408,26 @@ async function verify(response) {
             }
           );
 
-        const accountData =
-          await accountResponse.json();
+        const accountText =
+          await accountResponse.text();
+
+        let accountData = null;
+
+        try {
+          accountData = accountText
+            ? JSON.parse(accountText)
+            : null;
+        } catch {
+          accountData = null;
+        }
 
         if (
           !accountResponse.ok ||
-          !accountData.success
+          !accountData?.success
         ) {
           throw new Error(
-            accountData.error ||
-            'Member account confirmation failed'
+            accountData?.error ||
+            `Member account confirmation failed (HTTP ${accountResponse.status})`
           );
         }
 
