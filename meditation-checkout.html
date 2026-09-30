@@ -1159,30 +1159,18 @@ async function waitForPaymentConfirmation(
   maxAttempts = 20,
   intervalMs = 3000
 ) {
-
   for (
     let attempt = 1;
     attempt <= maxAttempts;
     attempt++
   ) {
-
     try {
-
-      /*
-         IMPORTANT:
-         Payment recovery must not depend on the
-         get_meditation_booking RPC because that RPC is
-         returning HTTP 400 in the browser after Razorpay success.
-
-         Use the existing meditation-api booking endpoint instead.
-      */
       const response = await fetch(
         `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=booking&id=${encodeURIComponent(booking.id)}`,
         {
           method: 'GET',
           headers: {
-            'apikey':
-              MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+            'apikey': MEDITATION_CONFIG.SUPABASE_ANON_KEY,
             'Authorization':
               `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
           }
@@ -1196,52 +1184,33 @@ async function waitForPaymentConfirmation(
         result?.success &&
         result?.booking
       ) {
-
         const data = result.booking;
 
-        const isPaid =
-          data.payment_status === 'paid';
-
-        const isConfirmed =
-          data.reservation_status === 'confirmed';
-
         if (
-          isPaid &&
-          isConfirmed
+          data.payment_status === 'paid' &&
+          data.reservation_status === 'confirmed'
         ) {
-
           console.log(
-            'Payment confirmed by backend recovery:',
+            'Payment confirmed by backend:',
             attempt
           );
 
           booking = data;
-
           return true;
         }
       }
-
     } catch (error) {
-
       console.warn(
-        'Backend payment recovery check failed:',
+        'Payment recovery check failed:',
         error
       );
-
     }
 
-    if (
-      attempt < maxAttempts
-    ) {
-
+    if (attempt < maxAttempts) {
       await new Promise(
         resolve =>
-          setTimeout(
-            resolve,
-            intervalMs
-          )
+          setTimeout(resolve, intervalMs)
       );
-
     }
   }
 
@@ -1253,370 +1222,221 @@ async function waitForPaymentConfirmation(
 ========================================= */
 
 async function verify(response) {
-
   setPaymentProcessing(true);
 
   try {
-
-
     /* =================================
        STEP 1
        Verify Razorpay payment
     ================================= */
 
-    const verifyResponse =
-      await fetch(
-
-        `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/verify-meditation-payment`,
-
-        {
-
-          method: 'POST',
-
-
-          headers: {
-
-            'Content-Type':
-              'application/json',
-
-            'apikey':
-              MEDITATION_CONFIG.SUPABASE_ANON_KEY,
-
-            'Authorization':
-              `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
-
-          },
-
-
-          body:
-            JSON.stringify({
-
-              booking_id:
-                booking.id,
-
-              razorpay_order_id:
-                response.razorpay_order_id,
-
-              razorpay_payment_id:
-                response.razorpay_payment_id,
-
-              razorpay_signature:
-                response.razorpay_signature
-
-            })
-
-        }
-
-      );
-
-
+    const verifyResponse = await fetch(
+      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/verify-meditation-payment`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey':
+            MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+          'Authorization':
+            `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          booking_id: booking.id,
+          razorpay_order_id:
+            response.razorpay_order_id,
+          razorpay_payment_id:
+            response.razorpay_payment_id,
+          razorpay_signature:
+            response.razorpay_signature
+        })
+      }
+    );
 
     const verifyData =
       await verifyResponse.json();
-
-
 
     if (
       !verifyResponse.ok ||
       !verifyData.success
     ) {
-
       throw new Error(
-
         verifyData.error ||
         'Payment verification failed'
-
       );
-
     }
-
-
 
     /* =================================
        STEP 2
        Create / attach member account
     ================================= */
 
-    const accountResponse =
-      await fetch(
-
-        `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=create-member`,
-
-        {
-
-          method: 'POST',
-
-
-          headers: {
-
-            'Content-Type':
-              'application/json',
-
-            'apikey':
-              MEDITATION_CONFIG.SUPABASE_ANON_KEY,
-
-            'Authorization':
-              `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
-
-          },
-
-
-          body:
-            JSON.stringify({
-
-              booking_id:
-                booking.id
-
-            })
-
-        }
-
-      );
-
-
+    const accountResponse = await fetch(
+      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=create-member`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey':
+            MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+          'Authorization':
+            `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          booking_id: booking.id
+        })
+      }
+    );
 
     const accountData =
       await accountResponse.json();
-
-
 
     if (
       !accountResponse.ok ||
       !accountData.success
     ) {
-
       throw new Error(
-
         accountData.error ||
         'Account creation failed'
-
       );
-
     }
 
-
+    localStorage.setItem(
+      'aa_member_mobile',
+      accountData.mobile ||
+      booking.mobile
+    );
 
     /* =================================
        STEP 3
-       Save mobile locally
-    ================================= */
-
-    localStorage.setItem(
-
-      'aa_member_mobile',
-
-      accountData.mobile ||
-      booking.mobile
-
-    );
-
-
-
-    /* =================================
-       STEP 4
-       NEW MEMBER
-       Password returned
+       New member
     ================================= */
 
     if (accountData.password) {
-
-
-      /* ---------------------------------
-         Show login details once
-      --------------------------------- */
+      setPaymentProcessing(false);
 
       showMemberSuccessPopup(
-  accountData.mobile || booking.mobile,
-  accountData.password,
-  booking.meditation_programs?.whatsapp_community_link || null
-);
-
-
-
-    /* =================================
-   WAIT FOR USER TO CONTINUE
-================================= */
-
-return;
-      }
-
-
-
-      /* ---------------------------------
-         Auto login successful
-      --------------------------------- */
-
-      console.log(
-
-        'Member auto login successful:',
-
-        loginData?.user?.id
-
+        accountData.mobile ||
+          booking.mobile,
+        accountData.password,
+        booking.meditation_programs
+          ?.whatsapp_community_link ||
+          null
       );
 
-
-      window.location.href =
-        'member-dashboard.html';
-
-
       return;
-
     }
 
-
-
     /* =================================
-       EXISTING MEMBER
+       STEP 4
+       Existing member
     ================================= */
 
+    setPaymentProcessing(false);
+
     alert(
-
       currentLang === 'ta'
-
         ? 'Payment வெற்றிகரமாக முடிந்தது. உங்கள் member account ஏற்கனவே உள்ளது. தயவுசெய்து login செய்யுங்கள்.'
-
         : 'Payment successful. Your member account already exists. Please login.'
-
     );
-
 
     window.location.href =
       'member-login.html?paid=1';
 
-
     return;
 
-
-
- } catch (error) {
-
-  console.error(
-    'Payment / account error:',
-    error
-  );
-
-  /*
-     Payment may already be successful
-     at Razorpay even if browser verification
-     failed.
-  */
-
-  const confirmed =
-    await waitForPaymentConfirmation();
-
-  if (confirmed) {
-
-    console.log(
-      'Webhook confirmed payment.'
+  } catch (error) {
+    console.error(
+      'Payment / account error:',
+      error
     );
 
     /*
-       Payment is now confirmed.
-       Send member creation again.
-       This is safe because create-member
-       already handles existing members.
+       Razorpay may already be successful.
+       Give backend/webhook time to confirm
+       and then retry member creation.
     */
 
-    try {
+    const confirmed =
+      await waitForPaymentConfirmation();
 
-      const accountResponse =
-        await fetch(
-
-          `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=create-member`,
-
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type':
-                'application/json',
-
-              'apikey':
-                MEDITATION_CONFIG.SUPABASE_ANON_KEY,
-
-              'Authorization':
-                `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
-            },
-
-            body:
-              JSON.stringify({
-                booking_id:
-                  booking.id
+    if (confirmed) {
+      try {
+        const accountResponse =
+          await fetch(
+            `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=create-member`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type':
+                  'application/json',
+                'apikey':
+                  MEDITATION_CONFIG.SUPABASE_ANON_KEY,
+                'Authorization':
+                  `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
+              },
+              body: JSON.stringify({
+                booking_id: booking.id
               })
-          }
+            }
+          );
+
+        const accountData =
+          await accountResponse.json();
+
+        if (
+          !accountResponse.ok ||
+          !accountData.success
+        ) {
+          throw new Error(
+            accountData.error ||
+            'Member account confirmation failed'
+          );
+        }
+
+        localStorage.setItem(
+          'aa_member_mobile',
+          accountData.mobile ||
+            booking.mobile
         );
 
-      const accountData =
-        await accountResponse.json();
+        setPaymentProcessing(false);
 
-      if (
-        !accountResponse.ok ||
-        !accountData.success
-      ) {
+        if (accountData.password) {
+          showMemberSuccessPopup(
+            accountData.mobile ||
+              booking.mobile,
+            accountData.password,
+            booking.meditation_programs
+              ?.whatsapp_community_link ||
+              null
+          );
+          return;
+        }
 
-        throw new Error(
-          accountData.error ||
-          'Member account confirmation failed'
+        window.location.href =
+          'member-login.html?paid=1';
+
+        return;
+
+      } catch (recoveryError) {
+        console.error(
+          'Payment recovery member error:',
+          recoveryError
         );
-
       }
-
-      localStorage.setItem(
-        'aa_member_mobile',
-        accountData.mobile ||
-        booking.mobile
-      );
-
-      /*
-         Existing/new member:
-         send to login page.
-      */
-
-      setPaymentProcessing(false);
-
-      window.location.href =
-        'member-login.html?paid=1';
-
-      return;
-
-    } catch (recoveryError) {
-
-      console.error(
-        'Webhook recovery member error:',
-        recoveryError
-      );
-
-      setPaymentProcessing(false);
-
-      show(
-        currentLang === 'ta'
-          ? 'Payment உறுதி செய்யப்பட்டது. Member account தயாராகிறது. தயவுசெய்து Login page-ல் தொடரவும்.'
-          : 'Payment is confirmed. Your member account is being prepared. Please continue from the Login page.',
-        true
-      );
-
-      return;
     }
+
+    setPaymentProcessing(false);
+
+    show(
+      currentLang === 'ta'
+        ? 'Payment உறுதி செய்யப்படவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.'
+        : 'Payment could not be confirmed. Please try again.',
+      true
+    );
   }
-
-  /*
-     Payment could not be confirmed
-     within recovery window.
-  */
-
-  setPaymentProcessing(false);
-
-  show(
-    currentLang === 'ta'
-      ? 'Payment உறுதி செய்யப்படவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.'
-      : 'Payment could not be confirmed. Please try again.',
-    false
-  );
-
 }
-}
-
-
 
 /* =========================================
    LANGUAGE
