@@ -972,7 +972,7 @@ async function createOrder() {
             JSON.stringify({
 
               booking_id:
-                booking.id
+                activeBookingId
 
             })
 
@@ -1259,7 +1259,7 @@ async function verify(response) {
             `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
         },
         body: JSON.stringify({
-          booking_id: booking.id,
+          booking_id: activeBookingId,
           razorpay_order_id:
             response.razorpay_order_id,
           razorpay_payment_id:
@@ -1393,7 +1393,7 @@ async function verify(response) {
                   `Bearer ${MEDITATION_CONFIG.SUPABASE_ANON_KEY}`
               },
               body: JSON.stringify({
-                booking_id: booking.id
+                booking_id: activeBookingId
               })
             }
           );
