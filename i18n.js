@@ -805,8 +805,7 @@ posterAlt:
 // LANGUAGE STATE
 // =========================================================
 
-let currentLang =
-  localStorage.getItem('aa_meditation_lang') || 'ta';
+let currentLang = 'ta';
 
 
 // =========================================================
