@@ -239,3 +239,54 @@ body:has(#programHeroTitle) .field label {
     box-shadow: 0 7px 22px rgba(40,78,94,.07);
   }
 }
+
+
+/* =========================================================
+   SLEEP LANDING — CONTACT CARD FINAL OVERRIDE
+   ========================================================= */
+
+body:has(#booking) .contact {
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(77,145,168,.10),
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #eef7fa
+    ) !important;
+
+  border: 1px solid #d7e7ed !important;
+  border-radius: 26px !important;
+
+  box-shadow:
+    0 12px 35px rgba(40,78,94,.10) !important;
+
+  color: #173042 !important;
+}
+
+body:has(#booking) .contact strong {
+  color: #2f6f84 !important;
+}
+
+body:has(#booking) .contact-name {
+  color: #173042 !important;
+}
+
+body:has(#booking) .contact-phone {
+  color: #2f6f84 !important;
+}
+
+body:has(#booking) .contact-actions a {
+  background:
+    linear-gradient(
+      135deg,
+      #d9b45c,
+      #c99b3b
+    ) !important;
+
+  color: #ffffff !important;
+  border-color: #c99b3b !important;
+}
