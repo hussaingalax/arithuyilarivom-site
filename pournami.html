@@ -267,6 +267,8 @@ async function renderOffers(){
   await refreshSlots();
 }
 
+
+  
 async function refreshSlots(){
   if(!program?.id)return;
 
@@ -280,8 +282,15 @@ async function refreshSlots(){
     return;
   }
 
-  const onlineUsed=Math.max(0,Number(countData?.online_used||0));
-  const liveUsed=Math.max(0,Number(countData?.live_used||0));
+  const onlineUsed=Math.max(
+    0,
+    Number(countData?.online_used||0)
+  );
+
+  const liveUsed=Math.max(
+    0,
+    Number(countData?.live_used||0)
+  );
 
   const online=getProgramTiers()
     .filter(o=>o.mode==='online')
@@ -290,55 +299,147 @@ async function refreshSlots(){
   let consumed=0;
 
   online.forEach(tier=>{
+
     const el=document.getElementById(`slot-${tier.index}`);
-    const card=document.querySelector(`.offer[data-tier="${tier.index}"]`);
+    const card=document.querySelector(
+      `.offer[data-tier="${tier.index}"]`
+    );
     const button=card?.querySelector('button.cta');
+
     if(!el)return;
 
-    const capacity=tier.total-tier.base;
-    const used=Math.min(capacity,Math.max(0,onlineUsed-consumed));
-    const current=tier.base+used;
-    const full=used>=capacity;
-    const previousComplete=onlineUsed>=consumed;
+    // Actual offer capacity
+    // ₹99  = 100 - 90 = 10
+    // ₹199 = 115 - 90 = 25
+    // ₹249 = 200 - 90 = 110
+    const capacity=Math.max(
+      0,
+      tier.total-tier.base
+    );
+
+    const tierStart=consumed;
+    const tierEnd=consumed+capacity;
+
+    // SAME booking count on every card
+    const current=Math.min(
+      tier.base+onlineUsed,
+      tier.total
+    );
+
+    const full=onlineUsed>=tierEnd;
+
+    const active=
+      onlineUsed>=tierStart &&
+      onlineUsed<tierEnd;
+
 
     if(full){
+
       el.textContent=t('completed');
-      if(button){button.disabled=true;button.textContent=t('completed');}
+
+      if(button){
+        button.disabled=true;
+        button.textContent=t('completed');
+      }
+
       card?.classList.add('offer-completed');
-    }else if(previousComplete){
-      el.textContent=`${current} / ${tier.total} ${t('filled')}`;
-      if(button){button.disabled=false;button.textContent=t('book');}
+
+    }else if(active){
+
+      el.textContent=
+        `${current} / ${tier.total} ${t('filled')}`;
+
+      if(button){
+        button.disabled=false;
+        button.textContent=t('book');
+      }
+
       card?.classList.remove('offer-completed');
+
     }else{
-      el.textContent=`${tier.base} / ${tier.total} ${t('filled')}`;
-      if(button){button.disabled=true;button.textContent=t('comingSoon');}
+
+      // Future tier:
+      // Same common booking count is displayed
+      el.textContent=
+        `${current} / ${tier.total} ${t('filled')}`;
+
+      if(button){
+        button.disabled=true;
+        button.textContent=t('comingSoon');
+      }
+
       card?.classList.remove('offer-completed');
     }
 
     consumed+=capacity;
+
   });
 
-  const offline=getProgramTiers().find(o=>o.mode==='offline');
+
+  // =====================================================
+  // OFFLINE / LIVE
+  // =====================================================
+
+  const offline=getProgramTiers()
+    .find(o=>o.mode==='offline');
+
   const el=document.getElementById('slot-offline');
+
   if(offline&&el){
-    const capacity=offline.total-offline.base;
-    const used=Math.min(capacity,liveUsed);
-    const current=offline.base+used;
-    const card=el.closest('.offer');
-    const button=card?.querySelector('button.cta');
+
+    const capacity=Math.max(
+      0,
+      offline.total-offline.base
+    );
+
+    const used=Math.min(
+      capacity,
+      liveUsed
+    );
+
+    const current=
+      offline.base+used;
+
+    const card=
+      el.closest('.offer');
+
+    const button=
+      card?.querySelector('button.cta');
+
 
     if(used>=capacity){
+
       el.textContent=t('completed');
-      if(button){button.disabled=true;button.textContent=t('completed');}
+
+      if(button){
+        button.disabled=true;
+        button.textContent=t('completed');
+      }
+
       card?.classList.add('offer-completed');
+
     }else{
-      el.textContent=`${current} / ${offline.total} ${t('filled')}`;
-      if(button){button.disabled=false;button.textContent=t('book');}
+
+      el.textContent=
+        `${current} / ${offline.total} ${t('filled')}`;
+
+      if(button){
+        button.disabled=false;
+        button.textContent=t('book');
+      }
+
       card?.classList.remove('offer-completed');
     }
   }
-}
-
+}                                            
+  
+  
+  
+  
+  
+  
+  
+  
 function formatProgramDateTime(p){
   try{
     const d=new Date(`${p.program_date}T${String(p.start_time||'00:00').slice(0,5)}:00`);
