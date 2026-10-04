@@ -304,190 +304,192 @@ async function renderOffers(){
   await refreshSlots();
 }
 
-
   
 async function refreshSlots(){
-  if(!program?.id)return;
 
-  const {data:countData,error:countError}=await sb.rpc(
-    'get_meditation_common_counts',
-    {p_program_id:program.id}
-  );
+  if(!program?.id) return;
+
+  const { data: countData, error: countError } =
+    await sb.rpc(
+      'get_meditation_common_counts',
+      { p_program_id: program.id }
+    );
 
   if(countError){
-    console.error('Common booking count error:',countError);
+    console.error(
+      'Common booking count error:',
+      countError
+    );
     return;
   }
 
-  const onlineUsed=Math.max(
+  const onlineUsed = Math.max(
     0,
-    Number(countData?.online_used||0)
+    Number(countData?.online_used || 0)
   );
 
-  const liveUsed=Math.max(
+  const liveUsed = Math.max(
     0,
-    Number(countData?.live_used||0)
+    Number(countData?.live_used || 0)
   );
 
-  const online=getProgramTiers()
-    .filter(o=>o.mode==='online')
-    .sort((a,b)=>a.index-b.index);
+  const online = getProgramTiers()
+    .filter(o => o.mode === 'online')
+    .sort((a,b) => a.index - b.index);
 
-  let consumed=0;
+  let consumed = 0;
 
-  online.forEach(tier=>{
+  online.forEach(tier => {
 
-    const el=document.getElementById(`slot-${tier.index}`);
-    const card=document.querySelector(
-      `.offer[data-tier="${tier.index}"]`
-    );
-    const button=card?.querySelector('button.cta');
+    const el =
+      document.getElementById(`slot-${tier.index}`);
 
-    if(!el)return;
+    const card =
+      document.querySelector(
+        `.offer[data-tier="${tier.index}"]`
+      );
 
-    // Actual offer capacity
-    // ₹99  = 100 - 90 = 10
-    // ₹199 = 115 - 90 = 25
-    // ₹249 = 200 - 90 = 110
-    const capacity=Math.max(
+    const button =
+      card?.querySelector('button.cta');
+
+    if(!el) return;
+
+    const capacity = Math.max(
       0,
-      tier.total-tier.base
+      tier.total - tier.base
     );
 
-    const tierStart=consumed;
-    const tierEnd=consumed+capacity;
+    const tierStart = consumed;
+    const tierEnd = consumed + capacity;
 
-    // SAME booking count on every card
-    const current=Math.min(
-      tier.base+onlineUsed,
+    const tierUsed = Math.max(
+      0,
+      Math.min(
+        capacity,
+        onlineUsed - tierStart
+      )
+    );
+
+    const current = Math.min(
+      tier.base + tierUsed,
       tier.total
     );
 
-    const full=onlineUsed>=tierEnd;
+    const full =
+      onlineUsed >= tierEnd;
 
-    const active=
-      onlineUsed>=tierStart &&
-      onlineUsed<tierEnd;
-
+    const active =
+      onlineUsed >= tierStart &&
+      onlineUsed < tierEnd;
 
     if(full){
 
-      el.textContent=t('completed');
-
-      const completedSeatBox=document.getElementById(`seat-left-${tier.index}`);
-      if(completedSeatBox) completedSeatBox.hidden=true;
+      el.textContent = t('completed');
 
       if(button){
-        button.disabled=true;
-        button.textContent=t('completed');
+        button.disabled = true;
+        button.textContent = t('completed');
       }
 
       card?.classList.add('offer-completed');
 
     }else if(active){
 
-      const remaining=Math.max(0,capacity-used);
-
-      el.textContent=
+      el.textContent =
         `${current} / ${tier.total} ${t('filled')}`;
 
-      const seatBox=document.getElementById(`seat-left-${tier.index}`);
-      const seatNumber=document.getElementById(`seat-left-number-${tier.index}`);
-
-      if(seatBox && seatNumber){
-        seatNumber.textContent=remaining;
-        seatBox.hidden=false;
-      }
-
       if(button){
-        button.disabled=false;
-        button.textContent=t('book');
+        button.disabled = false;
+        button.textContent = t('book');
       }
 
       card?.classList.remove('offer-completed');
 
     }else{
 
-      const seatBox=document.getElementById(`seat-left-${tier.index}`);
-      if(seatBox) seatBox.hidden=true;
-
-      // Future tier:
-      // Same common booking count is displayed
-      el.textContent=
-        `${current} / ${tier.total} ${t('filled')}`;
+      el.textContent =
+        `${tier.base} / ${tier.total} ${t('filled')}`;
 
       if(button){
-        button.disabled=true;
-        button.textContent=t('comingSoon');
+        button.disabled = true;
+        button.textContent = t('comingSoon');
       }
 
       card?.classList.remove('offer-completed');
     }
 
-    consumed+=capacity;
+    consumed += capacity;
 
   });
 
 
-  // =====================================================
+  // ================================
   // OFFLINE / LIVE
-  // =====================================================
+  // ================================
 
-  const offline=getProgramTiers()
-    .find(o=>o.mode==='offline');
+  const offline =
+    getProgramTiers()
+      .find(o => o.mode === 'offline');
 
-  const el=document.getElementById('slot-offline');
+  const offlineEl =
+    document.getElementById('slot-offline');
 
-  if(offline&&el){
+  if(offline && offlineEl){
 
-    const capacity=Math.max(
+    const capacity = Math.max(
       0,
-      offline.total-offline.base
+      offline.total - offline.base
     );
 
-    const used=Math.min(
-      capacity,
-      liveUsed
+    const liveUsedSafe = Math.max(
+      0,
+      Math.min(
+        capacity,
+        liveUsed
+      )
     );
 
-    const current=
-      offline.base+used;
+    const current =
+      offline.base + liveUsedSafe;
 
-    const card=
-      el.closest('.offer');
+    const card =
+      offlineEl.closest('.offer');
 
-    const button=
+    const button =
       card?.querySelector('button.cta');
 
+    if(liveUsedSafe >= capacity){
 
-    if(used>=capacity){
-
-      el.textContent=t('completed');
+      offlineEl.textContent =
+        t('completed');
 
       if(button){
-        button.disabled=true;
-        button.textContent=t('completed');
+        button.disabled = true;
+        button.textContent =
+          t('completed');
       }
 
-      card?.classList.add('offer-completed');
+      card?.classList.add(
+        'offer-completed'
+      );
 
     }else{
 
-      el.textContent=
+      offlineEl.textContent =
         `${current} / ${offline.total} ${t('filled')}`;
 
       if(button){
-        button.disabled=false;
-        button.textContent=t('book');
+        button.disabled = false;
+        button.textContent =
+          t('book');
       }
 
-      card?.classList.remove('offer-completed');
+      card?.classList.remove(
+        'offer-completed'
+      );
     }
   }
-}                                            
-  
-  
-  
+}  
   
   
   
