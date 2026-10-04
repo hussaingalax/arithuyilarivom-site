@@ -22,6 +22,39 @@
 <meta name="twitter:description" content="3 அக்டோபர் 2026 | சனிக்கிழமை | இரவு 7:30 மணி">
 <meta name="twitter:image" content="https://www.arithuyilarivom.com/public/sleep-ta.jpg">
 
+
+<style id="tierSeatLeftStyles">
+  .offer[data-tier] { position: relative; }
+  .tier-seat-left {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: none;
+    min-width: 58px;
+    padding: 5px 7px 6px;
+    border: 2px solid #ff3b30;
+    border-radius: 7px;
+    background: #fff;
+    text-align: center;
+    line-height: 1;
+    z-index: 3;
+  }
+  .tier-seat-left .seat-number {
+    display: block;
+    color: #ff3b30;
+    font-size: 24px;
+    font-weight: 900;
+  }
+  .tier-seat-left .seat-label {
+    display: block;
+    margin-top: 3px;
+    color: #111;
+    font-size: 9px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .tier-seat-left.visible { display: block; }
+</style>
 </head><body>
 <header class="topbar"><div class="container topbar-inner"><div class="brand" data-i18n="brand">Arithuyil Arivom</div><div class="nav-actions"><a href="member-login.html" class="member-login-link">
   🔐 <span data-i18n="login">Member Login</span>
@@ -248,9 +281,9 @@ async function renderOffers(){
       <span class="badge">${badge}</span>
       <h3>${t('online')}</h3>
       <div><span class="old">₹${Number(program.online_regular_price||0).toLocaleString('en-IN')}</span> <span class="price">₹${offer.price.toLocaleString('en-IN')}</span></div>
-      <div class="seat-left" id="seat-left-${offer.index}" aria-live="polite" hidden>
-        <span class="seat-left-number" id="seat-left-number-${offer.index}"></span>
-        <span class="seat-left-label">${currentLang==='ta'?'மீதமுள்ள இடங்கள்':'Seats Left'}</span>
+      <div class="tier-seat-left" id="seat-left-${offer.index}" aria-live="polite">
+        <span class="seat-number">0</span>
+        <span class="seat-label">Seats Left</span>
       </div>
       <div class="slots" id="slot-${offer.index}">&nbsp;</div>
       <button class="cta full" onclick="startBooking('online',${offer.index})">${t('book')}</button>
@@ -267,234 +300,129 @@ async function renderOffers(){
     </div>`);
   }
 
-  if(!document.getElementById('seatLeftStyles')){
-    const style=document.createElement('style');
-    style.id='seatLeftStyles';
-    style.textContent=`
-      .offer{position:relative}
-      .seat-left{
-        position:absolute;
-        top:12px;
-        right:12px;
-        z-index:2;
-        display:flex;
-        flex-direction:column;
-        align-items:flex-end;
-        line-height:1;
-        pointer-events:none;
-      }
-      .seat-left-number{
-        color:#ff2d2d;
-        font-size:30px;
-        font-weight:900;
-      }
-      .seat-left-label{
-        margin-top:4px;
-        color:#ff6b6b;
-        font-size:10px;
-        font-weight:800;
-        letter-spacing:.5px;
-        text-transform:uppercase;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
   grid.innerHTML=cards.join('');
   await refreshSlots();
 }
 
+
   
 async function refreshSlots(){
+  if(!program?.id)return;
 
-  if(!program?.id) return;
-
-  const { data: countData, error: countError } =
-    await sb.rpc(
-      'get_meditation_common_counts',
-      { p_program_id: program.id }
-    );
+  const {data:countData,error:countError}=await sb.rpc(
+    'get_meditation_common_counts',
+    {p_program_id:program.id}
+  );
 
   if(countError){
-    console.error(
-      'Common booking count error:',
-      countError
-    );
+    console.error('Common booking count error:',countError);
     return;
   }
 
-  const onlineUsed = Math.max(
-    0,
-    Number(countData?.online_used || 0)
-  );
+  const onlineUsed=Math.max(0,Number(countData?.online_used||0));
+  const liveUsed=Math.max(0,Number(countData?.live_used||0));
 
-  const liveUsed = Math.max(
-    0,
-    Number(countData?.live_used || 0)
-  );
+  const online=getProgramTiers()
+    .filter(o=>o.mode==='online')
+    .sort((a,b)=>a.index-b.index);
 
-  const online = getProgramTiers()
-    .filter(o => o.mode === 'online')
-    .sort((a,b) => a.index - b.index);
+  let consumed=0;
 
-  let consumed = 0;
+  online.forEach(tier=>{
+    const el=document.getElementById(`slot-${tier.index}`);
+    const card=document.querySelector(`.offer[data-tier="${tier.index}"]`);
+    const button=card?.querySelector('button.cta');
+    const seatBox=document.getElementById(`seat-left-${tier.index}`);
+    const seatNumber=seatBox?.querySelector('.seat-number');
 
-  online.forEach(tier => {
+    if(!el)return;
 
-    const el =
-      document.getElementById(`slot-${tier.index}`);
+    // Actual offer capacity:
+    // ₹99  = 100 - 90 = 10
+    // ₹199 = 115 - 90 = 25
+    // ₹249 = 200 - 90 = 110
+    const capacity=Math.max(0,tier.total-tier.base);
+    const tierStart=consumed;
+    const tierEnd=consumed+capacity;
 
-    const card =
-      document.querySelector(
-        `.offer[data-tier="${tier.index}"]`
-      );
+    const full=onlineUsed>=tierEnd;
+    const active=onlineUsed>=tierStart && onlineUsed<tierEnd;
 
-    const button =
-      card?.querySelector('button.cta');
-
-    if(!el) return;
-
-    const capacity = Math.max(
-      0,
-      tier.total - tier.base
-    );
-
-    const tierStart = consumed;
-    const tierEnd = consumed + capacity;
-
-    const tierUsed = Math.max(
-      0,
-      Math.min(
-        capacity,
-        onlineUsed - tierStart
-      )
-    );
-
-    const current = Math.min(
-      tier.base + tierUsed,
-      tier.total
-    );
-
-    const full =
-      onlineUsed >= tierEnd;
-
-    const active =
-      onlineUsed >= tierStart &&
-      onlineUsed < tierEnd;
+    // Red Seats Left box must appear ONLY on the active offer.
+    if(seatBox){
+      seatBox.classList.remove('visible');
+    }
 
     if(full){
-
-      el.textContent = t('completed');
+      el.textContent=t('completed');
 
       if(button){
-        button.disabled = true;
-        button.textContent = t('completed');
+        button.disabled=true;
+        button.textContent=t('completed');
       }
 
       card?.classList.add('offer-completed');
 
     }else if(active){
+      // Active tier shows the common live booking count.
+      const current=Math.min(onlineUsed,tier.total);
+      const seatsLeft=Math.max(0,tier.total-current);
 
-      el.textContent =
-        `${current} / ${tier.total} ${t('filled')}`;
+      el.textContent=`${current} / ${tier.total} ${t('filled')}`;
 
       if(button){
-        button.disabled = false;
-        button.textContent = t('book');
+        button.disabled=false;
+        button.textContent=t('book');
       }
 
       card?.classList.remove('offer-completed');
 
-    }else{
+      if(seatBox && seatNumber){
+        seatNumber.textContent=seatsLeft;
+        seatBox.classList.add('visible');
+      }
 
-      el.textContent =
-        `${tier.base} / ${tier.total} ${t('filled')}`;
+    }else{
+      // Future tier stays at its display base until it becomes active.
+      el.textContent=`${tier.base} / ${tier.total} ${t('filled')}`;
 
       if(button){
-        button.disabled = true;
-        button.textContent = t('comingSoon');
+        button.disabled=true;
+        button.textContent=t('comingSoon');
       }
 
       card?.classList.remove('offer-completed');
     }
 
-    consumed += capacity;
-
+    consumed+=capacity;
   });
 
-
-  // ================================
+  // =====================================================
   // OFFLINE / LIVE
-  // ================================
+  // =====================================================
 
-  const offline =
-    getProgramTiers()
-      .find(o => o.mode === 'offline');
+  const offline=getProgramTiers().find(o=>o.mode==='offline');
+  const el=document.getElementById('slot-offline');
 
-  const offlineEl =
-    document.getElementById('slot-offline');
+  if(offline&&el){
+    const capacity=Math.max(0,offline.total-offline.base);
+    const used=Math.min(capacity,liveUsed);
+    const current=offline.base+used;
+    const card=el.closest('.offer');
+    const button=card?.querySelector('button.cta');
 
-  if(offline && offlineEl){
-
-    const capacity = Math.max(
-      0,
-      offline.total - offline.base
-    );
-
-    const liveUsedSafe = Math.max(
-      0,
-      Math.min(
-        capacity,
-        liveUsed
-      )
-    );
-
-    const current =
-      offline.base + liveUsedSafe;
-
-    const card =
-      offlineEl.closest('.offer');
-
-    const button =
-      card?.querySelector('button.cta');
-
-    if(liveUsedSafe >= capacity){
-
-      offlineEl.textContent =
-        t('completed');
-
-      if(button){
-        button.disabled = true;
-        button.textContent =
-          t('completed');
-      }
-
-      card?.classList.add(
-        'offer-completed'
-      );
-
+    if(used>=capacity){
+      el.textContent=t('completed');
+      if(button){button.disabled=true;button.textContent=t('completed');}
+      card?.classList.add('offer-completed');
     }else{
-
-      offlineEl.textContent =
-        `${current} / ${offline.total} ${t('filled')}`;
-
-      if(button){
-        button.disabled = false;
-        button.textContent =
-          t('book');
-      }
-
-      card?.classList.remove(
-        'offer-completed'
-      );
+      el.textContent=`${current} / ${offline.total} ${t('filled')}`;
+      if(button){button.disabled=false;button.textContent=t('book');}
+      card?.classList.remove('offer-completed');
     }
   }
-}  
-  
-  
-  
-  
-  
+}
+
 function formatProgramDateTime(p){
   try{
     const d=new Date(`${p.program_date}T${String(p.start_time||'00:00').slice(0,5)}:00`);
