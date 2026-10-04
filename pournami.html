@@ -364,8 +364,13 @@ async function refreshSlots(){
       card?.classList.add('offer-completed');
 
     }else if(active){
-      // Active tier shows the common live booking count.
-      const current=Math.min(onlineUsed,tier.total);
+      // Active tier: display_base is the starting display count (90).
+      // onlineUsed is the real common booking count.
+      // Example: 90 + 2 bookings = 92 / 100.
+      const current=Math.min(
+        tier.base + onlineUsed,
+        tier.total
+      );
       const seatsLeft=Math.max(0,tier.total-current);
 
       el.textContent=`${current} / ${tier.total} ${t('filled')}`;
