@@ -328,7 +328,7 @@ async function refreshSlots(){
 
   let consumed=0;
 
-  online.forEach(tier=>{
+  online.forEach((tier,index)=>{
     const el=document.getElementById(`slot-${tier.index}`);
     const card=document.querySelector(`.offer[data-tier="${tier.index}"]`);
     const button=card?.querySelector('button.cta');
@@ -337,10 +337,6 @@ async function refreshSlots(){
 
     if(!el)return;
 
-    // Actual offer capacity:
-    // ₹99  = 100 - 90 = 10
-    // ₹199 = 115 - 90 = 25
-    // ₹249 = 200 - 90 = 110
     const capacity=Math.max(0,tier.total-tier.base);
     const tierStart=consumed;
     const tierEnd=consumed+capacity;
@@ -348,7 +344,7 @@ async function refreshSlots(){
     const full=onlineUsed>=tierEnd;
     const active=onlineUsed>=tierStart && onlineUsed<tierEnd;
 
-    // Red Seats Left box must appear ONLY on the active offer.
+    // Red Seats Left box ONLY on the active offer.
     if(seatBox){
       seatBox.classList.remove('visible');
     }
@@ -364,16 +360,24 @@ async function refreshSlots(){
       card?.classList.add('offer-completed');
 
     }else if(active){
-      // Active tier: display_base is the starting display count (90).
-      // onlineUsed is the real common booking count.
-      // Example: 90 + 2 bookings = 92 / 100.
-      const current=Math.min(
-        tier.base + onlineUsed,
-        tier.total
-      );
-      const seatsLeft=Math.max(0,tier.total-current);
 
-      el.textContent=`${current} / ${tier.total} ${t('filled')}`;
+      // Bottom number is shown ONLY on the active card:
+      // ₹99 active  -> 90 / 100
+      // ₹199 active -> 100 / 115
+      // ₹249 active -> 115 / 200
+      const displayCurrent =
+        index===0
+          ? tier.base
+          : online[index-1].total;
+
+      // Seats Left uses the real booking count.
+      const seatsLeft=Math.max(
+        0,
+        tierEnd-onlineUsed
+      );
+
+      el.textContent=
+        `${displayCurrent} / ${tier.total} ${t('filled')}`;
 
       if(button){
         button.disabled=false;
@@ -388,8 +392,9 @@ async function refreshSlots(){
       }
 
     }else{
-      // Future tier stays at its display base until it becomes active.
-      el.textContent=`${tier.base} / ${tier.total} ${t('filled')}`;
+
+      // Future offer: hide the bottom numeric content.
+      el.textContent='';
 
       if(button){
         button.disabled=true;
