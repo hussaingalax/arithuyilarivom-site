@@ -112,7 +112,7 @@ async function getClassAccess(booking) {
 
   try {
     const response = await fetch(
-      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=class-link`,
+      `${MEDITATION_CONFIG.SUPABASE_URL}/functions/v1/meditation-api?action=class-link&booking_id=${encodeURIComponent(booking.id)}`,
       { headers: { Authorization: `Bearer ${session.access_token}` } }
     );
 
