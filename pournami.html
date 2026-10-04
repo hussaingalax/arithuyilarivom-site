@@ -365,10 +365,11 @@ async function refreshSlots(){
       // ₹99 active  -> 90 / 100
       // ₹199 active -> 100 / 115
       // ₹249 active -> 115 / 200
-      const displayCurrent =
-        index===0
-          ? tier.base
-          : online[index-1].total;
+
+      const displayCurrent = Math.min(
+  tier.base + onlineUsed,
+  tier.total
+);
 
       // Seats Left uses the real booking count.
       const seatsLeft=Math.max(
