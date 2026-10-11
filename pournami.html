@@ -47,6 +47,14 @@
     white-space: nowrap;
   }
   .tier-seat-left.visible { display: block; }
+
+
+/* Hide bottom slot counters on all offer cards */
+.offer .slots {
+  display: none !important;
+}
+
+
 </style>
 </head><body>
 <header class="topbar"><div class="container topbar-inner"><div class="brand" data-i18n="brand">Arithuyil Arivom</div><div class="nav-actions"><a href="member-login.html" class="member-login-link">
@@ -330,7 +338,17 @@ async function refreshSlots(){
 
     if(!el)return;
 
-    const capacity=Math.max(0,tier.total-tier.base);
+    
+const capacityByPrice = {
+  99: 10,
+  199: 15,
+  249: 25
+};
+
+const capacity =
+  capacityByPrice[tier.price] ??
+  Math.max(0, tier.total - tier.base);
+
     const tierStart=consumed;
     const tierEnd=consumed+capacity;
 
