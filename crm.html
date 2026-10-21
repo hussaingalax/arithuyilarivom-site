@@ -66,6 +66,7 @@
           <input id="leadId" type="hidden">
           <div><label for="leadName">Full name *</label><input id="leadName" required maxlength="160"></div>
           <div><label for="leadMobile">Mobile number *</label><input id="leadMobile" required inputmode="tel" maxlength="30" placeholder="10-digit number"></div>
+          <div><label for="leadLocation">Location</label><input id="leadLocation" maxlength="180" placeholder="Area / city / district"></div>
           <div><label for="leadSource">Lead source *</label><select id="leadSource" required><option value="instagram_ad">Instagram Ad</option><option value="facebook_ad">Facebook Ad</option><option value="meta_ad">Meta Ad</option><option value="referral">Referral</option><option value="youtube">YouTube</option><option value="google_ads">Google Ads</option><option value="others">Others</option></select></div>
           <div><label for="leadSourceDetail">Source / referral details</label><input id="leadSourceDetail" maxlength="250" placeholder="Campaign, referrer, etc."></div>
           <div><label for="leadProgram">Interested program</label><input id="leadProgram" maxlength="180" placeholder="8-week course, Money Healing..."></div>
@@ -86,8 +87,9 @@
           <input id="leadSearch" type="search" placeholder="Search name or mobile">
           <select id="stageFilter"><option value="">All stages</option><option value="new_lead">New lead</option><option value="contacted">Contacted</option><option value="free_class_pending">Free class pending</option><option value="free_class_attended">Free class attended</option><option value="eight_week_interested">8-week interested</option><option value="follow_up">Follow-up</option><option value="lower_payment_class">Lower-payment class</option><option value="free_group_nurture">Free group nurture</option><option value="lost">Lost</option><option value="accidental_lead">Accidental lead</option></select>
           <button id="refreshLeads" class="button button-quiet" type="button">Refresh</button>
+          <button id="exportLeads" class="button button-primary" type="button">Export Leads CSV</button>
         </div>
-        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Source</th><th>Stage</th><th>Next follow-up</th><th>Tags</th><th>Action</th></tr></thead><tbody id="leadsBody"><tr><td colspan="6">Loading leads…</td></tr></tbody></table></div></div>
+        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Location</th><th>Source</th><th>Stage</th><th>Next follow-up</th><th>Tags</th><th>Action</th></tr></thead><tbody id="leadsBody"><tr><td colspan="7">Loading leads…</td></tr></tbody></table></div></div>
       </section>
 
       <section id="callsView" class="view hidden">
