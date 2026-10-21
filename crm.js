@@ -65,6 +65,12 @@
     const d = new Date(value);
     return Number.isNaN(d.getTime()) ? null : d.toISOString();
   }
+  function whatsappNumber(value) {
+    let digits = String(value || '').replace(/\D/g, '');
+    if (digits.length === 10) digits = `91${digits}`;
+    else if (digits.length === 11 && digits.startsWith('0')) digits = `91${digits.slice(1)}`;
+    return digits;
+  }
   function roleUi() {
     document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', !isAdmin()));
     $('userBadge').textContent = `${state.profile.display_name} · ${state.profile.role}`;
@@ -233,7 +239,11 @@
         <td><span class="stage">${esc(STAGES[l.pipeline_stage] || l.pipeline_stage)}</span></td>
         <td>${esc(formatDate(l.next_followup_at))}</td>
         <td>${(l.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('') || '—'}</td>
-        <td><div class="inline-actions"><button class="button button-quiet" type="button" data-edit-lead="${esc(l.id)}">Edit</button>${isAdmin() ? `<button class="button button-quiet" type="button" data-allocate-lead="${esc(l.id)}">Allocate</button>` : ''}</div></td>
+        <td><div class="inline-actions">
+          <a class="button button-quiet" href="tel:${esc(String(l.mobile || '').replace(/[^0-9+]/g, ''))}">Call</a>
+          <a class="button button-quiet" href="https://wa.me/${esc(whatsappNumber(l.mobile))}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <button class="button button-quiet" type="button" data-edit-lead="${esc(l.id)}">Edit</button>${isAdmin() ? `<button class="button button-quiet" type="button" data-allocate-lead="${esc(l.id)}">Allocate</button>` : ''}
+        </div></td>
       </tr>`).join('') : '<tr><td colspan="6" class="empty">No leads found for this filter.</td></tr>';
     document.querySelectorAll('[data-edit-lead]').forEach(b => b.onclick = () => editLead(b.dataset.editLead));
     document.querySelectorAll('[data-allocate-lead]').forEach(b => b.onclick = () => {
