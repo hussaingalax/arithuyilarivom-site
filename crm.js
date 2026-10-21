@@ -39,6 +39,25 @@
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
     }[c]));
   }
+
+  // India-first phone normalization for click-to-call and WhatsApp links.
+  function phoneDigits(value) {
+    let digits = String(value ?? '').replace(/\\D/g, '');
+    if (digits.startsWith('00')) digits = digits.slice(2);
+    if (digits.length === 10) return `91${digits}`;
+    if (digits.length === 11 && digits.startsWith('0')) return `91${digits.slice(1)}`;
+    return digits;
+  }
+
+  function leadContactActions(lead) {
+    const digits = phoneDigits(lead?.mobile);
+    if (!digits || digits.length < 10) return '';
+    const message = `Vanakkam ${lead.full_name || ''}, Arithuyil Arivom team-lirundhu contact panrom. Ungal enquiry pathi pesalama?`;
+    return `<div class="inline-actions contact-actions">
+      <a class="button button-quiet" href="tel:+${esc(digits)}" aria-label="Call ${esc(lead.full_name || 'lead')}">Call</a>
+      <a class="button button-quiet" href="https://wa.me/${esc(digits)}?text=${encodeURIComponent(message)}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp ${esc(lead.full_name || 'lead')}">WhatsApp</a>
+    </div>`;
+  }
   function setMessage(id, text, kind='') {
     const el = $(id);
     if (!el) return;
@@ -227,7 +246,7 @@
     });
     $('leadsBody').innerHTML = rows.length ? rows.map(l => `
       <tr>
-        <td><div class="lead-title">${esc(l.full_name)}</div><div class="cell-sub">${esc(l.mobile)}</div><div class="cell-sub">${esc(l.interested_program || '')}</div></td>
+        <td><div class="lead-title">${esc(l.full_name)}</div><div class="cell-sub">${esc(l.mobile)}</div>${leadContactActions(l)}<div class="cell-sub">${esc(l.interested_program || '')}</div></td>
         <td>${esc(SOURCES[l.source] || l.source)}<div class="cell-sub">${esc(l.source_detail || '')}</div></td>
         <td><span class="stage">${esc(STAGES[l.pipeline_stage] || l.pipeline_stage)}</span></td>
         <td>${esc(formatDate(l.next_followup_at))}</td>
@@ -263,12 +282,18 @@
       const lead = state.leads.find(l => l.id === a.lead_id);
       const person = state.users.find(u => u.id === a.salesperson_id);
       const statusOptions = Object.entries(CALL_STATUSES).map(([k,v]) => `<option value="${k}" ${a.call_status===k?'selected':''}>${esc(v)}</option>`).join('');
+      const otherSalespeople = state.users.filter(u => u.role === 'salesperson' && u.is_active && u.id !== a.salesperson_id);
+      const transferOptions = otherSalespeople.map(u => `<option value="${esc(u.id)}">${esc(u.display_name)}</option>`).join('');
       return `<tr>
-        <td><div class="lead-title">${esc(lead?.full_name || 'Lead unavailable')}</div><div class="cell-sub">${esc(lead?.mobile || '')}</div></td>
+        <td><div class="lead-title">${esc(lead?.full_name || 'Lead unavailable')}</div><div class="cell-sub">${esc(lead?.mobile || '')}</div>${lead ? leadContactActions(lead) : ''}</td>
         <td>${esc(person?.display_name || (a.salesperson_id === state.user.id ? state.profile.display_name : 'Salesperson'))}</td>
         <td>${isAdmin() ? `<span class="stage">${esc(CALL_STATUSES[a.call_status] || a.call_status)}</span>` : `<select class="small-select" data-call-status="${esc(a.id)}">${statusOptions}</select>`}</td>
         <td>${isAdmin() ? `${esc(a.call_outcome || '')}<div class="cell-sub">${esc(a.salesperson_note || '')}</div>` : `<input class="small-input" data-call-outcome="${esc(a.id)}" value="${esc(a.call_outcome || '')}" placeholder="Outcome"><input class="small-input" data-call-note="${esc(a.id)}" value="${esc(a.salesperson_note || '')}" placeholder="Note">`}</td>
-        <td>${isAdmin() ? (a.call_status === 'assigned' || a.call_status === 'not_called' ? `<button class="button button-quiet" type="button" data-review-allocation="${esc(a.id)}">Review</button>` : '—') : `<button class="button button-primary" type="button" data-save-allocation="${esc(a.id)}">Save status</button>`}</td>
+        <td>${isAdmin()
+          ? `<div class="inline-actions">${(a.call_status === 'assigned' || a.call_status === 'not_called') ? `<button class="button button-quiet" type="button" data-review-allocation="${esc(a.id)}">Review</button>` : ''}</div>
+             <div class="transfer-controls"><select class="small-select" data-transfer-salesperson="${esc(a.id)}" aria-label="Transfer ${esc(lead?.full_name || 'lead')} to salesperson" ${otherSalespeople.length ? '' : 'disabled'}><option value="">${otherSalespeople.length ? 'Transfer to…' : 'No other salesperson'}</option>${transferOptions}</select>
+             <button class="button button-quiet" type="button" data-transfer-allocation="${esc(a.id)}" ${otherSalespeople.length ? '' : 'disabled'}>Transfer</button></div>`
+          : `<button class="button button-primary" type="button" data-save-allocation="${esc(a.id)}">Save status</button>`}</td>
       </tr>`;
     }).join('') : '<tr><td colspan="5" class="empty">No calls allocated for this date.</td></tr>';
     document.querySelectorAll('[data-save-allocation]').forEach(b => b.onclick = () => saveAllocation(b.dataset.saveAllocation));
@@ -277,6 +302,9 @@
       const select = document.querySelector(`[data-review-status="${CSS.escape(b.dataset.reviewAllocation)}"]`);
       if (select) select.focus();
     });
+    document.querySelectorAll('[data-transfer-allocation]').forEach(b =>
+      b.onclick = () => transferAllocation(b.dataset.transferAllocation)
+    );
   }
 
   function renderReviews() {
@@ -435,6 +463,32 @@
     } catch (err) {
       setMessage('allocationMessage',err.message || 'Allocation failed.','error');
     } finally { btn.disabled = false; }
+  }
+
+  async function transferAllocation(id) {
+    const select = document.querySelector(`[data-transfer-salesperson="${CSS.escape(id)}"]`);
+    const newSalespersonId = select?.value;
+    if (!newSalespersonId) {
+      showNotice('Choose an active salesperson before transferring this call.');
+      return;
+    }
+    const btn = document.querySelector(`[data-transfer-allocation="${CSS.escape(id)}"]`);
+    if (btn) btn.disabled = true;
+    try {
+      const { error } = await sb.rpc('crm_reassign_daily_allocation', {
+        p_allocation_id: id,
+        p_new_salesperson_id: newSalespersonId
+      });
+      if (error) throw error;
+      await Promise.all([loadLeads(), loadAllocations()]);
+      if (isAdmin()) await loadReviews();
+      renderStats();
+      showNotice('Call transferred. The previous allocation is preserved as transferred.');
+    } catch (err) {
+      showNotice(`Could not transfer call: ${err.message || err}`);
+    } finally {
+      if (btn) btn.disabled = false;
+    }
   }
 
   async function saveReview(id) {
