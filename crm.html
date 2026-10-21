@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Arithuyil Arivom | CRM</title>
+  <link rel="stylesheet" href="crm.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script defer src="crm.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">AA</div>
+      <div><strong>Arithuyil Arivom</strong><span>Sales CRM</span></div>
+    </div>
+    <div class="topbar-right">
+      <span id="userBadge" class="user-badge hidden"></span>
+      <button id="logoutBtn" class="button button-quiet hidden" type="button">Logout</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section id="loginPanel" class="login-wrap">
+      <div class="login-card">
+        <div class="eyebrow">TEAM WORKSPACE</div>
+        <h1>CRM sign in</h1>
+        <p class="muted">Use your approved Arithuyil Arivom Supabase Auth account.</p>
+        <form id="loginForm">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" autocomplete="username" required placeholder="name@example.com">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" required>
+          <button class="button button-primary button-full" type="submit">Sign in</button>
+          <p id="loginMessage" class="message" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="appPanel" class="hidden">
+      <div class="welcome-row">
+        <div><div class="eyebrow">SALES OVERVIEW</div><h1 id="welcomeTitle">CRM Dashboard</h1><p class="muted">Track leads, follow-ups and daily call accountability.</p></div>
+        <div class="date-chip"><span>Work date</span><input id="workDate" type="date"></div>
+      </div>
+
+      <div id="notice" class="notice hidden" role="status"></div>
+
+      <section class="stats-grid" aria-label="CRM summary">
+        <article class="stat-card"><span>Visible leads</span><strong id="statLeads">—</strong><small>Leads you can access</small></article>
+        <article class="stat-card"><span>Calls allocated today</span><strong id="statAllocated">—</strong><small>Daily assigned list</small></article>
+        <article class="stat-card"><span>Calls completed</span><strong id="statCompleted">—</strong><small>Marked complete today</small></article>
+        <article class="stat-card"><span>Reason pending</span><strong id="statReasonPending">—</strong><small>Admin review required</small></article>
+      </section>
+
+      <nav class="tabs" aria-label="CRM sections">
+        <button class="tab active" data-tab="leadsView" type="button">Leads</button>
+        <button class="tab" data-tab="callsView" type="button">Daily Calls</button>
+        <button class="tab admin-only hidden" data-tab="reviewView" type="button">Evening Review</button>
+      </nav>
+
+      <section id="leadsView" class="view">
+        <div class="section-heading"><div><h2>Lead management</h2><p class="muted">Add leads and maintain the sales pipeline.</p></div><button id="toggleLeadForm" class="button button-primary" type="button">+ Add lead</button></div>
+        <form id="leadForm" class="panel form-grid hidden">
+          <input id="leadId" type="hidden">
+          <div><label for="leadName">Full name *</label><input id="leadName" required maxlength="160"></div>
+          <div><label for="leadMobile">Mobile number *</label><input id="leadMobile" required inputmode="tel" maxlength="30" placeholder="10-digit number"></div>
+          <div><label for="leadSource">Lead source *</label><select id="leadSource" required><option value="instagram_ad">Instagram Ad</option><option value="facebook_ad">Facebook Ad</option><option value="meta_ad">Meta Ad</option><option value="referral">Referral</option><option value="youtube">YouTube</option><option value="google_ads">Google Ads</option><option value="others">Others</option></select></div>
+          <div><label for="leadSourceDetail">Source / referral details</label><input id="leadSourceDetail" maxlength="250" placeholder="Campaign, referrer, etc."></div>
+          <div><label for="leadProgram">Interested program</label><input id="leadProgram" maxlength="180" placeholder="8-week course, Money Healing..."></div>
+          <div><label for="leadStage">Pipeline stage</label><select id="leadStage"><option value="new_lead">New lead</option><option value="contacted">Contacted</option><option value="free_class_pending">Free class pending</option><option value="free_class_attended">Free class attended</option><option value="eight_week_interested">Interested in 8-week course</option><option value="follow_up">Follow-up</option><option value="lower_payment_class">Lower-payment class</option><option value="free_group_nurture">Free group nurture</option><option value="lost">Not interested / lost</option><option value="accidental_lead">Accidental lead</option></select></div>
+          <div><label for="leadClassPreference">Class preference</label><select id="leadClassPreference"><option value="undecided">Not decided</option><option value="direct">Direct class</option><option value="online">Online class</option></select></div>
+          <div><label for="leadGroupPreference">Group preference</label><select id="leadGroupPreference"><option value="undecided">Not discussed</option><option value="common_group">Common group</option><option value="private">Private / privacy</option></select></div>
+          <div><label for="leadGroupStatus">Common group status</label><select id="leadGroupStatus"><option value="not_discussed">Not discussed</option><option value="pending">Pending — remind to join</option><option value="joined">Joined</option><option value="private">Private follow-up</option></select></div>
+          <div><label for="leadFreeClassDate">Free direct class date</label><input id="leadFreeClassDate" type="date"></div>
+          <div><label for="leadFreeClassStatus">Free class status</label><select id="leadFreeClassStatus"><option value="not_scheduled">Not scheduled</option><option value="reminder_needed">Reminder needed</option><option value="confirmed">Confirmed</option><option value="attended">Attended</option><option value="missed">Missed</option><option value="reschedule_requested">Reschedule requested</option></select></div>
+          <div><label for="leadInterest">8-week course interest</label><select id="leadInterest"><option value="undecided">Undecided</option><option value="interested">Interested</option><option value="not_interested">Not interested</option></select></div>
+          <div><label for="leadNextFollowup">Next follow-up</label><input id="leadNextFollowup" type="datetime-local"></div>
+          <div class="span-2"><label for="leadTags">Tags (comma-separated)</label><input id="leadTags" placeholder="DIRECT_CLASS_REMINDER, REPEATED_FOLLOWUP"></div>
+          <div class="span-2"><label for="leadReason">Objection / reason / notes</label><textarea id="leadReason" rows="3" maxlength="2000"></textarea></div>
+          <div class="form-actions span-2"><button class="button button-primary" type="submit">Save lead</button><button id="cancelLeadForm" class="button button-quiet" type="button">Cancel</button><span id="leadFormMessage" class="message" role="status"></span></div>
+        </form>
+
+        <div class="toolbar panel">
+          <input id="leadSearch" type="search" placeholder="Search name or mobile">
+          <select id="stageFilter"><option value="">All stages</option><option value="new_lead">New lead</option><option value="contacted">Contacted</option><option value="free_class_pending">Free class pending</option><option value="free_class_attended">Free class attended</option><option value="eight_week_interested">8-week interested</option><option value="follow_up">Follow-up</option><option value="lower_payment_class">Lower-payment class</option><option value="free_group_nurture">Free group nurture</option><option value="lost">Lost</option><option value="accidental_lead">Accidental lead</option></select>
+          <button id="refreshLeads" class="button button-quiet" type="button">Refresh</button>
+        </div>
+        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Source</th><th>Stage</th><th>Next follow-up</th><th>Tags</th><th>Action</th></tr></thead><tbody id="leadsBody"><tr><td colspan="6">Loading leads…</td></tr></tbody></table></div></div>
+      </section>
+
+      <section id="callsView" class="view hidden">
+        <div class="section-heading"><div><h2>Daily call allocation</h2><p class="muted">Morning allocation and call completion for the selected work date.</p></div></div>
+        <form id="allocationForm" class="panel form-grid admin-only hidden">
+          <div><label for="allocationLead">Lead</label><select id="allocationLead" required></select></div>
+          <div><label for="allocationSalesperson">Salesperson</label><select id="allocationSalesperson" required></select></div>
+          <div><label for="allocationDate">Work date</label><input id="allocationDate" type="date" required></div>
+          <div class="form-actions"><button class="button button-primary" type="submit">Allocate call</button><span id="allocationMessage" class="message" role="status"></span></div>
+        </form>
+        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Salesperson</th><th>Call status</th><th>Outcome / note</th><th>Update</th></tr></thead><tbody id="allocationsBody"><tr><td colspan="5">Loading allocations…</td></tr></tbody></table></div></div>
+      </section>
+
+      <section id="reviewView" class="view hidden">
+        <div class="section-heading"><div><h2>Evening review</h2><p class="muted">Admin records reasons for uncompleted calls. The original allocation remains in history.</p></div><button id="refreshReviews" class="button button-quiet" type="button">Refresh review</button></div>
+        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Salesperson</th><th>Lead</th><th>Call status</th><th>Review status</th><th>Reason</th><th>Save review</th></tr></thead><tbody id="reviewsBody"><tr><td colspan="6">Loading reviews…</td></tr></tbody></table></div></div>
+      </section>
+      <footer class="footer">CRM workspace · Existing booking and payment modules are separate.</footer>
+    </section>
+  </main>
+</body>
+</html>
