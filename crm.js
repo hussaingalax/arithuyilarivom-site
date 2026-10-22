@@ -185,10 +185,11 @@
     }
     const { data, error } = await sb.from('crm_users')
       .select('id,display_name,role,is_active')
-      .eq('is_active', true).order('display_name');
+      .order('display_name');
     if (error) throw error;
     state.users = data || [];
     fillSalespersonSelect();
+    fillAssignedSalespersonFilter();
   }
 
   async function loadAllocations() {
@@ -237,15 +238,20 @@
     ).join('');
   }
 
-  function renderLeads() {
+  function getFilteredLeads() {
     const search = $('leadSearch').value.trim().toLowerCase();
     const stage = $('stageFilter').value;
-    const rows = state.leads.filter(l => {
-      const matchSearch = !search || `${l.full_name} ${l.mobile} ${l.location || ''} ${l.source_detail || ''}`.toLowerCase().includes(search);
+    return state.leads.filter(l => {
+      const matchSearch = !search || `${l.full_name} ${l.mobile} ${l.location || ''} ${l.source_detail || ''} ${l.interested_program || ''}`.toLowerCase().includes(search);
       if (!matchSearch || (stage && l.pipeline_stage !== stage)) return false;
       if (!isAdmin()) return true;
       const equals = (id, value) => !$(id)?.value || String(value ?? '') === $(id).value;
       const dateOnly = value => value ? String(value).slice(0, 10) : '';
+      const allocationStatus = $('filterAllocationStatus')?.value || '';
+      const assignedFilter = $('filterAssignedSalesperson')?.value || '';
+      if (allocationStatus === 'allocated' && !l.assigned_to) return false;
+      if (allocationStatus === 'not_allocated' && l.assigned_to) return false;
+      if (assignedFilter && String(l.assigned_to || '') !== assignedFilter) return false;
       return equals('filterFreeClassDate', dateOnly(l.free_class_date)) &&
         equals('filterLeadSource', l.source) &&
         equals('filterPipelineStage', l.pipeline_stage) &&
@@ -256,28 +262,48 @@
         equals('filterCourseInterest', l.course_interest) &&
         equals('filterNextFollowupDate', dateOnly(l.next_followup_at));
     });
+  }
+
+  function renderLeads() {
+    const rows = getFilteredLeads();
     const countEl = $('leadFilterCount');
     if (countEl) countEl.textContent = `Showing ${rows.length} of ${state.totalLeads} total leads`;
-    $('leadsBody').innerHTML = rows.length ? rows.map(l => `
-      <tr>
+    $('leadsBody').innerHTML = rows.length ? rows.map(l => {
+      const owner = state.users.find(u => u.id === l.assigned_to);
+      const allocationText = l.assigned_to
+        ? `Allocated to ${esc(owner?.display_name || 'Salesperson')}`
+        : 'Not allocated';
+      return `<tr>
         <td><div class="lead-title">${esc(l.full_name)}</div><div class="cell-sub">${esc(l.mobile)}</div><div class="cell-sub">${esc(l.interested_program || '')}</div></td>
         <td>${esc(l.location || '—')}</td>
         <td>${esc(SOURCES[l.source] || l.source)}<div class="cell-sub">${esc(l.source_detail || '')}</div></td>
         <td><span class="stage">${esc(STAGES[l.pipeline_stage] || l.pipeline_stage)}</span></td>
         <td>${esc(formatDate(l.next_followup_at))}</td>
         <td>${(l.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('') || '—'}</td>
+        <td><span class="stage">${allocationText}</span></td>
         <td><div class="inline-actions">
           <a class="button button-quiet" href="tel:${esc(String(l.mobile || '').replace(/[^0-9+]/g, ''))}">Call</a>
           <a class="button button-quiet" href="https://wa.me/${esc(whatsappNumber(l.mobile))}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-          <button class="button button-quiet" type="button" data-edit-lead="${esc(l.id)}">Edit</button>${isAdmin() ? `<button class="button button-quiet" type="button" data-allocate-lead="${esc(l.id)}">Allocate</button>` : ''}
+          <button class="button button-quiet" type="button" data-edit-lead="${esc(l.id)}">Edit</button>${isAdmin() && !l.assigned_to ? `<button class="button button-quiet" type="button" data-allocate-lead="${esc(l.id)}">Allocate</button>` : ''}
         </div></td>
-      </tr>`).join('') : '<tr><td colspan="6" class="empty">No leads found for this filter.</td></tr>';
+      </tr>`;
+    }).join('') : '<tr><td colspan="8" class="empty">No leads found for this filter.</td></tr>';
     document.querySelectorAll('[data-edit-lead]').forEach(b => b.onclick = () => editLead(b.dataset.editLead));
     document.querySelectorAll('[data-allocate-lead]').forEach(b => b.onclick = () => {
       $('allocationLead').value = b.dataset.allocateLead;
       document.querySelector('[data-tab="callsView"]').click();
       $('allocationSalesperson').focus();
     });
+  }
+
+  function fillAssignedSalespersonFilter() {
+    const select = $('filterAssignedSalesperson');
+    if (!select) return;
+    const old = select.value;
+    const salespeople = state.users.filter(u => u.role === 'salesperson');
+    select.innerHTML = '<option value="">All salespersons</option>' + salespeople
+      .map(u => `<option value="${esc(u.id)}">${esc(u.display_name)}</option>`).join('');
+    if (salespeople.some(u => u.id === old)) select.value = old;
   }
 
   function fillLeadSelect() {
@@ -449,22 +475,13 @@
 
 
   function exportLeadsCsv() {
-    const search = $('leadSearch').value.trim().toLowerCase();
-    const stage = $('stageFilter').value;
-    const rows = state.leads.filter(l => {
-      const matchSearch = !search || `${l.full_name} ${l.mobile} ${l.location || ''} ${l.source_detail || ''}`.toLowerCase().includes(search);
-      if (!matchSearch || (stage && l.pipeline_stage !== stage)) return false;
-      if (!isAdmin()) return true;
-      const equals = (id, value) => !$(id)?.value || String(value ?? '') === $(id).value;
-      const dateOnly = value => value ? String(value).slice(0, 10) : '';
-      return equals('filterFreeClassDate', dateOnly(l.free_class_date)) && equals('filterLeadSource', l.source) && equals('filterPipelineStage', l.pipeline_stage) && equals('filterClassPreference', l.class_preference) && equals('filterGroupPreference', l.group_preference) && equals('filterCommonGroupStatus', l.common_group_status) && equals('filterFreeClassStatus', l.free_class_status) && equals('filterCourseInterest', l.course_interest) && equals('filterNextFollowupDate', dateOnly(l.next_followup_at));
-    });
+    const rows = getFilteredLeads();
     if (!rows.length) { showNotice('No leads to export for the current filter.'); return; }
-    const headers = ['Name','Mobile','Location','Lead Source','Source Details','Interested Program','Pipeline Stage','Assigned Salesperson','Group Preference','Common Group Status','Class Preference','Free Class Date','Free Class Status','Course Interest','Next Follow-up','Tags','Notes','Created At'];
+    const headers = ['Name','Mobile','Location','Lead Source','Source Details','Interested Program','Pipeline Stage','Assigned Salesperson','Allocation Status','Group Preference','Common Group Status','Class Preference','Free Class Date','Free Class Status','Course Interest','Next Follow-up','Tags','Notes','Created At'];
     const cell = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
     const csv = [headers, ...rows.map(l => {
       const owner = state.users.find(u => u.id === l.assigned_to);
-      return [l.full_name,l.mobile,l.location,SOURCES[l.source] || l.source,l.source_detail,l.interested_program,STAGES[l.pipeline_stage] || l.pipeline_stage,owner?.display_name || '',l.group_preference,l.common_group_status,l.class_preference,l.free_class_date,l.free_class_status,l.course_interest,l.next_followup_at,(l.tags || []).join('; '),l.objection_reason,l.created_at];
+      return [l.full_name,l.mobile,l.location,SOURCES[l.source] || l.source,l.source_detail,l.interested_program,STAGES[l.pipeline_stage] || l.pipeline_stage,owner?.display_name || '',l.assigned_to ? 'Allocated' : 'Not allocated',l.group_preference,l.common_group_status,l.class_preference,l.free_class_date,l.free_class_status,l.course_interest,l.next_followup_at,(l.tags || []).join('; '),l.objection_reason,l.created_at];
     })].map(row => row.map(cell).join(',')).join('\r\n');
     const blob = new Blob(['\uFEFF', csv], {type:'text/csv;charset=utf-8;'});
     const url = URL.createObjectURL(blob);
@@ -550,14 +567,14 @@
       if ($('filterPipelineStage')) $('filterPipelineStage').value = $('stageFilter').value;
       renderLeads();
     });
-    ['filterFreeClassDate','filterLeadSource','filterPipelineStage','filterClassPreference','filterGroupPreference','filterCommonGroupStatus','filterFreeClassStatus','filterCourseInterest','filterNextFollowupDate'].forEach(id => {
+    ['filterFreeClassDate','filterLeadSource','filterPipelineStage','filterClassPreference','filterGroupPreference','filterCommonGroupStatus','filterFreeClassStatus','filterCourseInterest','filterNextFollowupDate','filterAllocationStatus','filterAssignedSalesperson'].forEach(id => {
       $(id)?.addEventListener('change', () => {
         if (id === 'filterPipelineStage') $('stageFilter').value = $('filterPipelineStage').value;
         renderLeads();
       });
     });
     $('clearLeadFilters')?.addEventListener('click', () => {
-      ['filterFreeClassDate','filterLeadSource','filterPipelineStage','filterClassPreference','filterGroupPreference','filterCommonGroupStatus','filterFreeClassStatus','filterCourseInterest','filterNextFollowupDate'].forEach(id => { if ($(id)) $(id).value = ''; });
+      ['filterFreeClassDate','filterLeadSource','filterPipelineStage','filterClassPreference','filterGroupPreference','filterCommonGroupStatus','filterFreeClassStatus','filterCourseInterest','filterNextFollowupDate','filterAllocationStatus','filterAssignedSalesperson'].forEach(id => { if ($(id)) $(id).value = ''; });
       $('stageFilter').value = '';
       renderLeads();
     });
