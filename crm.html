@@ -106,10 +106,12 @@
             <div><label for="filterFreeClassStatus">Free class status</label><select id="filterFreeClassStatus"><option value="">All statuses</option><option value="not_scheduled">Not scheduled</option><option value="reminder_needed">Reminder needed</option><option value="confirmed">Confirmed</option><option value="attended">Attended</option><option value="missed">Missed</option><option value="reschedule_requested">Reschedule requested</option></select></div>
             <div><label for="filterCourseInterest">8-week course interest</label><select id="filterCourseInterest"><option value="">All interest statuses</option><option value="undecided">Undecided</option><option value="interested">Interested</option><option value="not_interested">Not interested</option></select></div>
             <div><label for="filterNextFollowupDate">Next follow-up date</label><input id="filterNextFollowupDate" type="date"></div>
+            <div><label for="filterAllocationStatus">Allocation status</label><select id="filterAllocationStatus"><option value="">All allocation statuses</option><option value="allocated">Allocated</option><option value="not_allocated">Not allocated</option></select></div>
+            <div><label for="filterAssignedSalesperson">Assigned salesperson</label><select id="filterAssignedSalesperson"><option value="">All salespersons</option></select></div>
             <div class="filter-actions"><button id="clearLeadFilters" class="button button-quiet" type="button">Clear filters</button></div>
           </div>
         </section>
-        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Location</th><th>Source</th><th>Stage</th><th>Next follow-up</th><th>Tags</th><th>Action</th></tr></thead><tbody id="leadsBody"><tr><td colspan="7">Loading leads…</td></tr></tbody></table></div></div>
+        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Location</th><th>Source</th><th>Stage</th><th>Next follow-up</th><th>Tags</th><th>Allocation</th><th>Action</th></tr></thead><tbody id="leadsBody"><tr><td colspan="8">Loading leads…</td></tr></tbody></table></div></div>
       </section>
 
       <section id="callsView" class="view hidden">
