@@ -54,6 +54,11 @@
         <article class="stat-card"><span>Reason pending</span><strong id="statReasonPending">—</strong><small>Admin review required</small></article>
       </section>
 
+      <section id="pipelineStageSummary" class="panel admin-only hidden">
+        <div class="section-heading"><div><h2>Pipeline stage counts</h2><p class="muted">Current visible lead count by stage.</p></div></div>
+        <div id="pipelineStageCounts" class="stage-count-grid"></div>
+      </section>
+
       <nav class="tabs" aria-label="CRM sections">
         <button class="tab active" data-tab="leadsView" type="button">Leads</button>
         <button class="tab" data-tab="callsView" type="button">Daily Calls</button>
@@ -89,6 +94,21 @@
           <button id="refreshLeads" class="button button-quiet" type="button">Refresh</button>
           <button id="exportLeads" class="button button-primary" type="button">Export Leads CSV</button>
         </div>
+        <section id="adminLeadFilters" class="panel admin-only hidden">
+          <div class="filter-heading"><strong>Advanced lead filters</strong><span id="leadFilterCount" class="filter-count">Showing — of — leads</span></div>
+          <div class="filter-grid">
+            <div><label for="filterFreeClassDate">Free direct class date</label><input id="filterFreeClassDate" type="date"></div>
+            <div><label for="filterLeadSource">Lead source</label><select id="filterLeadSource"><option value="">All sources</option><option value="instagram_ad">Instagram Ad</option><option value="facebook_ad">Facebook Ad</option><option value="meta_ad">Meta Ad</option><option value="referral">Referral</option><option value="youtube">YouTube</option><option value="google_ads">Google Ads</option><option value="others">Others</option></select></div>
+            <div><label for="filterPipelineStage">Pipeline stage</label><select id="filterPipelineStage"><option value="">All stages</option><option value="new_lead">New lead</option><option value="contacted">Contacted</option><option value="free_class_pending">Free class pending</option><option value="free_class_attended">Free class attended</option><option value="eight_week_interested">8-week interested</option><option value="follow_up">Follow-up</option><option value="lower_payment_class">Lower-payment class</option><option value="free_group_nurture">Free group nurture</option><option value="lost">Lost</option><option value="accidental_lead">Accidental lead</option></select></div>
+            <div><label for="filterClassPreference">Class preference</label><select id="filterClassPreference"><option value="">All preferences</option><option value="undecided">Not decided</option><option value="direct">Direct class</option><option value="online">Online class</option></select></div>
+            <div><label for="filterGroupPreference">Group preference</label><select id="filterGroupPreference"><option value="">All preferences</option><option value="undecided">Not discussed</option><option value="common_group">Common group</option><option value="private">Private / privacy</option></select></div>
+            <div><label for="filterCommonGroupStatus">Common group status</label><select id="filterCommonGroupStatus"><option value="">All statuses</option><option value="not_discussed">Not discussed</option><option value="pending">Pending</option><option value="joined">Joined</option><option value="private">Private</option></select></div>
+            <div><label for="filterFreeClassStatus">Free class status</label><select id="filterFreeClassStatus"><option value="">All statuses</option><option value="not_scheduled">Not scheduled</option><option value="reminder_needed">Reminder needed</option><option value="confirmed">Confirmed</option><option value="attended">Attended</option><option value="missed">Missed</option><option value="reschedule_requested">Reschedule requested</option></select></div>
+            <div><label for="filterCourseInterest">8-week course interest</label><select id="filterCourseInterest"><option value="">All interest statuses</option><option value="undecided">Undecided</option><option value="interested">Interested</option><option value="not_interested">Not interested</option></select></div>
+            <div><label for="filterNextFollowupDate">Next follow-up date</label><input id="filterNextFollowupDate" type="date"></div>
+            <div class="filter-actions"><button id="clearLeadFilters" class="button button-quiet" type="button">Clear filters</button></div>
+          </div>
+        </section>
         <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Location</th><th>Source</th><th>Stage</th><th>Next follow-up</th><th>Tags</th><th>Action</th></tr></thead><tbody id="leadsBody"><tr><td colspan="7">Loading leads…</td></tr></tbody></table></div></div>
       </section>
 
@@ -100,7 +120,7 @@
           <div><label for="allocationDate">Work date</label><input id="allocationDate" type="date" required></div>
           <div class="form-actions"><button class="button button-primary" type="submit">Allocate call</button><span id="allocationMessage" class="message" role="status"></span></div>
         </form>
-        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Salesperson</th><th>Call status</th><th>Outcome / note</th><th>Update</th></tr></thead><tbody id="allocationsBody"><tr><td colspan="5">Loading allocations…</td></tr></tbody></table></div></div>
+        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead / Actions</th><th>Salesperson</th><th>Call status</th><th>Outcome / note</th><th>Update</th></tr></thead><tbody id="allocationsBody"><tr><td colspan="5">Loading allocations…</td></tr></tbody></table></div></div>
       </section>
 
       <section id="reviewView" class="view hidden">
