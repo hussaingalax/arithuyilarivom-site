@@ -144,34 +144,26 @@
       <span id="allocationMessage" class="message" role="status"></span>
     </div>
   </form>
-
-  <!-- Follow-ups scheduled for the selected work date -->
-  <div class="panel">
-    <div class="section-heading">
-      <div>
-        <h2>Follow-ups Due</h2>
-        <p class="muted">Leads scheduled for follow-up on the selected work date.</p>
-      </div>
-    </div>
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th>Lead</th>
-            <th>Mobile</th>
-            <th>Follow-up date</th>
-          </tr>
-        </thead>
-        <tbody id="followupsBody">
-          <tr>
-            <td colspan="3">Loading follow-ups…</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="panel daily-calls-toolbar">
+    <div><label for="dailyCallStageFilter">Filter calls by lead stage</label></div>
+    <select id="dailyCallStageFilter">
+      <option value="">All stages</option>
+      <option value="new_lead">New lead</option>
+      <option value="contacted">Contacted</option>
+      <option value="free_class_pending">Free class pending</option>
+      <option value="free_class_attended">Free class attended</option>
+      <option value="eight_week_interested">Interested in 8-week course</option>
+      <option value="follow_up">Follow-up</option>
+      <option value="lower_payment_class">Lower-payment class</option>
+      <option value="free_group_nurture">Free group nurture</option>
+      <option value="final_sale_closed">Final sale closed</option>
+      <option value="lost">Not interested / lost</option>
+      <option value="accidental_lead">Accidental lead</option>
+    </select>
   </div>
 
-  <!-- Existing Daily Calls table -->
+  <!-- Daily Calls table -->
+
   <div class="panel table-panel">
     <div class="table-scroll">
       <table>
@@ -186,7 +178,7 @@
         </thead>
         <tbody id="allocationsBody">
           <tr>
-            <td colspan="5">Loading allocations…</td>
+            <td colspan="6">Loading allocations…</td>
           </tr>
         </tbody>
       </table>
