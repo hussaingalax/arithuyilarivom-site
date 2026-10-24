@@ -176,7 +176,6 @@
 state.totalLeads = count ?? state.leads.length;
 renderLeads();
 fillLeadSelect();
-renderFollowups();
 }
 
   async function loadUsers() {
@@ -195,6 +194,8 @@ renderFollowups();
 
   async function loadAllocations() {
     const date = $('workDate').value || isoToday();
+
+    // Read allocations already present for the selected work date.
     let query = sb.from('crm_daily_allocations')
       .select('id,work_date,lead_id,salesperson_id,allocated_by,call_status,call_outcome,salesperson_note,completed_at,created_at')
       .eq('work_date', date).order('created_at', { ascending: true }).limit(1000);
@@ -202,9 +203,46 @@ renderFollowups();
     const { data, error } = await query;
     if (error) throw error;
     state.allocations = data || [];
-renderAllocations();
-renderFollowups();
-renderStats();
+
+    // Auto-allocate due follow-ups only to the salesperson already assigned to the lead.
+    const allocatedLeadIds = new Set(state.allocations.map(a => String(a.lead_id)));
+    const dueLeads = state.leads.filter(lead =>
+      lead.assigned_to &&
+      localFollowupDate(lead.next_followup_at) === date &&
+      (isAdmin() || lead.assigned_to === state.user.id) &&
+      !allocatedLeadIds.has(String(lead.id))
+    );
+
+    let needsReload = false;
+    for (const lead of dueLeads) {
+      const { error: createError } = await sb.rpc('crm_create_daily_allocation', {
+        p_work_date: date,
+        p_lead_id: lead.id,
+        p_salesperson_id: lead.assigned_to
+      });
+      if (!createError) needsReload = true;
+      else if (createError.code !== '23505') throw createError;
+    }
+
+    if (needsReload || dueLeads.length) {
+      let refreshedQuery = sb.from('crm_daily_allocations')
+        .select('id,work_date,lead_id,salesperson_id,allocated_by,call_status,call_outcome,salesperson_note,completed_at,created_at')
+        .eq('work_date', date).order('created_at', { ascending: true }).limit(1000);
+      if (!isAdmin()) refreshedQuery = refreshedQuery.eq('salesperson_id', state.user.id);
+      const { data: refreshedData, error: refreshedError } = await refreshedQuery;
+      if (refreshedError) throw refreshedError;
+      state.allocations = refreshedData || [];
+    }
+
+    renderAllocations();
+    renderStats();
+  }
+
+  function localFollowupDate(value) {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   }
 
   async function loadReviews() {
@@ -324,72 +362,25 @@ renderStats();
       .map(u => `<option value="${esc(u.id)}">${esc(u.display_name)}</option>`).join('');
   }
 
-function localFollowupDate(value) {
-  if (!value) return '';
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '';
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
-
-function renderFollowups() {
-  const tbody = $('followupsBody');
-  if (!tbody) return;
-
-  const selectedDate = $('workDate').value || isoToday();
-
-  const allocatedLeadIds = new Set(
-    state.allocations.map(a => String(a.lead_id))
-  );
-
-  const dueLeads = state.leads
-    .filter(lead =>
-      lead.assigned_to &&
-      localFollowupDate(lead.next_followup_at) === selectedDate &&
-      !allocatedLeadIds.has(String(lead.id))
-    )
-    .sort((a, b) =>
-      String(a.next_followup_at).localeCompare(String(b.next_followup_at))
-    );
-
-  tbody.innerHTML = dueLeads.length
-    ? dueLeads.map(lead => `
-        <tr>
-          <td>
-            <div class="lead-title">${esc(lead.full_name || 'Unnamed lead')}</div>
-          </td>
-          <td>${esc(lead.mobile || '')}</td>
-          <td>${esc(
-            lead.next_followup_at
-              ? new Date(lead.next_followup_at).toLocaleString('en-IN', {
-                  dateStyle: 'medium',
-                  timeStyle: 'short'
-                })
-              : ''
-          )}</td>
-        </tr>
-      `).join('')
-    : '<tr><td colspan="3" class="empty">No follow-ups due for this date.</td></tr>';
-}
-  
-  function renderAllocations() {
-    $('allocationsBody').innerHTML = state.allocations.length ? state.allocations.map(a => {
+function renderAllocations() {
+    const selectedStage = $('dailyCallStageFilter')?.value || '';
+    const visibleAllocations = state.allocations.filter(a => {
+      const lead = state.leads.find(l => l.id === a.lead_id);
+      return !selectedStage || lead?.pipeline_stage === selectedStage;
+    });
+    $('allocationsBody').innerHTML = visibleAllocations.length ? visibleAllocations.map(a => {
       const lead = state.leads.find(l => l.id === a.lead_id);
       const person = state.users.find(u => u.id === a.salesperson_id);
       const statusOptions = Object.entries(CALL_STATUSES).map(([k,v]) => `<option value="${k}" ${a.call_status===k?'selected':''}>${esc(v)}</option>`).join('');
       return `<tr>
         <td><div class="lead-title">${esc(lead?.full_name || 'Lead unavailable')}</div><div class="cell-sub">${esc(lead?.mobile || '')}</div><div class="inline-actions allocation-lead-actions">${lead ? `<a class="button button-quiet" href="tel:${esc(String(lead.mobile || '').replace(/[^0-9+]/g, ''))}">Call</a><a class="button button-quiet" href="https://wa.me/${esc(whatsappNumber(lead.mobile))}" target="_blank" rel="noopener noreferrer">WhatsApp</a><button class="button button-quiet" type="button" data-edit-allocation-lead="${esc(lead.id)}">Edit lead</button>${isAdmin() ? `<button class="button button-quiet" type="button" data-allocate-from-call="${esc(lead.id)}">Allocate</button>` : ''}` : ''}</div></td>
+        <td><span class="stage">${esc(STAGES[lead?.pipeline_stage] || lead?.pipeline_stage || 'Unknown')}</span></td>
         <td>${esc(person?.display_name || (a.salesperson_id === state.user.id ? state.profile.display_name : 'Salesperson'))}</td>
         <td>${isAdmin() ? `<span class="stage">${esc(CALL_STATUSES[a.call_status] || a.call_status)}</span>` : `<select class="small-select" data-call-status="${esc(a.id)}">${statusOptions}</select>`}</td>
         <td>${isAdmin() ? `${esc(a.call_outcome || '')}<div class="cell-sub">${esc(a.salesperson_note || '')}</div>` : `<input class="small-input" data-call-outcome="${esc(a.id)}" value="${esc(a.call_outcome || '')}" placeholder="Outcome"><input class="small-input" data-call-note="${esc(a.id)}" value="${esc(a.salesperson_note || '')}" placeholder="Note">`}</td>
         <td>${isAdmin() ? (a.call_status === 'assigned' || a.call_status === 'not_called' ? `<button class="button button-quiet" type="button" data-review-allocation="${esc(a.id)}">Review</button>` : '—') : `<button class="button button-primary" type="button" data-save-allocation="${esc(a.id)}">Save status</button>`}</td>
       </tr>`;
-    }).join('') : '<tr><td colspan="5" class="empty">No calls allocated for this date.</td></tr>';
+    }).join('') : '<tr><td colspan="6" class="empty">No calls allocated for this date and stage.</td></tr>';
     document.querySelectorAll('[data-edit-allocation-lead]').forEach(b => b.onclick = () => {
       document.querySelector('[data-tab="leadsView"]').click();
       editLead(b.dataset.editAllocationLead);
@@ -649,6 +640,7 @@ function renderFollowups() {
     });
     $('refreshLeads').addEventListener('click', async () => { try { await loadLeads(); renderStats(); } catch(e) { showNotice(e.message); } });
     $('exportLeads').addEventListener('click', exportLeadsCsv);
+    $('dailyCallStageFilter')?.addEventListener('change', renderAllocations);
     $('workDate').addEventListener('change', async () => {
       $('allocationDate').value = $('workDate').value;
       try { await loadAllocations(); if (isAdmin()) await loadReviews(); renderStats(); } catch(e) { showNotice(e.message); }
