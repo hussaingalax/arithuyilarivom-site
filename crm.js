@@ -173,10 +173,11 @@
     const { data, error, count } = await query;
     if (error) throw error;
     state.leads = data || [];
-    state.totalLeads = count ?? state.leads.length;
-    renderLeads();
-    fillLeadSelect();
-  }
+state.totalLeads = count ?? state.leads.length;
+renderLeads();
+fillLeadSelect();
+renderFollowups();
+}
 
   async function loadUsers() {
     if (!isAdmin()) {
