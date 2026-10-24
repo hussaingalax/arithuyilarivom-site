@@ -117,16 +117,83 @@
         <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Location</th><th>Source</th><th>Stage</th><th>Next follow-up</th><th>Tags</th><th>Allocation</th><th>Action</th></tr></thead><tbody id="leadsBody"><tr><td colspan="8">Loading leads…</td></tr></tbody></table></div></div>
       </section>
 
-      <section id="callsView" class="view hidden">
-        <div class="section-heading"><div><h2>Daily call allocation</h2><p class="muted">Morning allocation and call completion for the selected work date.</p></div></div>
-        <form id="allocationForm" class="panel form-grid admin-only hidden">
-          <div><label for="allocationLead">Lead</label><select id="allocationLead" required></select></div>
-          <div><label for="allocationSalesperson">Salesperson</label><select id="allocationSalesperson" required></select></div>
-          <div><label for="allocationDate">Work date</label><input id="allocationDate" type="date" required></div>
-          <div class="form-actions"><button class="button button-primary" type="submit">Allocate call</button><span id="allocationMessage" class="message" role="status"></span></div>
-        </form>
-        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead / Actions</th><th>Salesperson</th><th>Call status</th><th>Outcome / note</th><th>Update</th></tr></thead><tbody id="allocationsBody"><tr><td colspan="5">Loading allocations…</td></tr></tbody></table></div></div>
-      </section>
+     
+<section id="callsView" class="view hidden">
+  <div class="section-heading">
+    <div>
+      <h2>Daily call allocation</h2>
+      <p class="muted">Morning allocation and call completion for the selected work date.</p>
+    </div>
+  </div>
+
+  <form id="allocationForm" class="panel form-grid admin-only hidden">
+    <div>
+      <label for="allocationLead">Lead</label>
+      <select id="allocationLead" required></select>
+    </div>
+    <div>
+      <label for="allocationSalesperson">Salesperson</label>
+      <select id="allocationSalesperson" required></select>
+    </div>
+    <div>
+      <label for="allocationDate">Work date</label>
+      <input id="allocationDate" type="date" required>
+    </div>
+    <div class="form-actions">
+      <button class="button button-primary" type="submit">Allocate call</button>
+      <span id="allocationMessage" class="message" role="status"></span>
+    </div>
+  </form>
+
+  <!-- Follow-ups scheduled for the selected work date -->
+  <div class="panel">
+    <div class="section-heading">
+      <div>
+        <h2>Follow-ups Due</h2>
+        <p class="muted">Leads scheduled for follow-up on the selected work date.</p>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Lead</th>
+            <th>Mobile</th>
+            <th>Follow-up date</th>
+          </tr>
+        </thead>
+        <tbody id="followupsBody">
+          <tr>
+            <td colspan="3">Loading follow-ups…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Existing Daily Calls table -->
+  <div class="panel table-panel">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Lead / Actions</th>
+            <th>Salesperson</th>
+            <th>Call status</th>
+            <th>Outcome / note</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody id="allocationsBody">
+          <tr>
+            <td colspan="5">Loading allocations…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 
       <section id="reviewView" class="view hidden">
         <div class="section-heading"><div><h2>Evening review</h2><p class="muted">Admin records reasons for uncompleted calls. The original allocation remains in history.</p></div><button id="refreshReviews" class="button button-quiet" type="button">Refresh review</button></div>
