@@ -2,3 +2,8 @@
 
 /* CRM V1 requested admin filters, stage counts and daily-call lead actions */
 .filter-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.filter-heading strong{font-size:14px}.filter-count{font-size:12px;color:#66748b;background:#f2f5fa;border-radius:8px;padding:7px 10px}.filter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.filter-grid label{margin-bottom:6px}.filter-actions{display:flex;align-items:end}.stage-count-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.stage-count-card{background:#f7f9fc;border:1px solid #e5eaf2;border-radius:10px;padding:10px;min-width:0}.stage-count-card span{display:block;font-size:11px;color:#65728a;line-height:1.35}.stage-count-card strong{display:block;font-size:22px;margin-top:5px;color:#18345d}.allocation-lead-actions{margin-top:8px;max-width:360px}.allocation-lead-actions .button{padding:7px 9px;white-space:nowrap}@media(max-width:900px){.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stage-count-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.filter-grid{grid-template-columns:1fr}.stage-count-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.filter-heading{align-items:flex-start;flex-direction:column}.allocation-lead-actions{max-width:260px}}
+
+/* Daily Calls stage filter */
+.daily-calls-toolbar{display:grid;grid-template-columns:minmax(180px,240px) minmax(220px,320px);align-items:end;gap:10px}
+.daily-calls-toolbar label{margin:0 0 7px}
+@media(max-width:600px){.daily-calls-toolbar{grid-template-columns:1fr}}
