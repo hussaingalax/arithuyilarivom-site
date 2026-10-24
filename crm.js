@@ -323,6 +323,59 @@ renderFollowups();
       .map(u => `<option value="${esc(u.id)}">${esc(u.display_name)}</option>`).join('');
   }
 
+function localFollowupDate(value) {
+  if (!value) return '';
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+function renderFollowups() {
+  const tbody = $('followupsBody');
+  if (!tbody) return;
+
+  const selectedDate = $('workDate').value || isoToday();
+
+  const allocatedLeadIds = new Set(
+    state.allocations.map(a => String(a.lead_id))
+  );
+
+  const dueLeads = state.leads
+    .filter(lead =>
+      lead.assigned_to &&
+      localFollowupDate(lead.next_followup_at) === selectedDate &&
+      !allocatedLeadIds.has(String(lead.id))
+    )
+    .sort((a, b) =>
+      String(a.next_followup_at).localeCompare(String(b.next_followup_at))
+    );
+
+  tbody.innerHTML = dueLeads.length
+    ? dueLeads.map(lead => `
+        <tr>
+          <td>
+            <div class="lead-title">${esc(lead.full_name || 'Unnamed lead')}</div>
+          </td>
+          <td>${esc(lead.mobile || '')}</td>
+          <td>${esc(
+            lead.next_followup_at
+              ? new Date(lead.next_followup_at).toLocaleString('en-IN', {
+                  dateStyle: 'medium',
+                  timeStyle: 'short'
+                })
+              : ''
+          )}</td>
+        </tr>
+      `).join('')
+    : '<tr><td colspan="3" class="empty">No follow-ups due for this date.</td></tr>';
+}
+  
   function renderAllocations() {
     $('allocationsBody').innerHTML = state.allocations.length ? state.allocations.map(a => {
       const lead = state.leads.find(l => l.id === a.lead_id);
