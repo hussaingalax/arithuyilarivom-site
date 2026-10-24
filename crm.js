@@ -202,8 +202,9 @@ renderFollowups();
     const { data, error } = await query;
     if (error) throw error;
     state.allocations = data || [];
-    renderAllocations();
-    renderStats();
+renderAllocations();
+renderFollowups();
+renderStats();
   }
 
   async function loadReviews() {
