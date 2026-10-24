@@ -88,12 +88,7 @@
           <div class="form-actions span-2"><button class="button button-primary" type="submit">Save lead</button><button id="cancelLeadForm" class="button button-quiet" type="button">Cancel</button><span id="leadFormMessage" class="message" role="status"></span></div>
         </form>
 
-        <div class="toolbar panel">
-          <input id="leadSearch" type="search" placeholder="Search name or mobile">
-          <select id="stageFilter"><option value="">All stages</option><option value="new_lead">New lead</option><option value="contacted">Contacted</option><option value="free_class_pending">Free class pending</option><option value="free_class_attended">Free class attended</option><option value="eight_week_interested">8-week interested</option><option value="follow_up">Follow-up</option><option value="lower_payment_class">Lower-payment class</option><option value="free_group_nurture">Free group nurture</option><option value="lost">Lost</option><option value="accidental_lead">Accidental lead</option></select>
-          <button id="refreshLeads" class="button button-quiet" type="button">Refresh</button>
-          <button id="exportLeads" class="button button-primary" type="button">Export Leads CSV</button>
-        </div>
+       
         <section id="adminLeadFilters" class="panel admin-only hidden">
           <div class="filter-heading"><strong>Advanced lead filters</strong><span id="leadFilterCount" class="filter-count">Showing — of — leads</span></div>
           <div class="filter-grid">
@@ -111,6 +106,14 @@
             <div class="filter-actions"><button id="clearLeadFilters" class="button button-quiet" type="button">Clear filters</button></div>
           </div>
         </section>
+
+ <div class="toolbar panel">
+          <input id="leadSearch" type="search" placeholder="Search name or mobile">
+          <select id="stageFilter"><option value="">All stages</option><option value="new_lead">New lead</option><option value="contacted">Contacted</option><option value="free_class_pending">Free class pending</option><option value="free_class_attended">Free class attended</option><option value="eight_week_interested">8-week interested</option><option value="follow_up">Follow-up</option><option value="lower_payment_class">Lower-payment class</option><option value="free_group_nurture">Free group nurture</option><option value="lost">Lost</option><option value="accidental_lead">Accidental lead</option></select>
+          <button id="refreshLeads" class="button button-quiet" type="button">Refresh</button>
+          <button id="exportLeads" class="button button-primary" type="button">Export Leads CSV</button>
+        </div>
+        
         <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Lead</th><th>Location</th><th>Source</th><th>Stage</th><th>Next follow-up</th><th>Tags</th><th>Allocation</th><th>Action</th></tr></thead><tbody id="leadsBody"><tr><td colspan="8">Loading leads…</td></tr></tbody></table></div></div>
       </section>
 
