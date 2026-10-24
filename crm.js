@@ -195,7 +195,19 @@ fillLeadSelect();
   async function loadAllocations() {
     const date = $('workDate').value || isoToday();
 
-    // Read allocations already present for the selected work date.
+    // The SQL RPC performs safe, idempotent follow-up allocation using the
+    // lead's existing assigned_to owner. Keep the existing read path working
+    // if the migration has not been installed yet.
+    const { error: syncError } = await sb.rpc('crm_sync_followup_allocations', {
+      p_work_date: date
+    });
+    if (syncError) {
+      const missingFunction = syncError.code === 'PGRST202' ||
+        /crm_sync_followup_allocations.*(not found|schema cache)|could not find the function/i.test(syncError.message || '');
+      if (!missingFunction) throw syncError;
+      console.warn('Automatic follow-up allocation is waiting for the approved SQL function crm_sync_followup_allocations.');
+    }
+
     let query = sb.from('crm_daily_allocations')
       .select('id,work_date,lead_id,salesperson_id,allocated_by,call_status,call_outcome,salesperson_note,completed_at,created_at')
       .eq('work_date', date).order('created_at', { ascending: true }).limit(1000);
@@ -203,46 +215,8 @@ fillLeadSelect();
     const { data, error } = await query;
     if (error) throw error;
     state.allocations = data || [];
-
-    // Auto-allocate due follow-ups only to the salesperson already assigned to the lead.
-    const allocatedLeadIds = new Set(state.allocations.map(a => String(a.lead_id)));
-    const dueLeads = state.leads.filter(lead =>
-      lead.assigned_to &&
-      localFollowupDate(lead.next_followup_at) === date &&
-      (isAdmin() || lead.assigned_to === state.user.id) &&
-      !allocatedLeadIds.has(String(lead.id))
-    );
-
-    let needsReload = false;
-    for (const lead of dueLeads) {
-      const { error: createError } = await sb.rpc('crm_create_daily_allocation', {
-        p_work_date: date,
-        p_lead_id: lead.id,
-        p_salesperson_id: lead.assigned_to
-      });
-      if (!createError) needsReload = true;
-      else if (createError.code !== '23505') throw createError;
-    }
-
-    if (needsReload || dueLeads.length) {
-      let refreshedQuery = sb.from('crm_daily_allocations')
-        .select('id,work_date,lead_id,salesperson_id,allocated_by,call_status,call_outcome,salesperson_note,completed_at,created_at')
-        .eq('work_date', date).order('created_at', { ascending: true }).limit(1000);
-      if (!isAdmin()) refreshedQuery = refreshedQuery.eq('salesperson_id', state.user.id);
-      const { data: refreshedData, error: refreshedError } = await refreshedQuery;
-      if (refreshedError) throw refreshedError;
-      state.allocations = refreshedData || [];
-    }
-
     renderAllocations();
     renderStats();
-  }
-
-  function localFollowupDate(value) {
-    if (!value) return '';
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return '';
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   }
 
   async function loadReviews() {
