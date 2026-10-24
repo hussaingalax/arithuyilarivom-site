@@ -466,9 +466,23 @@
       await loadAllocations();
       renderStats();
       setMessage('leadFormMessage','Lead saved.','success');
-    } catch (err) {
-      setMessage('leadFormMessage',err.message || 'Unable to save lead.','error');
-    } finally {
+
+} catch (err) {
+  if (err.code === '23505') {
+    setMessage(
+      'leadFormMessage',
+      'This mobile number is already registered. Please search for the existing lead.',
+      'error'
+    );
+  } else {
+    setMessage(
+      'leadFormMessage',
+      err.message || 'Unable to save lead.',
+      'error'
+    );
+  }
+} finally {
+      
       btn.disabled = false;
     }
   }
