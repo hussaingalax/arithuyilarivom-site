@@ -598,6 +598,317 @@ function renderAllocations() {
     } finally { if (btn) btn.disabled = false; }
   }
 
+
+  // ==============================
+  // STUDENT MANAGEMENT
+  // Admin-only module
+  // ==============================
+
+  const STUDENT_COURSES = {
+    eight_week_course: '8 Week Course',
+    advance_l1: 'Advance L1',
+    advance_l2: 'Advance L2',
+    money_class: 'Money Class',
+    raajayoga_dheekshai: 'Raajayoga Dheekshai'
+  };
+
+  function studentDate(value) {
+    return value ? String(value).slice(0, 10) : '';
+  }
+
+  function studentCourseLabel(value) {
+    return value === 'completed' ? 'Completed' : 'Not Completed';
+  }
+
+  function studentDobMatch(dob, mode) {
+    if (!dob || !mode) return true;
+
+    const parts = String(dob).slice(0, 10).split('-').map(Number);
+    const month = parts[1];
+    const day = parts[2];
+    if (!month || !day) return false;
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const currentMonth = now.getMonth() + 1;
+
+    if (mode === 'month') return month === currentMonth;
+
+    if (mode === 'upcoming') {
+      const end = new Date(today);
+      end.setDate(end.getDate() + 30);
+
+      for (let year = today.getFullYear(); year <= end.getFullYear(); year++) {
+        const birthday = new Date(year, month - 1, day);
+        if (birthday >= today && birthday <= end) return true;
+      }
+      return false;
+    }
+    return true;
+  }
+
+  async function loadStudents() {
+    if (!isAdmin()) return;
+
+    const { data, error } = await sb.from('crm_students')
+      .select(`
+        id,student_name,mobile,reference,batch_no,dob,
+        marriage_anniversary,advance_l1,advance_l2,
+        money_class,raajayoga_dheekshai,eight_week_course,
+        assigned_to,created_at,updated_at
+      `)
+      .order('student_name', { ascending: true })
+      .limit(5000);
+
+    if (error) {
+      showNotice(`Unable to load students: ${error.message}`);
+      return;
+    }
+
+    state.students = data || [];
+    fillStudentFilters();
+    renderStudents();
+    renderStudentStats();
+  }
+
+  function fillStudentFilters() {
+    const batchSelect = $('studentBatchFilter');
+    const salespersonSelect = $('studentSalespersonFilter');
+    const editAssigned = $('studentEditAssigned');
+
+    if (batchSelect) {
+      const old = batchSelect.value;
+      const batches = [...new Set(state.students.map(s => s.batch_no).filter(Boolean))]
+        .sort((a, b) => String(a).localeCompare(String(b), undefined, {numeric:true}));
+
+      batchSelect.innerHTML =
+        '<option value="">All batches</option>' +
+        batches.map(b => `<option value="${esc(b)}">${esc(b)}</option>`).join('');
+
+      batchSelect.value = batches.includes(old) ? old : '';
+    }
+
+    const salespeople = state.users.filter(u =>
+      u.role === 'salesperson' && u.is_active
+    );
+
+    if (salespersonSelect) {
+      const old = salespersonSelect.value;
+      salespersonSelect.innerHTML =
+        '<option value="">All salespersons</option>' +
+        salespeople.map(u =>
+          `<option value="${esc(u.id)}">${esc(u.display_name)}</option>`
+        ).join('');
+      salespersonSelect.value = salespeople.some(u => u.id === old) ? old : '';
+    }
+
+    if (editAssigned) {
+      const old = editAssigned.value;
+      editAssigned.innerHTML =
+        '<option value="">Not Allocated</option>' +
+        salespeople.map(u =>
+          `<option value="${esc(u.id)}">${esc(u.display_name)}</option>`
+        ).join('');
+      editAssigned.value = old;
+    }
+  }
+
+  function getFilteredStudents() {
+    const search = $('studentSearch')?.value.trim().toLowerCase() || '';
+    const batch = $('studentBatchFilter')?.value || '';
+    const dobMode = $('studentDobFilter')?.value || '';
+    const course = $('studentCourseFilter')?.value || '';
+    const courseStatus = $('studentCourseStatus')?.value || '';
+    const salesperson = $('studentSalespersonFilter')?.value || '';
+
+    return state.students.filter(s => {
+      const searchMatch = !search ||
+        `${s.student_name} ${s.mobile} ${s.reference || ''}`.toLowerCase().includes(search);
+
+      if (!searchMatch) return false;
+      if (batch && s.batch_no !== batch) return false;
+      if (dobMode && !studentDobMatch(s.dob, dobMode)) return false;
+      if (salesperson && s.assigned_to !== salesperson) return false;
+
+      if (course && courseStatus && s[course] !== courseStatus) return false;
+
+      return true;
+    });
+  }
+
+  function renderStudentStats() {
+    const students = state.students;
+    $('studentTotal').textContent = students.length;
+    $('studentEightWeek').textContent =
+      students.filter(s => s.eight_week_course === 'completed').length;
+    $('studentUpcomingDob').textContent =
+      students.filter(s => studentDobMatch(s.dob, 'upcoming')).length;
+    $('studentNotAllocated').textContent =
+      students.filter(s => !s.assigned_to).length;
+  }
+
+  function renderStudents() {
+    if (!isAdmin()) return;
+
+    const rows = getFilteredStudents();
+
+    $('studentsBody').innerHTML = rows.length ? rows.map(s => {
+      const owner = state.users.find(u => u.id === s.assigned_to);
+
+      const status = field =>
+        `<span class="student-status ${s[field] === 'completed' ? 'is-completed' : 'is-pending'}">${studentCourseLabel(s[field])}</span>`;
+
+      return `<tr>
+        <td>
+          <div class="lead-title">${esc(s.student_name)}</div>
+          <div class="cell-sub">${esc(s.mobile)}</div>
+          <div class="cell-sub">${esc(s.reference || '')}</div>
+        </td>
+        <td>${esc(s.batch_no)}</td>
+        <td>${esc(s.dob || '—')}</td>
+        <td>${status('eight_week_course')}</td>
+        <td>${status('advance_l1')}</td>
+        <td>${status('advance_l2')}</td>
+        <td>${status('money_class')}</td>
+        <td>${status('raajayoga_dheekshai')}</td>
+        <td>${esc(owner?.display_name || 'Not allocated')}</td>
+        <td>
+          <div class="inline-actions">
+            <a class="button button-quiet"
+               href="tel:${esc(String(s.mobile || '').replace(/[^0-9+]/g, ''))}">Call</a>
+            <button class="button button-quiet" type="button"
+              data-student-whatsapp="${esc(s.id)}">WhatsApp</button>
+            <button class="button button-quiet" type="button"
+              data-edit-student="${esc(s.id)}">Edit</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('') :
+      '<tr><td colspan="10" class="empty">No students found for these filters.</td></tr>';
+
+    document.querySelectorAll('[data-edit-student]').forEach(btn => {
+      btn.onclick = () => editStudent(btn.dataset.editStudent);
+    });
+
+    document.querySelectorAll('[data-student-whatsapp]').forEach(btn => {
+      btn.onclick = () => openStudentWhatsApp(btn.dataset.studentWhatsapp);
+    });
+  }
+
+  function editStudent(id) {
+    const s = state.students.find(x => x.id === id);
+    if (!s) return;
+
+    $('studentEditId').value = s.id;
+    $('studentEditName').value = s.student_name || '';
+    $('studentEditMobile').value = s.mobile || '';
+    $('studentEditBatch').value = s.batch_no || '';
+    $('studentEditReference').value = s.reference || '';
+    $('studentEditDob').value = studentDate(s.dob);
+    $('studentEditAnniversary').value = studentDate(s.marriage_anniversary);
+
+    $('studentEditEightWeek').value = s.eight_week_course || 'not_completed';
+    $('studentEditAdvanceL1').value = s.advance_l1 || 'not_completed';
+    $('studentEditAdvanceL2').value = s.advance_l2 || 'not_completed';
+    $('studentEditMoney').value = s.money_class || 'not_completed';
+    $('studentEditRaajayoga').value = s.raajayoga_dheekshai || 'not_completed';
+
+    fillStudentFilters();
+    $('studentEditAssigned').value = s.assigned_to || '';
+
+    $('studentEditPanel').classList.remove('hidden');
+    setMessage('studentEditMessage', '');
+    $('studentEditPanel').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  async function saveStudent(event) {
+    event.preventDefault();
+
+    if (!isAdmin()) {
+      showNotice('Only Admin can edit student records.');
+      return;
+    }
+
+    const btn = $('studentEditForm').querySelector('button[type="submit"]');
+    btn.disabled = true;
+    setMessage('studentEditMessage', 'Saving student...');
+
+    try {
+      const id = $('studentEditId').value;
+
+      const payload = {
+        student_name: $('studentEditName').value.trim(),
+        mobile: $('studentEditMobile').value.trim(),
+        batch_no: $('studentEditBatch').value.trim(),
+        reference: $('studentEditReference').value.trim() || null,
+        dob: $('studentEditDob').value || null,
+        marriage_anniversary: $('studentEditAnniversary').value || null,
+        eight_week_course: $('studentEditEightWeek').value,
+        advance_l1: $('studentEditAdvanceL1').value,
+        advance_l2: $('studentEditAdvanceL2').value,
+        money_class: $('studentEditMoney').value,
+        raajayoga_dheekshai: $('studentEditRaajayoga').value,
+        assigned_to: $('studentEditAssigned').value || null,
+        updated_at: new Date().toISOString()
+      };
+
+      const { error } = await sb.from('crm_students')
+        .update(payload)
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setMessage('studentEditMessage', 'Student updated successfully.', 'success');
+      $('studentEditPanel').classList.add('hidden');
+      await loadStudents();
+      showNotice('Student information updated.');
+    } catch (err) {
+      setMessage('studentEditMessage', err.message || 'Unable to update student.', 'error');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function buildStudentMessage(student) {
+    const info = $('studentMessageInfo').value.trim();
+    const link = $('studentMessageLink').value.trim();
+    const template = $('studentMessageTemplate').value;
+    const name = student.student_name || 'Student';
+
+    const messages = {
+      location:
+        `Vanakkam ${name},\n\nArithuyil Arivom centre location:\n${link || info}\n\nThank you.`,
+      class:
+        `Vanakkam ${name},\n\nClass information:\n${info}\n\nThank you.\nArithuyil Arivom`,
+      link:
+        `Vanakkam ${name},\n\nPlease find the link below:\n${link}\n\nThank you.`,
+      birthday:
+        ` இனிய பிறந்தநாள் வாழ்த்துக்கள் ${name}! உங்கள் வாழ்க்கை மகிழ்ச்சியும் நலமும் நிறைந்ததாக அமைய வாழ்த்துகள்.\n\nArithuyil Arivom`,
+      reminder:
+        `Vanakkam ${name},\n\nFriendly reminder about your upcoming class:\n${info}\n\nPlease be on time.\nArithuyil Arivom`,
+      completion:
+        `Vanakkam ${name},\n\nCongratulations on completing your course! Wishing you continued growth and success.\n\nArithuyil Arivom`
+    };
+
+    return messages[template] || messages.class;
+  }
+
+  function openStudentWhatsApp(id) {
+    const student = state.students.find(s => s.id === id);
+    if (!student) return;
+
+    const phone = whatsappNumber(student.mobile);
+    if (!phone) {
+      showNotice('Invalid student mobile number.');
+      return;
+    }
+
+    const message = buildStudentMessage(student);
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  
   function bindEvents() {
     $('loginForm').addEventListener('submit', login);
     $('logoutBtn').addEventListener('click', logout);
