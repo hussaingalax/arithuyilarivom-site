@@ -159,6 +159,7 @@
         document.querySelectorAll('.view').forEach(v => v.classList.toggle('hidden', v.id !== btn.dataset.tab));
         if (btn.dataset.tab === 'callsView') loadAllocations();
         if (btn.dataset.tab === 'reviewView') loadReviews();
+        if (btn.dataset.tab === 'studentsView' && isAdmin()) loadStudents();
       };
     });
   }
