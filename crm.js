@@ -12,7 +12,16 @@
 
   const sb = window.supabase.createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
   const $ = id => document.getElementById(id);
-  const state = { user: null, profile: null, leads: [], totalLeads: 0, allocations: [], users: [], reviews: [] };
+  const state = {
+  user: null,
+  profile: null,
+  leads: [],
+  totalLeads: 0,
+  allocations: [],
+  users: [],
+  reviews: [],
+  students: []
+};
   const ADMIN = 'admin';
   const SOURCES = {
     instagram_ad:'Instagram Ad', facebook_ad:'Facebook Ad', meta_ad:'Meta Ad',
