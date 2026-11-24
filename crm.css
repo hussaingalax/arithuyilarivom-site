@@ -7,3 +7,69 @@
 .daily-calls-toolbar{display:grid;grid-template-columns:minmax(180px,240px) minmax(220px,320px);align-items:end;gap:10px}
 .daily-calls-toolbar label{margin:0 0 7px}
 @media(max-width:600px){.daily-calls-toolbar{grid-template-columns:1fr}}
+
+
+/* Students Module */
+.student-stats {
+  margin-top: 12px;
+}
+
+.student-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.student-filters label,
+.student-template-grid label {
+  margin-bottom: 7px;
+}
+
+.student-filter-action {
+  display: flex;
+  align-items: end;
+}
+
+.student-whatsapp-settings {
+  margin-top: 16px;
+}
+
+.student-template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.student-status {
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 7px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.student-status.is-completed {
+  background: #e8f7ee;
+  color: #167344;
+}
+
+.student-status.is-pending {
+  background: #fff4df;
+  color: #946200;
+}
+
+@media(max-width:900px) {
+  .student-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .student-template-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width:600px) {
+  .student-filters {
+    grid-template-columns: 1fr;
+  }
+}
