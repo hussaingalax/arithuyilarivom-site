@@ -944,6 +944,45 @@ function renderAllocations() {
     $('allocationDate').addEventListener('change', () => $('workDate').value = $('allocationDate').value);
     $('allocationForm').addEventListener('submit', createAllocation);
     $('refreshReviews').addEventListener('click', async () => { try { await loadAllocations(); await loadReviews(); } catch(e) { showNotice(e.message); } });
+
+    
+    // Students module event listeners
+    $('studentEditForm')?.addEventListener('submit', saveStudent);
+
+    $('cancelStudentEdit')?.addEventListener('click', () => {
+      $('studentEditPanel').classList.add('hidden');
+      $('studentEditForm').reset();
+    });
+
+    $('refreshStudents')?.addEventListener('click', loadStudents);
+
+    [
+      'studentSearch',
+      'studentBatchFilter',
+      'studentDobFilter',
+      'studentCourseFilter',
+      'studentCourseStatus',
+      'studentSalespersonFilter'
+    ].forEach(id => {
+      $(id)?.addEventListener('input', renderStudents);
+      $(id)?.addEventListener('change', renderStudents);
+    });
+
+    $('clearStudentFilters')?.addEventListener('click', () => {
+      [
+        'studentSearch',
+        'studentBatchFilter',
+        'studentDobFilter',
+        'studentCourseFilter',
+        'studentCourseStatus',
+        'studentSalespersonFilter'
+      ].forEach(id => {
+        if ($(id)) $(id).value = '';
+      });
+      renderStudents();
+    });
+
+  
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
