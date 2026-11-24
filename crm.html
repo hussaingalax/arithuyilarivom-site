@@ -189,6 +189,203 @@
 </section>
 
 
+<section id="studentsView" class="view hidden">
+  <div class="section-heading">
+    <div>
+      <h2>Student Management</h2>
+      <p class="muted">Manage student details, batches and course completion.</p>
+    </div>
+    <button id="refreshStudents" class="button button-quiet" type="button">Refresh Students</button>
+  </div>
+
+  <div class="stats-grid student-stats">
+    <article class="stat-card"><span>Total Students</span><strong id="studentTotal">—</strong></article>
+    <article class="stat-card"><span>8 Week Completed</span><strong id="studentEightWeek">—</strong></article>
+    <article class="stat-card"><span>Upcoming DOB (30 days)</span><strong id="studentUpcomingDob">—</strong></article>
+    <article class="stat-card"><span>Not Allocated</span><strong id="studentNotAllocated">—</strong></article>
+  </div>
+
+  <div class="panel student-filters">
+    <div>
+      <label for="studentSearch">Search student</label>
+      <input id="studentSearch" type="search" placeholder="Name or mobile">
+    </div>
+    <div>
+      <label for="studentBatchFilter">Batch</label>
+      <select id="studentBatchFilter"><option value="">All batches</option></select>
+    </div>
+    <div>
+      <label for="studentDobFilter">DOB filter</label>
+      <select id="studentDobFilter">
+        <option value="">All DOB</option>
+        <option value="upcoming">Upcoming 30 days</option>
+        <option value="month">This month</option>
+      </select>
+    </div>
+    <div>
+      <label for="studentCourseFilter">Course</label>
+      <select id="studentCourseFilter">
+        <option value="">All courses</option>
+        <option value="eight_week_course">8 Week Course</option>
+        <option value="advance_l1">Advance L1</option>
+        <option value="advance_l2">Advance L2</option>
+        <option value="money_class">Money Class</option>
+        <option value="raajayoga_dheekshai">Raajayoga Dheekshai</option>
+      </select>
+    </div>
+    <div>
+      <label for="studentCourseStatus">Course status</label>
+      <select id="studentCourseStatus">
+        <option value="">All statuses</option>
+        <option value="completed">Completed</option>
+        <option value="not_completed">Not Completed</option>
+      </select>
+    </div>
+    <div>
+      <label for="studentSalespersonFilter">Allocated salesperson</label>
+      <select id="studentSalespersonFilter"><option value="">All salespersons</option></select>
+    </div>
+    <div class="student-filter-action">
+      <button id="clearStudentFilters" class="button button-quiet" type="button">Clear Filters</button>
+    </div>
+  </div>
+
+  <div id="studentEditPanel" class="panel hidden">
+    <div class="section-heading">
+      <div><h2>Edit Student</h2><p class="muted">Update student information and course status.</p></div>
+    </div>
+
+    <form id="studentEditForm" class="form-grid">
+      <input id="studentEditId" type="hidden">
+
+      <div>
+        <label for="studentEditName">Student Name</label>
+        <input id="studentEditName" required>
+      </div>
+      <div>
+        <label for="studentEditMobile">Mobile</label>
+        <input id="studentEditMobile" required>
+      </div>
+      <div>
+        <label for="studentEditBatch">Batch Number</label>
+        <input id="studentEditBatch" required>
+      </div>
+      <div>
+        <label for="studentEditReference">Reference</label>
+        <input id="studentEditReference">
+      </div>
+      <div>
+        <label for="studentEditDob">Date of Birth</label>
+        <input id="studentEditDob" type="date">
+      </div>
+      <div>
+        <label for="studentEditAnniversary">Marriage Anniversary</label>
+        <input id="studentEditAnniversary" type="date">
+      </div>
+
+      <div>
+        <label for="studentEditEightWeek">8 Week Course</label>
+        <select id="studentEditEightWeek">
+          <option value="not_completed">Not Completed</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      <div>
+        <label for="studentEditAdvanceL1">Advance L1</label>
+        <select id="studentEditAdvanceL1">
+          <option value="not_completed">Not Completed</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      <div>
+        <label for="studentEditAdvanceL2">Advance L2</label>
+        <select id="studentEditAdvanceL2">
+          <option value="not_completed">Not Completed</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      <div>
+        <label for="studentEditMoney">Money Class</label>
+        <select id="studentEditMoney">
+          <option value="not_completed">Not Completed</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      <div>
+        <label for="studentEditRaajayoga">Raajayoga Dheekshai</label>
+        <select id="studentEditRaajayoga">
+          <option value="not_completed">Not Completed</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      <div>
+        <label for="studentEditAssigned">Allocated Salesperson</label>
+        <select id="studentEditAssigned">
+          <option value="">Not Allocated</option>
+        </select>
+      </div>
+
+      <div class="form-actions span-2">
+        <button class="button button-primary" type="submit">Save Student</button>
+        <button id="cancelStudentEdit" class="button button-quiet" type="button">Cancel</button>
+        <span id="studentEditMessage" class="message" role="status"></span>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel student-whatsapp-settings">
+    <strong>WhatsApp Message Templates</strong>
+    <p class="muted">Select a template, fill the relevant information if needed, then use the student's WhatsApp action.</p>
+    <div class="student-template-grid">
+      <div>
+        <label for="studentMessageTemplate">Message Template</label>
+        <select id="studentMessageTemplate">
+          <option value="location">Centre Location</option>
+          <option value="class">Class Information</option>
+          <option value="link">Share a Link</option>
+          <option value="birthday">Birthday Wishes</option>
+          <option value="reminder">Upcoming Class Reminder</option>
+          <option value="completion">Course Completion Wishes</option>
+        </select>
+      </div>
+      <div>
+        <label for="studentMessageInfo">Additional Information</label>
+        <input id="studentMessageInfo" placeholder="Class date, time, location details...">
+      </div>
+      <div>
+        <label for="studentMessageLink">Location / Link</label>
+        <input id="studentMessageLink" type="url" placeholder="https://...">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel table-panel">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Batch</th>
+            <th>DOB</th>
+            <th>8 Week</th>
+            <th>Advance L1</th>
+            <th>Advance L2</th>
+            <th>Money Class</th>
+            <th>Raajayoga</th>
+            <th>Salesperson</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentsBody">
+          <tr><td colspan="10">Loading students...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+      
       <section id="reviewView" class="view hidden">
         <div class="section-heading"><div><h2>Evening review</h2><p class="muted">Admin records reasons for uncompleted calls. The original allocation remains in history.</p></div><button id="refreshReviews" class="button button-quiet" type="button">Refresh review</button></div>
         <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Salesperson</th><th>Lead</th><th>Call status</th><th>Review status</th><th>Reason</th><th>Save review</th></tr></thead><tbody id="reviewsBody"><tr><td colspan="6">Loading reviews…</td></tr></tbody></table></div></div>
