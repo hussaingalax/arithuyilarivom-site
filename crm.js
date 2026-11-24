@@ -167,7 +167,8 @@
     clearNotice();
     try {
       await Promise.all([loadLeads(), loadAllocations(), loadUsers()]);
-      await loadReviews();
+await loadReviews();
+if (isAdmin()) await loadStudents();
       renderStats();
     } catch (err) {
       showNotice(`Unable to load CRM data: ${err.message || err}`);
