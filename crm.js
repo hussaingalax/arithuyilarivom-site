@@ -387,7 +387,8 @@ fillLeadSelect();
         <td><span class="stage">${allocationText}</span></td>
         <td><div class="inline-actions">
           <a class="button button-quiet" href="tel:${esc(String(l.mobile || '').replace(/[^0-9+]/g, ''))}">Call</a>
-          <a class="button button-quiet" href="https://wa.me/${esc(whatsappNumber(l.mobile))}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <button class="button button-quiet" type="button"
+  data-lead-whatsapp="${esc(l.id)}">WhatsApp</button>
           <button class="button button-quiet" type="button" data-edit-lead="${esc(l.id)}">Edit</button>${isAdmin() && !l.assigned_to ? `<button class="button button-quiet" type="button" data-allocate-lead="${esc(l.id)}">Allocate</button>` : ''}
         </div></td>
       </tr>`;
