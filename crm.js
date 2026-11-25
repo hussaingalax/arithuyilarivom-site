@@ -1226,6 +1226,25 @@ async function saveStudent(event) {
 
     
     // Students module event listeners
+
+    
+$('toggleStudentForm')?.addEventListener('click', () => {
+  if (!isAdmin()) {
+    showNotice('Only Admin can add student records.');
+    return;
+  }
+
+  $('studentEditForm').reset();
+  $('studentEditId').value = '';
+  $('studentEditPanel').querySelector('.section-heading h2').textContent = 'Add New Student';
+
+  setMessage('studentEditMessage', '');
+  $('studentEditPanel').classList.remove('hidden');
+  $('studentEditPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('studentEditName').focus();
+});
+
+    
     $('studentEditForm')?.addEventListener('submit', saveStudent);
 
     $('cancelStudentEdit')?.addEventListener('click', () => {
