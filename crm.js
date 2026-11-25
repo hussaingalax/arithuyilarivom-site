@@ -733,7 +733,7 @@ function studentDobMatch(dob, mode) {
     const courseStatus = $('studentCourseStatus')?.value || '';
     const salesperson = $('studentSalespersonFilter')?.value || '';
 
-    return state.students.filter(s => {
+        const filtered = state.students.filter(s => {
       const searchMatch = !search ||
         `${s.student_name} ${s.mobile} ${s.reference || ''}`.toLowerCase().includes(search);
 
@@ -745,9 +745,24 @@ function studentDobMatch(dob, mode) {
       if (course && courseStatus && s[course] !== courseStatus) return false;
 
       return true;
-    });
-  }
+        });
 
+    // DOB filter selected-na birthday date order-la sort
+    if (dobMode === 'month' || dobMode === 'upcoming') {
+      filtered.sort((a, b) => {
+        const getDay = s => {
+          if (!s.dob) return 9999;
+
+          const parts = String(s.dob).slice(0, 10).split('-').map(Number);
+          return parts[1] * 100 + parts[2];
+        };
+
+        return getDay(a) - getDay(b);
+      });
+    }
+
+    return filtered;
+  }
   function renderStudentStats() {
     const students = state.students;
     $('studentTotal').textContent = students.length;
