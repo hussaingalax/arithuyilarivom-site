@@ -152,18 +152,97 @@
     showLogin('You have signed out.');
   }
 
+
   function bindTabs() {
-    document.querySelectorAll('.tab').forEach(btn => {
+
+    // Leads module sub-tabs
+    document.querySelectorAll('#leadsModule .tab').forEach(btn => {
       btn.onclick = () => {
-        document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
-        document.querySelectorAll('.view').forEach(v => v.classList.toggle('hidden', v.id !== btn.dataset.tab));
+        document.querySelectorAll('#leadsModule .tab').forEach(b =>
+          b.classList.toggle('active', b === btn)
+        );
+
+        document.querySelectorAll('#leadsModule .view').forEach(v =>
+          v.classList.toggle('hidden', v.id !== btn.dataset.tab)
+        );
+
         if (btn.dataset.tab === 'callsView') loadAllocations();
         if (btn.dataset.tab === 'reviewView') loadReviews();
-        if (btn.dataset.tab === 'studentsView' && isAdmin()) loadStudents();
       };
     });
+
+    // Main dashboard visibility
+    function toggleDashboardSummary(show) {
+      const welcome = document.querySelector('#appPanel > .welcome-row');
+      const stats = document.querySelector('#appPanel > .stats-grid');
+      const pipeline = $('pipelineStageSummary');
+
+      welcome?.classList.toggle('hidden', !show);
+      stats?.classList.toggle('hidden', !show);
+      pipeline?.classList.toggle('hidden', !show || !isAdmin());
+    }
+
+    // Open main dashboard
+    function openModuleHome() {
+      $('moduleHome').classList.remove('hidden');
+      $('leadsModule').classList.add('hidden');
+      $('studentsModule').classList.add('hidden');
+
+      toggleDashboardSummary(false);
+    }
+
+    // Open Leads module
+    function openLeadsModule() {
+      $('moduleHome').classList.add('hidden');
+      $('leadsModule').classList.remove('hidden');
+      $('studentsModule').classList.add('hidden');
+
+      toggleDashboardSummary(true);
+
+      const leadsTab = document.querySelector('#leadsModule [data-tab="leadsView"]');
+      if (leadsTab) leadsTab.click();
+    }
+
+    // Open Students module
+    async function openStudentsModule() {
+      $('moduleHome').classList.add('hidden');
+      $('leadsModule').classList.add('hidden');
+      $('studentsModule').classList.remove('hidden');
+
+      toggleDashboardSummary(false);
+
+      $('studentsView').classList.remove('hidden');
+
+      await loadStudents();
+    }
+
+    // Main module cards
+    document.querySelectorAll('[data-module]').forEach(btn => {
+      btn.onclick = () => {
+        if (btn.dataset.module === 'leads') {
+          openLeadsModule();
+        }
+
+        if (btn.dataset.module === 'students' && isAdmin()) {
+          openStudentsModule();
+        }
+      };
+    });
+
+    // Back to Dashboard buttons
+    document.querySelectorAll('[data-back-dashboard]').forEach(btn => {
+      btn.onclick = openModuleHome;
+    });
+
+    // Initial screen based on role
+    if (isAdmin()) {
+      openModuleHome();
+    } else {
+      openLeadsModule();
+    }
   }
 
+  
   async function refreshAll() {
     clearNotice();
     try {
