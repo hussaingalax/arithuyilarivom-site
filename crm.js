@@ -505,7 +505,7 @@ Arithuyil Arivom Special Offer:
 
 ${info}
 
-Registration / Details:
+Avail this offer : 
 ${link}
 
 இந்த வாய்ப்பைப் பயன்படுத்திக் கொள்ளுங்கள்.
