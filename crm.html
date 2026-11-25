@@ -95,8 +95,7 @@
         <button class="tab active" data-tab="leadsView" type="button">Leads</button>
         <button class="tab" data-tab="callsView" type="button">Daily Calls</button>
         <button class="tab admin-only hidden" data-tab="reviewView" type="button">Evening Review</button>
-        <button class="tab admin-only hidden" data-tab="studentsView" type="button">Students</button>
-      </nav>
+             </nav>
 
       <section id="leadsView" class="view">
         <div class="section-heading"><div><h2>Lead management</h2><p class="muted">Add leads and maintain the sales pipeline.</p></div><button id="toggleLeadForm" class="button button-primary" type="button">+ Add lead</button></div>
@@ -220,6 +219,22 @@
   </div>
 </section>
 
+
+
+
+      
+      <section id="reviewView" class="view hidden">
+        <div class="section-heading"><div><h2>Evening review</h2><p class="muted">Admin records reasons for uncompleted calls. The original allocation remains in history.</p></div><button id="refreshReviews" class="button button-quiet" type="button">Refresh review</button></div>
+        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Salesperson</th><th>Lead</th><th>Call status</th><th>Review status</th><th>Reason</th><th>Save review</th></tr></thead><tbody id="reviewsBody"><tr><td colspan="6">Loading reviews…</td></tr></tbody></table></div></div>
+      </section>
+  </div>
+<!-- End Leads Module -->
+
+<!-- Students Module -->
+<div id="studentsModule" class="hidden">
+  <button type="button" class="button button-quiet module-back" data-back-dashboard>
+    ← Back to Dashboard
+  </button>
 
 <section id="studentsView" class="view hidden">
   <div class="section-heading">
@@ -423,20 +438,7 @@
   </div>
 </section>
 
-
-      
-      <section id="reviewView" class="view hidden">
-        <div class="section-heading"><div><h2>Evening review</h2><p class="muted">Admin records reasons for uncompleted calls. The original allocation remains in history.</p></div><button id="refreshReviews" class="button button-quiet" type="button">Refresh review</button></div>
-        <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Salesperson</th><th>Lead</th><th>Call status</th><th>Review status</th><th>Reason</th><th>Save review</th></tr></thead><tbody id="reviewsBody"><tr><td colspan="6">Loading reviews…</td></tr></tbody></table></div></div>
-      </section>
-  </div>
-<!-- End Leads Module -->
-
-<!-- Students Module -->
-<div id="studentsModule" class="hidden">
-  <button type="button" class="button button-quiet module-back" data-back-dashboard>
-    ← Back to Dashboard
-  </button>
+  
 </div>
 <!-- End Students Module -->
       <footer class="footer">CRM workspace · Existing booking and payment modules are separate.</footer>
