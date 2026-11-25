@@ -73,3 +73,61 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Main CRM Module Dashboard */
+.module-home {
+  margin: 28px 0;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.module-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 30px;
+  min-height: 190px;
+  border: 1px solid #dce2ec;
+  border-radius: 18px;
+  background: #fff;
+  color: #172033;
+  text-align: left;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.module-card:hover {
+  border-color: #18345d;
+  box-shadow: 0 8px 24px #18345d12;
+  transform: translateY(-2px);
+}
+
+.module-icon {
+  font-size: 32px;
+}
+
+.module-card strong {
+  font-size: 19px;
+  color: #18345d;
+}
+
+.module-card small {
+  color: #7b8496;
+  font-size: 13px;
+}
+
+.module-back {
+  margin: 14px 0 20px;
+}
+
+@media(max-width:600px) {
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+}
