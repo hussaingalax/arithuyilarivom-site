@@ -59,6 +59,38 @@
         <div id="pipelineStageCounts" class="stage-count-grid"></div>
       </section>
 
+
+<!-- Main Module Selection -->
+<section id="moduleHome" class="module-home hidden">
+  <div class="section-heading">
+    <div>
+      <h2>Admin Workspace</h2>
+      <p class="muted">Choose a module to continue.</p>
+    </div>
+  </div>
+
+  <div class="module-grid">
+    <button type="button" class="module-card" data-module="leads">
+      <span class="module-icon">👥</span>
+      <strong>LEADS</strong>
+      <small>Marketing leads, follow-ups and daily calls</small>
+    </button>
+
+    <button type="button" class="module-card" data-module="students">
+      <span class="module-icon">🎓</span>
+      <strong>STUDENTS</strong>
+      <small>Student records, batches and course management</small>
+    </button>
+  </div>
+</section>
+
+<!-- Leads Module Wrapper -->
+<div id="leadsModule" class="hidden">
+  <button type="button" class="button button-quiet module-back" data-back-dashboard>
+    ← Back to Dashboard
+  </button>
+
+      
       <nav class="tabs" aria-label="CRM sections">
         <button class="tab active" data-tab="leadsView" type="button">Leads</button>
         <button class="tab" data-tab="callsView" type="button">Daily Calls</button>
