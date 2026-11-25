@@ -139,6 +139,40 @@
           </div>
         </section>
 
+
+<div class="panel lead-whatsapp-settings">
+  <strong>WhatsApp Message Templates</strong>
+  <p class="muted">Select a marketing message template and send it directly to the selected lead.</p>
+
+  <div class="student-template-grid">
+    <div>
+      <label for="leadMessageTemplate">Message Template</label>
+      <select id="leadMessageTemplate">
+        <option value="free_invitation">Free Class Invitation</option>
+        <option value="free_reminder">Free Class Reminder</option>
+        <option value="location">Class Location</option>
+        <option value="class_info">Class Information</option>
+        <option value="registration">Registration Link</option>
+        <option value="course">8 Week Course Details</option>
+        <option value="followup">Follow-up Message</option>
+        <option value="offer">Special Offer</option>
+        <option value="custom">Custom Message</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="leadMessageInfo">Additional Information</label>
+      <input id="leadMessageInfo" placeholder="Date, time, offer, class details...">
+    </div>
+
+    <div>
+      <label for="leadMessageLink">Location / Link</label>
+      <input id="leadMessageLink" type="url" placeholder="https://...">
+    </div>
+  </div>
+</div>
+
+        
  <div class="toolbar panel">
           <input id="leadSearch" type="search" placeholder="Search name or mobile">
           <select id="stageFilter"><option value="">All stages</option><option value="new_lead">New lead</option><option value="contacted">Contacted</option><option value="free_class_pending">Free class pending</option><option value="free_class_attended">Free class attended</option><option value="eight_week_interested">8-week interested</option><option value="follow_up">Follow-up</option><option value="lower_payment_class">Lower-payment class</option><option value="free_group_nurture">Free group nurture</option><option value="lost">Lost</option><option value="accidental_lead">Accidental lead</option></select>
