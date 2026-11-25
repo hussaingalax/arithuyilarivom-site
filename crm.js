@@ -1076,54 +1076,78 @@ if (countEl) {
     $('studentEditPanel').scrollIntoView({behavior:'smooth', block:'start'});
   }
 
-  async function saveStudent(event) {
-    event.preventDefault();
+  
+async function saveStudent(event) {
+  event.preventDefault();
 
-    if (!isAdmin()) {
-      showNotice('Only Admin can edit student records.');
-      return;
-    }
-
-    const btn = $('studentEditForm').querySelector('button[type="submit"]');
-    btn.disabled = true;
-    setMessage('studentEditMessage', 'Saving student...');
-
-    try {
-      const id = $('studentEditId').value;
-
-      const payload = {
-        student_name: $('studentEditName').value.trim(),
-        mobile: $('studentEditMobile').value.trim(),
-        batch_no: $('studentEditBatch').value.trim(),
-        reference: $('studentEditReference').value.trim() || null,
-        dob: $('studentEditDob').value || null,
-        marriage_anniversary: $('studentEditAnniversary').value || null,
-        eight_week_course: $('studentEditEightWeek').value,
-        advance_l1: $('studentEditAdvanceL1').value,
-        advance_l2: $('studentEditAdvanceL2').value,
-        money_class: $('studentEditMoney').value,
-        raajayoga_dheekshai: $('studentEditRaajayoga').value,
-        assigned_to: $('studentEditAssigned').value || null,
-        updated_at: new Date().toISOString()
-      };
-
-      const { error } = await sb.from('crm_students')
-        .update(payload)
-        .eq('id', id);
-
-      if (error) throw error;
-
-      setMessage('studentEditMessage', 'Student updated successfully.', 'success');
-      $('studentEditPanel').classList.add('hidden');
-      await loadStudents();
-      showNotice('Student information updated.');
-    } catch (err) {
-      setMessage('studentEditMessage', err.message || 'Unable to update student.', 'error');
-    } finally {
-      btn.disabled = false;
-    }
+  if (!isAdmin()) {
+    showNotice('Only Admin can add or edit student records.');
+    return;
   }
 
+  const btn = $('studentEditForm').querySelector('button[type="submit"]');
+  btn.disabled = true;
+  setMessage('studentEditMessage', 'Saving student...');
+
+  try {
+    const id = $('studentEditId').value.trim();
+
+    const payload = {
+      student_name: $('studentEditName').value.trim(),
+      mobile: $('studentEditMobile').value.trim(),
+      batch_no: $('studentEditBatch').value.trim(),
+      reference: $('studentEditReference').value.trim() || null,
+      dob: $('studentEditDob').value || null,
+      marriage_anniversary: $('studentEditAnniversary').value || null,
+      eight_week_course: $('studentEditEightWeek').value,
+      advance_l1: $('studentEditAdvanceL1').value,
+      advance_l2: $('studentEditAdvanceL2').value,
+      money_class: $('studentEditMoney').value,
+      raajayoga_dheekshai: $('studentEditRaajayoga').value,
+      assigned_to: $('studentEditAssigned').value || null,
+      updated_at: new Date().toISOString()
+    };
+
+    let error;
+
+    if (id) {
+      // Existing student: UPDATE
+      ({ error } = await sb.from('crm_students')
+        .update(payload)
+        .eq('id', id));
+    } else {
+      // New student: INSERT
+      ({ error } = await sb.from('crm_students')
+        .insert(payload));
+    }
+
+    if (error) throw error;
+
+    const message = id
+      ? 'Student updated successfully.'
+      : 'New student added successfully.';
+
+    setMessage('studentEditMessage', message, 'success');
+
+    $('studentEditForm').reset();
+    $('studentEditId').value = '';
+    $('studentEditPanel').classList.add('hidden');
+
+    await loadStudents();
+    showNotice(message);
+
+  } catch (err) {
+    setMessage(
+      'studentEditMessage',
+      err.message || 'Unable to save student.',
+      'error'
+    );
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+  
   function buildStudentMessage(student) {
     const info = $('studentMessageInfo').value.trim();
     const link = $('studentMessageLink').value.trim();
