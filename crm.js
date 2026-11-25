@@ -394,12 +394,154 @@ fillLeadSelect();
       </tr>`;
     }).join('') : '<tr><td colspan="8" class="empty">No leads found for this filter.</td></tr>';
     document.querySelectorAll('[data-edit-lead]').forEach(b => b.onclick = () => editLead(b.dataset.editLead));
+document.querySelectorAll('[data-lead-whatsapp]').forEach(b => {
+  b.onclick = () => openLeadWhatsApp(b.dataset.leadWhatsapp);
+});
     document.querySelectorAll('[data-allocate-lead]').forEach(b => b.onclick = () => {
       $('allocationLead').value = b.dataset.allocateLead;
       document.querySelector('[data-tab="callsView"]').click();
       $('allocationSalesperson').focus();
     });
   }
+
+
+function buildLeadWhatsAppMessage(lead) {
+  const template = $('leadMessageTemplate').value;
+  const info = $('leadMessageInfo').value.trim();
+  const link = $('leadMessageLink').value.trim();
+  const name = lead.full_name || 'வணக்கம்';
+  const program = lead.interested_program || '8 Week Course';
+  const classDate = lead.free_class_date
+    ? new Date(lead.free_class_date + 'T00:00:00').toLocaleDateString('en-IN')
+    : '';
+
+  const messages = {
+    free_invitation:
+`Vanakkam ${name}!
+
+Arithuyil Arivom - TrueSelf Mind Gym சார்பாக உங்களை எங்களுடைய Free Introductory Class-க்கு அன்புடன் அழைக்கிறோம்.
+
+இந்த வகுப்பில் உங்கள் ஆழ்மன சக்தியைப் பயன்படுத்தி வாழ்க்கையில் நல்ல மாற்றங்களை உருவாக்குவது பற்றி அறிந்து கொள்ளலாம்.
+
+${info}
+
+உங்கள் வருகையை உறுதி செய்யுங்கள்.
+Arithuyil Arivom`,
+
+    free_reminder:
+`Vanakkam ${name}!
+
+Arithuyil Arivom Free Class Reminder.
+
+${classDate ? `Class Date: ${classDate}` : ''}
+${info}
+
+தயவுசெய்து குறித்த நேரத்திற்கு வகுப்பில் கலந்து கொள்ளுங்கள்.
+
+நன்றி,
+Arithuyil Arivom`,
+
+    location:
+`Vanakkam ${name}!
+
+Arithuyil Arivom Class Centre Location:
+
+${link || info}
+
+உங்களை வகுப்பில் சந்திப்பதில் மகிழ்ச்சி.
+Arithuyil Arivom`,
+
+    class_info:
+`Vanakkam ${name}!
+
+Arithuyil Arivom Class Information:
+
+${info}
+
+${link}
+
+மேலும் விவரங்களுக்கு எங்களைத் தொடர்பு கொள்ளலாம்.
+Arithuyil Arivom`,
+
+    registration:
+`Vanakkam ${name}!
+
+Arithuyil Arivom ${program} Registration Link:
+
+${link}
+
+உங்கள் பதிவை நிறைவு செய்யுங்கள்.
+நன்றி!`,
+
+    course:
+`Vanakkam ${name}!
+
+Arithuyil Arivom - ${program}
+
+இந்தப் பயிற்சியில் உங்கள் ஆழ்மன சக்தி, தன்னம்பிக்கை மற்றும் வாழ்க்கை முன்னேற்றத்திற்கான பயிற்சிகளை கற்றுக்கொள்ளலாம்.
+
+${info}
+
+மேலும் விவரங்கள்:
+${link}
+
+Arithuyil Arivom`,
+
+    followup:
+`Vanakkam ${name}!
+
+Arithuyil Arivom-ல் இருந்து தொடர்பு கொள்கிறோம்.
+
+நமது முந்தைய உரையாடல் தொடர்பாக உங்களுடைய கருத்தைத் தெரிந்துகொள்ள விரும்புகிறோம்.
+
+${info}
+
+நன்றி!`,
+
+    offer:
+`Vanakkam ${name}!
+
+Arithuyil Arivom Special Offer:
+
+${info}
+
+Registration / Details:
+${link}
+
+இந்த வாய்ப்பைப் பயன்படுத்திக் கொள்ளுங்கள்.
+Arithuyil Arivom`,
+
+    custom:
+`Vanakkam ${name}!
+
+${info}
+
+${link}
+
+Arithuyil Arivom`
+  };
+
+  return messages[template] || messages.followup;
+}
+
+function openLeadWhatsApp(id) {
+  const lead = state.leads.find(l => l.id === id);
+  if (!lead) return;
+
+  const phone = whatsappNumber(lead.mobile);
+
+  if (!phone) {
+    showNotice('Invalid lead mobile number.');
+    return;
+  }
+
+  const message = buildLeadWhatsAppMessage(lead);
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+
 
   function fillAssignedSalespersonFilter() {
     const select = $('filterAssignedSalesperson');
