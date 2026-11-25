@@ -620,33 +620,45 @@ function renderAllocations() {
     return value === 'completed' ? 'Completed' : 'Not Completed';
   }
 
-  function studentDobMatch(dob, mode) {
-    if (!dob || !mode) return true;
 
-    const parts = String(dob).slice(0, 10).split('-').map(Number);
-    const month = parts[1];
-    const day = parts[2];
-    if (!month || !day) return false;
+function studentDobMatch(dob, mode) {
+  if (!mode) return true;
 
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const currentMonth = now.getMonth() + 1;
+  // DOB illatha students DOB filters-la vara koodathu
+  if (!dob) return false;
 
-    if (mode === 'month') return month === currentMonth;
+  const parts = String(dob).slice(0, 10).split('-').map(Number);
+  const month = parts[1];
+  const day = parts[2];
 
-    if (mode === 'upcoming') {
-      const end = new Date(today);
-      end.setDate(end.getDate() + 30);
+  if (!month || !day) return false;
 
-      for (let year = today.getFullYear(); year <= end.getFullYear(); year++) {
-        const birthday = new Date(year, month - 1, day);
-        if (birthday >= today && birthday <= end) return true;
-      }
-      return false;
-    }
-    return true;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  if (mode === 'month') {
+    return month === (now.getMonth() + 1);
   }
 
+  if (mode === 'upcoming') {
+    const end = new Date(today);
+    end.setDate(end.getDate() + 30);
+
+    for (let year = today.getFullYear(); year <= end.getFullYear(); year++) {
+      const birthday = new Date(year, month - 1, day);
+
+      if (birthday >= today && birthday <= end) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  return true;
+}
+
+  
   async function loadStudents() {
     if (!isAdmin()) return;
 
