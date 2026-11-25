@@ -779,6 +779,12 @@ function studentDobMatch(dob, mode) {
 
     const rows = getFilteredStudents();
 
+const countEl = $('studentFilterCount');
+if (countEl) {
+  countEl.textContent =
+    `Showing ${rows.length} of ${state.students.length} total students`;
+}
+    
     $('studentsBody').innerHTML = rows.length ? rows.map(s => {
       const owner = state.users.find(u => u.id === s.assigned_to);
 
