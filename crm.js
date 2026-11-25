@@ -1071,6 +1071,8 @@ if (countEl) {
     fillStudentFilters();
     $('studentEditAssigned').value = s.assigned_to || '';
 
+$('studentEditPanel').querySelector('.section-heading h2').textContent = 'Edit Student';
+    
     $('studentEditPanel').classList.remove('hidden');
     setMessage('studentEditMessage', '');
     $('studentEditPanel').scrollIntoView({behavior:'smooth', block:'start'});
